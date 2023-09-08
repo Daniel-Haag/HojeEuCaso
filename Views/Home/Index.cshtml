@@ -1,0 +1,182 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    ViewBag.Title = "Agenda";
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pt-BR");
+    System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+    System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        /* Estilos do calendário */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 2px;
+        }
+
+        .day {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+            height: 40px;
+            font-size: 10px;
+        }
+
+        .today {
+            background-color: lightblue;
+        }
+
+        /* Efeito de hover */
+        .day:hover {
+            background-color: rgba(200, 200, 200, 0.5);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card p-4 shadow" style="margin-top: 50px">
+        <h2 style="font-weight: 600; font-size: 24px;">Agenda</h2>
+        <h3 style="font-weight: 500; font-size: 20px;">@ViewBag.CurrentDate.ToString("MMMM yyyy")</h3>
+
+        <div>
+            <a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.AddMonths(-1).Month, year = ViewBag.CurrentDate.AddMonths(-1).Year })" class="btn btn-outline-primary mr-2" style="font-size:10px"><i class="fas fa-chevron-left"></i> Mês Anterior</a>
+            <a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.AddMonths(1).Month, year = ViewBag.CurrentDate.AddMonths(1).Year })" class="btn btn-outline-primary ml-2" style="font-size:10px">Próximo Mês <i class="fas fa-chevron-right"></i></a>
+            @*<a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.Month, year = ViewBag.CurrentDate.Year - 1 })" class="btn btn-outline-secondary mr-2" style="font-size:10px"><i class="fas fa-chevron-left"></i> Ano Anterior</a>*@
+            @*<a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.Month, year = ViewBag.CurrentDate.Year + 1 })" class="btn btn-outline-secondary ml-2" style="font-size:10px">Próximo Ano <i class="fas fa-chevron-right"></i></a>*@
+        </div>
+
+        <div class="calendar card-body">
+            <div class="day bg-light">Dom</div>
+            <div class="day bg-light">Seg</div>
+            <div class="day bg-light">Ter</div>
+            <div class="day bg-light">Qua</div>
+            <div class="day bg-light">Qui</div>
+            <div class="day bg-light">Sex</div>
+            <div class="day bg-light">Sáb</div>
+
+            @for (var day = 1; day <= DateTime.DaysInMonth(ViewBag.CurrentDate.Year, ViewBag.CurrentDate.Month); day++)
+            {
+                var date = new DateTime(ViewBag.CurrentDate.Year, ViewBag.CurrentDate.Month, day);
+                var dayName = date.ToString("ddd");
+                var offset = (int)date.DayOfWeek; // Obter o deslocamento para o primeiro dia da semana
+
+                <div class="day @(date.Date == ViewBag.CurrentDate.Date ? "today" : "")" style="grid-column: @(offset + 1) / span 1;">
+                    <span class="day-number">@day</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Modal de Marcar Agenda -->
+    <div class="modal fade" id="agendaModal" tabindex="-1" aria-labelledby="agendaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agendaModalLabel">Marcar Agenda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="agendaForm">
+                        <div class="form-group">
+                            <label for="startDate">Data agendamento</label>
+                            <input type="text" class="form-control" id="startDate" name="startDate" readonly>
+                        </div>
+                       @* <div class="form-group">
+                            <label for="endDate">Data Final</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate">
+                        </div>*@
+                        <div class="form-group">
+                            <label for="clientSelect">Selecionar Cliente</label>
+                            <select class="form-control" id="clientSelect" name="clientSelect">
+                                <option value="">Selecione um cliente</option>
+                                <!-- Opções de clientes -->
+                            </select>
+                        </div>
+                        @{
+                            var role = HttpContextAccessor?.HttpContext?.Session.GetString("Role");
+                        }
+
+                        @if (role == "Franqueado")
+                        {
+                            <div class="form-group">
+                                <label for="clientSelect">Selecionar Piscineiro</label>
+                                <select class="form-control" id="piscineiroSelect" name="piscineiroSelect">
+                                    <option value="">Selecione um piscineiro</option>
+                                    <!-- Opções de piscineiros -->
+                                </select>
+                            </div>
+                        }
+                        else if (role == "Piscineiro")
+                        {
+                            <div class="form-group">
+                                <label for="piscineiroName">Nome do Piscineiro</label>
+                                <input type="text" class="form-control" id="piscineiroName" name="piscineiroName" value="Nome do Piscineiro" readonly>
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label for="clientName">Nome do Cliente</label>
+                            <input type="text" class="form-control" id="clientName" name="clientName" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientAddress">Endereço do Cliente</label>
+                            <input type="text" class="form-control" id="clientAddress" name="clientAddress" disabled>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="saveAgendaBtn">Agendar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<script>
+    $(function () {
+        // Evento de clique para os dias do calendário
+        $(".day").click(function () {
+            // Preencher as informações do agendamento
+            var clickedDay = $(this).find(".day-number").text();
+            var clickedDate = new Date(@ViewBag.CurrentDate.Year, @ViewBag.CurrentDate.Month - 1, clickedDay);
+            var formattedDate = clickedDate.toLocaleDateString('pt-BR');
+
+            $('#agendaModal').modal('show');
+
+            // Preencher o campo de Data Inicial e habilitar o datepicker
+            $("#startDate").val(formattedDate).datepicker("enable");
+
+            // Lógica para preencher e desabilitar os campos de Nome do Cliente e Endereço do Cliente
+            // Aqui adicionar código para selecionar um cliente e preencher os campos
+            // com base nas informações do cliente selecionado.
+            // Exemplo: $("#clientSelect").change(function() { ... });
+        });
+
+        // Inicialize o datepicker para o campo de Data Final
+        $("#endDate").datepicker({
+            dateFormat: 'dd/mm/yy',
+            onSelect: function (dateText) {
+                // Lógica de seleção de data final
+            }
+        });
+    });
+</script>
+

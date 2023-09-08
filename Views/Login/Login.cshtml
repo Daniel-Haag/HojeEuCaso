@@ -1,0 +1,318 @@
+﻿@model HojeEuCaso.Models.Usuario
+@{
+    ViewData["Title"] = "Login";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.2.0/vanilla-masker.min.js"></script>
+
+<style>
+    .bg-lightPrimary {
+        background-color: #6495ed; /* Altere para a cor de fundo desejada */
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4" style="margin-top: 100px;">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Entrar</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label>Entrar com:</label>
+                            <div class="form-check">
+                                <input type="radio" name="loginType" value="cpf" class="form-check-input" id="loginWithCPF">
+                                <label class="form-check-label" for="loginWithCPF">CPF</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" name="loginType" value="cnpj" class="form-check-input" id="loginWithCNPJ">
+                                <label class="form-check-label" for="loginWithCNPJ">CNPJ</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="cpfGroup" style="display: none;">
+                            <label asp-for="CPF">CPF:</label>
+                            <input asp-for="CPF" id="cpfInput" class="form-control" />
+                        </div>
+
+                        <div class="form-group" id="cnpjGroup" style="display: none;">
+                            <label asp-for="CNPJ">CNPJ:</label>
+                            <input asp-for="CNPJ" id="cnpjInput" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Senha">Senha:</label>
+                            <input asp-for="Senha" class="form-control" type="password" />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+
+                        <hr class="my-3">
+                        <p class="text-center">ou</p>
+                        <p class="text-center">Ainda não tem uma conta? <a href="#" data-toggle="modal" data-target="#cadastroModal">Cadastre-se</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cadastroModal" tabindex="-1" role="dialog" aria-labelledby="cadastroModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cadastroModalLabel">Novo Usuário</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="funcao">Função:</label>
+                    <select id="funcao" class="form-control">
+                        <option value="1">Cliente</option>
+                        <option value="2">Piscineiro</option>
+                        <option value="3" selected>Franqueado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input asp-for="Nome" type="text" id="nomeUsuarioCadastro" class="form-control">
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                    <span id="nomeError" class="text-danger" style="display: none;">Campo obrigatório.</span>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input asp-for="Email" type="text" id="email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <span id="emailError" class="text-danger" style="display: none;">Campo obrigatório.</span>
+                </div>
+                <div class="form-group">
+                    <label for="cpf">CPF:</label>
+                    <input asp-for="CPF" type="text" id="cpf" class="form-control">
+                    <span id="cpfError" class="text-danger" style="display: none;">Campo obrigatório.</span>
+                </div>
+                <div class="form-group">
+                    <label for="cnpj">CNPJ:</label>
+                    <input asp-for="CNPJ" type="text" id="cnpj" class="form-control">
+                    <span id="cnpjError" class="text-danger" style="display: none;">Campo obrigatório.</span>
+                </div>
+
+                <!-- Campos específicos para Cliente -->
+                <div class="form-group" id="clienteCampos" style="display: none;">
+                    <label for="piscineiroSelecionado">Selecione um Piscineiro:</label>
+                    <select id="piscineiroSelecionado" class="form-control">
+                        <!-- Opções de piscineiros vão aqui -->
+                    </select>
+                    <label for="endereco">Endereço:</label>
+                    <input type="text" id="endereco" class="form-control">
+                    <label for="telefone">Telefone:</label>
+                    <input type="text" id="telefone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input asp-for="Senha" type="password" id="senha" class="form-control">
+                    <span asp-validation-for="Senha" class="text-danger"></span>
+                    <span id="senhaError" class="text-danger" style="display: none;">Campo obrigatório.</span>
+                </div>
+
+                <!-- Campos específicos para Piscineiro -->
+                <div class="form-group" id="piscineiroCampos" style="display: none;">
+                    <label for="franqueadoSelecionado">Selecione um Franqueado:</label>
+                    <select id="franqueadoSelecionado" class="form-control">
+                        <!-- Opções de franqueados vão aqui -->
+                    </select>
+                </div>
+
+                <!-- Campos específicos para Franqueado -->
+                <div class="form-group" id="franqueadoCampos" style="display: block;">
+                    <!-- Campos para Franqueado -->
+                    <label for="franquiaSelecionada">Selecione uma Franquia:</label>
+                    <select id="franquiaSelecionada" class="form-control">
+                        <!-- Opções de franquias vão aqui -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="btnCadastrar">Cadastrar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="alert alert-success alert-dismissible fade show" id="successMessage" style="display: none; margin: 10px 10px 10px 10px">
+    Cadastro realizado com sucesso!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="alert alert-danger alert-dismissible fade show" id="errorMessage" style="display: none; margin: 10px 10px 10px 10px">
+    Erro no cadastro!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<img src="~/images/logo-poolbr.jpg" alt="Imagem de Fundo" style="position: absolute; top: 0; left: 35; width: 150px;">
+
+<script>
+    $(document).ready(function () {
+
+        function limparCamposCadastro() {
+        $("#funcao").val(""); 
+        $("#nomeUsuarioCadastro").val("");
+        $("#email").val("");
+        $("#cpf").val("");
+        $("#cnpj").val("");
+        $("#senha").val("");
+
+        // Oculta campos específicos
+        $("#clienteCampos").hide();
+        $("#piscineiroCampos").hide();
+        $("#franqueadoCampos").hide();
+    }
+
+        var roleID;
+
+        $("input[name='loginType']").change(function () {
+
+            var selectedValue = $(this).val();
+
+            if (selectedValue === "cpf") {
+                $("#cpfGroup").show();
+                $("#cnpjGroup").hide();
+                $("#cpfInput").val("");
+            } else if (selectedValue === "cnpj") {
+                $("#cpfGroup").hide();
+                $("#cnpjGroup").show();
+                $("#cnpjInput").val("");
+            } else {
+                $("#cpfGroup").hide();
+                $("#cnpjGroup").hide();
+                $("#cpfInput").val("");
+                $("#cnpjInput").val("");
+            }
+        });
+
+        $("#funcao").change(function () {
+            var selectedFuncao = $(this).val();
+            
+            if (selectedFuncao === "1") {
+                roleID = 1; // ID para Cliente
+            } else if (selectedFuncao === "2") {
+                roleID = 2; // ID para Piscineiro
+            } else if (selectedFuncao === "3") {
+                roleID = 3; // ID para Franqueado
+            }
+
+            $("#clienteCampos").toggle(selectedFuncao === "1");
+            $("#piscineiroCampos").toggle(selectedFuncao === "2");
+            $("#franqueadoCampos").toggle(selectedFuncao === "3");
+        });
+
+        // Evento de clique no botão "Cadastrar"
+        $("#btnCadastrar").click(function () {
+            // Coleta os dados do formulário
+            var funcao = $("#funcao").val();
+            var nome = $("#nomeUsuarioCadastro").val();
+            var email = $("#email").val();
+            var cpf = $("#cpf").val();
+            var cnpj = $("#cnpj").val();
+            var senha = $("#senha").val();
+
+            var cpfOuCnpjPreenchido = cpf || cnpj;
+
+            // Define os campos obrigatórios e os IDs das mensagens de erro
+            var camposObrigatorios = [
+                { campo: nome, idErro: "#nomeError" },
+                { campo: email, idErro: "#emailError" },
+                { campo: cpfOuCnpjPreenchido, idErro: "#cpfError, #cnpjError" },
+                { campo: senha, idErro: "#senhaError" }
+            ];
+
+            // Exibe ou oculta as mensagens de erro com base nos campos obrigatórios
+            camposObrigatorios.forEach(function (item) {
+                $(item.idErro).toggle(!item.campo);
+            });
+
+            // Verifica se todos os campos obrigatórios estão preenchidos
+            var camposEmBranco = camposObrigatorios.some(function (item) {
+                return !item.campo;
+            });
+
+            // Impede o envio do formulário se campos estiverem em branco
+            if (camposEmBranco) {
+                $("#errorMessage").text("Por favor, preencha todos os campos obrigatórios.");
+                $("#errorMessage").fadeIn("slow");
+                setTimeout(function () {
+                    $("#errorMessage").fadeOut("slow");
+                }, 5000);
+                return;
+            }
+
+            // Cria um objeto de usuário com os dados coletados
+            var usuario = {
+                RoleID: roleID,
+                Nome: nome,
+                Email: email,
+                CPF: cpf,
+                CNPJ: cnpj,
+                Senha: senha,
+                Ativo: true
+            };
+
+            // Envia os dados do usuário para o servidor
+            $.ajax({
+                url: "/Login/CreateUsuario", 
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(usuario),
+                success: function (response) {
+                    if (response.success) {
+                        $("#successMessage").text(response.message);
+                        $("#successMessage").fadeIn("slow");
+
+                        setTimeout(function () {
+                            $("#successMessage").fadeOut("slow");
+                            window.location.href = "/Login/Login";
+                        }, 5000); 
+
+                        limparCamposCadastro();
+                        $("#cadastroModal").modal("hide");
+                    } else {
+                        
+                        $("#errorMessage").text(response.message);
+                        $("#errorMessage").fadeIn("slow");
+                        setTimeout(function () {
+                            $("#errorMessage").fadeOut("slow");
+                        }, 5000); 
+                    }
+                },
+                    error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    $("#errorMessage").text(response.message);
+                    $("#errorMessage").fadeIn("slow");
+                    setTimeout(function () {
+                        $("#errorMessage").fadeOut("slow");
+                    }, 5000);
+                }
+            });
+        });
+
+        VMasker(document.getElementById("cpfInput")).maskPattern("999.999.999-99");
+        VMasker(document.getElementById("cnpjInput")).maskPattern("99.999.999/9999-99");
+        VMasker(document.getElementById("cpf")).maskPattern("999.999.999-99");
+        VMasker(document.getElementById("cnpj")).maskPattern("99.999.999/9999-99");
+    });
+</script>
+
