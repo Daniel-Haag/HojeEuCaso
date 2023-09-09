@@ -42,7 +42,7 @@ namespace HojeEuCaso.Controllers
         [HttpPost]
         public IActionResult Login(Usuario usuarioLogin)
         {
-            if ((usuarioLogin.CPF == "111.111.111-11" || usuarioLogin.CNPJ == "11.111.111/1111-11") && usuarioLogin.Senha == "password")
+            if ((usuarioLogin.Email == "teste@teste.com.br" && usuarioLogin.Senha == "123"))
             {
                 var usuarioLogando = new Usuario
                 {
