@@ -1,0 +1,78 @@
+﻿@page
+@{
+    var cidades = new List<object>
+    {
+        new { Id = 1, Nome = "Cidade 1" },
+        new { Id = 2, Nome = "Cidade 2" },
+        new { Id = 3, Nome = "Cidade 3" },
+        new { Id = 3, Nome = "Cidade 4" },
+        new { Id = 3, Nome = "Cidade 5" },
+        new { Id = 3, Nome = "Cidade 6" },
+        new { Id = 3, Nome = "Cidade 7" },
+        new { Id = 3, Nome = "Cidade 8" },
+        new { Id = 3, Nome = "Cidade 9" },
+        new { Id = 3, Nome = "Cidade 10" },
+        new { Id = 3, Nome = "Cidade 11" },
+        new { Id = 3, Nome = "Cidade 12" },
+        // dados mockados pois não há modelo ainda
+    };
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cidades</title>
+    <!-- Incluir os links para os estilos e scripts necessários, como Bootstrap e FontAwesome -->
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Cidades</h2>
+        <table class="table table-hover table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cidade in cidades)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="cidadeIds" value="@@cidade.Id" /></td>
+                        <td>@@cidade.Id</td> @*temporário*@
+                        <td>@@cidade.Nome</td> @*temporário*@
+                        <td>
+                            <a href="#" class="btn btn-primary btn-sm">
+                                <i class="fa fa-edit"></i> Editar
+                            </a>
+                            <a href="#" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i> Excluir
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @*<div class="form-group">
+            <button class="btn btn-danger" id="btnExcluirSelecionados">Excluir Selecionados</button>
+        </div>*@
+    </div>
+
+    <!-- Inclua aqui os links para os estilos e scripts necessários, como FontAwesome e Bootstrap -->
+</body>
+</html>
+<script>
+    // Use JavaScript/jQuery para capturar os IDs dos registros selecionados
+    $(document).ready(function () {
+        $('#btnExcluirSelecionados').click(function () {
+            var selectedIds = [];
+            $('input[name="cidadeIds"]:checked').each(function () {
+                selectedIds.push($(this).val());
+            });
+            // Agora você tem os IDs selecionados em 'selectedIds'. Faça algo com eles, como enviar para um servidor.
+            console.log(selectedIds);
+        });
+    });
+</script>

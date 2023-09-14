@@ -3,27 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HojeEuCaso.Controllers
 {
-    public class NovaController : Controller
+    public class CidadesController : Controller
     {
-        // GET: NovaController
+        // GET: CidadesController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: NovaController/Details/5
+        // GET: CidadesController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: NovaController/Create
+        // GET: CidadesController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: NovaController/Create
+        // POST: CidadesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -38,13 +38,13 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: NovaController/Edit/5
+        // GET: CidadesController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: NovaController/Edit/5
+        // POST: CidadesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -59,13 +59,13 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: NovaController/Delete/5
+        // GET: CidadesController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: NovaController/Delete/5
+        // POST: CidadesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
