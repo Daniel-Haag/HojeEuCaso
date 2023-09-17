@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Cadastro Cidade";
+    ViewData["Title"] = "Editar Cidade";
 }
 <style>
     fade-in-out {
@@ -71,8 +71,8 @@
                             <input @*asp-for="Nome"*@ class="form-control" />
                             <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
                         </div>
-                        <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
+                        <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
                     </form>
@@ -86,7 +86,7 @@
         // Verifica se há uma mensagem de sucesso
         var successMessage = $(".alert.alert-success");
 
-        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        // Se houver uma mensagem de sucesso, inicie a animação de fade-in e depois fade-out
         if (successMessage.length > 0) {
             successMessage.addClass("fade-in-out");
             setTimeout(function () {
@@ -97,7 +97,7 @@
         // Verifica se há uma mensagem de erro
         var errorMessage = $(".alert.alert-danger");
 
-        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        // Se houver uma mensagem de erro, inicie a animação de fade-in e depois fade-out
         if (errorMessage.length > 0) {
             errorMessage.addClass("error-fade-in-out");
             setTimeout(function () {

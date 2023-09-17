@@ -3,27 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HojeEuCaso.Controllers
 {
-    public class CidadesController : Controller
+    public class CategoriasController : Controller
     {
-        // GET: CidadesController
+        // GET: CategoriasController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: CidadesController/Details/5
+        // GET: CategoriasController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CidadesController/Create
+        // GET: CategoriasController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CidadesController/Create
+        // POST: CategoriasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection) //Alterar para a entidade
@@ -32,7 +32,6 @@ namespace HojeEuCaso.Controllers
             {
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
-                //return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -41,13 +40,13 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: CidadesController/Edit/5
+        // GET: CategoriasController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CidadesController/Edit/5
+        // POST: CategoriasController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -62,13 +61,13 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: CidadesController/Delete/5
+        // GET: CategoriasController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CidadesController/Delete/5
+        // POST: CategoriasController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

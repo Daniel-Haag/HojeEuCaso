@@ -14,10 +14,15 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
-
-      
 
         .menu-toggle {
             /* Estilos comuns para o elemento de alternância do menu */
@@ -48,17 +53,17 @@
             /* Estilizar as subseleções */
             .sub-menu.expanded {
                 display: block;
-                margin-left: 10px;
+                margin-left: 70px;
             }
 
         /* Estilizar o ícone de alternância do menu quando as subseleções estão expandidas */
-        #nova-site-toggle i.fa {
+        /*#nova-site-toggle i.fa {
             transition: transform 0.3s;
-        }
+        }*/
 
-        #nova-site-toggle.expanded i.fa {
+        /*#nova-site-toggle.expanded i.fa {
             transform: rotate(90deg);
-        }
+        }*/
 
 
 
@@ -93,7 +98,7 @@
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
-    background-color:lightpink !Important;
+    background-color:lightgray !Important;
    
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -268,6 +273,37 @@
         margin-right: 0;
     }
 }
+
+ /* Estilo do sidebar-wrapper */
+    #sidebar-wrapper {
+        background-color: #fff; /* Cor de fundo do menu */
+        border-right: 1px solid #ddd; /* Borda à direita */
+    }
+
+    /* Estilo itens de menu */
+    .sidebar-nav li {
+        text-indent: 20px;
+        line-height: 40px;
+    }
+
+    .sidebar-nav li a {
+        color: black; /* Cor dos links */
+        text-decoration: none;
+        transition: color 0.3s ease; /* Transição de cor ao passar o mouse */
+    }
+
+    .sidebar-nav li a:hover {
+        color: red /* Cor ao passar o mouse sobre os links */
+    }
+
+    /* Estilo ícone de alternância do menu quando as subseleções estão expandidas */
+    #nova-site-toggle i.fa {
+        transition: transform 0.3s;
+    }
+
+    #nova-site-toggle.expanded i.fa {
+        transform: rotate(90deg);
+    }
     </style>
 </head>
 <body>
@@ -277,36 +313,6 @@
 
     @if (!string.IsNullOrEmpty(usuarioLogado))
     {
-        @*<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-    <div class="container">
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-    <img src="~/images/logo-completo.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 70px;" />
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-    <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contato">Contato</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Nova" asp-action="Index">Nova Site</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Sair</a>
-    </li>
-    </ul>
-    </div>
-    </div>
-    </nav>
-    </header>*@
-
         <div class="container">
             <div class="row">
                 <hr />
@@ -314,14 +320,14 @@
                 <div id="wrapper">
                     <!-- Sidebar -->
                     <div id="sidebar-wrapper">
-                        <ul class="sidebar-nav" style="margin-left:0;">
+                        <ul class="sidebar-nav">
                             <li class="sidebar-brand" style="margin-bottom:100px">
+                                <a href="#menu-toggle" id="menu-toggle" style="float:right;">
+                                    <i class="fa fa-bars" style="font-size:20px !important;" aria-hidden="true"></i>
+                                </a>
                                 <a class="navbar-brand logoWeb logoMobile" id="logo" asp-area="" asp-controller="Home" asp-action="Index">
                                     <img src="~/images/logo-completo.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 70px;" />
                                     <hr/>
-                                </a>
-                                <a href="#menu-toggle" id="menu-toggle" style="float:right;">
-                                    <i class="fa fa-bars" style="font-size:20px !important;" aria-hidden="true"></i>
                                 </a>
                             </li>
                             <li>
@@ -391,7 +397,7 @@
 
     <script>
         $("#menu-toggle").click(function (e) {
-            $('#logo').toggle();
+            //$('#logo').toggle();
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
