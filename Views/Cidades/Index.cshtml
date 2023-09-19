@@ -137,7 +137,7 @@
 
     $(document).ready(function () {
         $(".delete-button").click(function () {
-            var cidadeId = $(this).data("cidade-id");
+            var cidade = $(this).data("cidade-id");
 
             $("#confirmDelete").data("cidade-id", cidadeId);
             $("#confirmDeleteModal").modal("show");
@@ -146,13 +146,23 @@
         $("#confirmDelete").click(function () {
             var cidadeId = $(this).data("cidade-id");
 
-            // Aqui deve enviar uma solicitação para excluir o registro com o ID da cidade
-            // Por exemplo, usar AJAX para enviar uma solicitação de exclusão ao servidor.
+            // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
+            $.ajax({
+                type: 'POST',
+                url: '/Cidades/Delete/' + cidadeId, // Verifique se o URL corresponde à sua rota de exclusão
+                success: function (response) {
+                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
+                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
+                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
+                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-            // Após a exclusão bem-sucedida, pode recarregar a página ou atualizar a tabela de cidades.
-
-            // Fecha o modal
-            $("#confirmDeleteModal").modal("hide");
+                    // Fecha o modal
+                    $("#confirmDeleteModal").modal("hide");
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
         });
     });
 </script>

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Editar Cidade";
+    ViewData["Title"] = "Editar Cláusulas de Contrato";
 }
 <style>
     fade-in-out {
@@ -67,9 +67,17 @@
                     }
                     <form asp-action="Edit">
                         <div class="form-group">
-                            <label @*asp-for=""*@>Nome da Cidade</label>
-                            <input @*asp-for="Nome"*@ class="form-control" />
-                            <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+                            <label @*asp-for=""*@>Descrição</label>
+                            <input @*asp-for="Descricao"*@ class="form-control" />
+                            <span @*asp-validation-for="Descricao"*@ class="text-danger"></span>
+
+                            <label @*asp-for="DefaultCategory"*@>Default Category</label>
+                            <select @*asp-for="DefaultCategory"*@ class="form-control">
+                                <option value="Opção1">Opção 1</option>
+                                <option value="Opção2">Opção 2</option>
+                                <option value="Opção3">Opção 3</option>
+                            </select>
+                            <span @*asp-validation-for="DefaultCategory"*@ class="text-danger"></span>
                         </div>
                         <hr />
                         <!-- Adicione outros campos relevantes aqui, se necessário -->

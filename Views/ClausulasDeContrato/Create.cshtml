@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Editar Cidade";
+    ViewData["Title"] = "Cláusulas de Contrato";
 }
 <style>
     fade-in-out {
@@ -65,14 +65,22 @@
                             @TempData["ErrorMessage"]
                         </div>
                     }
-                    <form asp-action="Edit">
+                    <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for=""*@>Nome da Cidade</label>
+                            <label @*asp-for=""*@>Descrição</label>
                             <input @*asp-for="Nome"*@ class="form-control" />
                             <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+
+                            <label @*asp-for="DefaultCategory"*@>Default Category</label>
+                            <select @*asp-for="DefaultCategory"*@ class="form-control">
+                                <option value="Opção1">Opção 1</option>
+                                <option value="Opção2">Opção 2</option>
+                                <option value="Opção3">Opção 3</option>
+                            </select>
+                            <span @*asp-validation-for="DefaultCategory"*@ class="text-danger"></span>
                         </div>
+                        <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
-                        <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
                     </form>
@@ -86,7 +94,7 @@
         // Verifica se há uma mensagem de sucesso
         var successMessage = $(".alert.alert-success");
 
-        // Se houver uma mensagem de sucesso, inicie a animação de fade-in e depois fade-out
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
         if (successMessage.length > 0) {
             successMessage.addClass("fade-in-out");
             setTimeout(function () {
@@ -97,7 +105,7 @@
         // Verifica se há uma mensagem de erro
         var errorMessage = $(".alert.alert-danger");
 
-        // Se houver uma mensagem de erro, inicie a animação de fade-in e depois fade-out
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
         if (errorMessage.length > 0) {
             errorMessage.addClass("error-fade-in-out");
             setTimeout(function () {
