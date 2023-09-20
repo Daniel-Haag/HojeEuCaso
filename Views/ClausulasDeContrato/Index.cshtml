@@ -120,9 +120,9 @@
 
     $(document).ready(function () {
         $(".delete-button").click(function () {
-            var clausulaId = $(this).data("clausula-id");
+            var clausula = $(this).data("clausula-id");
 
-            $("#confirmDelete").data("clausula-id", clausulaId);
+            $("#confirmDelete").data("clausula-id", clausula);
             $("#confirmDeleteModal").modal("show");
         });
 

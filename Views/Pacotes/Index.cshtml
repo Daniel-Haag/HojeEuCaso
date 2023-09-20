@@ -125,7 +125,7 @@
         $(".delete-button").click(function () {
             var pacote = $(this).data("pacote-id");
 
-            $("#confirmDelete").data("pacote-id", pacoteId);
+            $("#confirmDelete").data("pacote-id", pacote);
             $("#confirmDeleteModal").modal("show");
         });
 

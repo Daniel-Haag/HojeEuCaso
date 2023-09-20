@@ -1,58 +1,41 @@
 ﻿@page
 @{
-    var cidades = new List<object>
+    var categoriasDosPlanos = new List<object>
     {
-        new { Id = 1, Nome = "Cidade 1" },
-        new { Id = 2, Nome = "Cidade 2" },
-        new { Id = 3, Nome = "Cidade 3" },
-        new { Id = 3, Nome = "Cidade 4" },
-        new { Id = 3, Nome = "Cidade 5" },
-        new { Id = 3, Nome = "Cidade 6" },
-        new { Id = 3, Nome = "Cidade 7" },
-        new { Id = 3, Nome = "Cidade 8" },
-        new { Id = 3, Nome = "Cidade 9" },
-        new { Id = 3, Nome = "Cidade 10" },
-        new { Id = 3, Nome = "Cidade 11" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
-        new { Id = 3, Nome = "Cidade 12" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
+        new { Id = 1, Categoria = "Categoria", Plano = "Plano" }
+        
         // dados mockados pois não há modelo ainda
     };
 }
@@ -60,15 +43,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cidades</title>
+    <title>Categorias dos Planos</title>
 </head>
 <body>
     <div class="container mt-4" style="margin-left:10%">
-        <h2>Cidades</h2>
+        <h2>Categorias dos Planos</h2>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive">
-                    <a href="/Cidades/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
+                    <a href="/CategoriasDosPlanos/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
                         <i class="fas fa-plus"></i> Novo
                     </a>
                     <table id="listagem" class="table table-striped" style="width:100%">
@@ -76,25 +59,27 @@
                             <tr>
                                 <th>Seleção</th>
                                 <th>ID</th>
-                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Plano</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
-                                foreach (var cidade in cidades)
+                                foreach (var categoriaDosPlanos in categoriasDosPlanos)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@cidade.ID">
+                                            <input type="checkbox" name="selecao[]" value="@@categoriaDosPlanos.ID">
                                         </td>
-                                        <td>@@cidade.ID</td>
-                                        <td>@@cidade.Nome</td>
+                                        <td>@@categoriaDosPlanos.ID</td>
+                                        <td>@@categoriaDosPlanos.Categoria</td>
+                                        <td>@@categoriaDosPlanos.Plano</td>
                                         <td>
-                                            <a href="/Cidades/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/CategoriasDosPlanos/Edit/1" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-cidade-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-categoriaDosPlanos-id="1">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -137,19 +122,19 @@
 
     $(document).ready(function () {
         $(".delete-button").click(function () {
-            var cidade = $(this).data("cidade-id");
+            var categoriaDosPlanos = $(this).data("categoriaDosPlanos-id");
 
-            $("#confirmDelete").data("cidade-id", cidade);
+            $("#confirmDelete").data("categoriaDosPlanos-id", categoriaDosPlanos);
             $("#confirmDeleteModal").modal("show");
         });
 
         $("#confirmDelete").click(function () {
-            var cidadeId = $(this).data("cidade-id");
+            var categoriaDosPlanosId = $(this).data("categoriaDosPlanos-id");
 
             // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
             $.ajax({
                 type: 'POST',
-                url: '/Cidades/Delete/' + cidadeId, // Verifique se o URL corresponde à sua rota de exclusão
+                url: '/categoriaDosPlanoss/Delete/' + categoriaDosPlanosId, // Verifique se o URL corresponde à sua rota de exclusão
                 success: function (response) {
                     // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
                     // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma

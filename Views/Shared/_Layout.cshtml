@@ -50,10 +50,13 @@
             display: none;
         }
 
+        .sub-menu-option {
+            font-size: 10px;
+        }
+
             /* Estilizar as subseleções */
             .sub-menu.expanded {
                 display: block;
-                margin-left: 70px;
             }
 
         /* Estilizar o ícone de alternância do menu quando as subseleções estão expandidas */
@@ -345,14 +348,22 @@
                                 </a>
                                 @*<span class="menu-toggle nav-link" id="nova-site-toggle"><i class="fa fa-keyboard" aria-hidden="true"></i><span style="margin-left:10px;">Nova Site</span></span>*@
                                 <ul class="sub-menu">
-                                    <li><a asp-area="" asp-controller="Cidades" asp-action="Index">Cidades</a></li>
-                                    <li><a asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a></li>
-                                    <li><a asp-area="" asp-controller="ClausulasDeContrato" asp-action="Index">Cláusulas de Contrato</a></li>
-                                    <li><a asp-area="" asp-controller="Pacotes" asp-action="Index">Pacotes</a></li>
-                                    <li><a asp-area="" asp-controller="ItensDePacotes" asp-action="Index">Itens de Pacotes</a></li>
-                                    <li><a asp-area="" asp-controller="Planos" asp-action="Index">Planos</a></li>
-                                    <li><a asp-area="" asp-controller="CategoriasDosPlanos" asp-action="Index">Categorias dos Planos</a></li>
-                                    <li><a asp-area="" asp-controller="PacotesDeUsuarios" asp-action="Index">Pacotes de Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="Cidades" asp-action="Index" class="sub-menu-option">Cidades</a></li>
+                                    <li><a asp-area="" asp-controller="Categorias" asp-action="Index" class="sub-menu-option">Categorias</a></li>
+                                    <li><a asp-area="" asp-controller="ClausulasDeContrato" asp-action="Index" class="sub-menu-option">Cláusulas de Contrato</a></li>
+                                    <li><a asp-area="" asp-controller="Pacotes" asp-action="Index" class="sub-menu-option">Pacotes</a></li>
+                                    <li><a asp-area="" asp-controller="ItensDePacotes" asp-action="Index" class="sub-menu-option">Itens de Pacotes</a></li>
+                                    <li><a asp-area="" asp-controller="Planos" asp-action="Index" class="sub-menu-option">Planos</a></li>
+                                    <li><a asp-area="" asp-controller="CategoriasDosPlanos" asp-action="Index" class="sub-menu-option">Categorias dos Planos</a></li>
+                                    <li><a asp-area="" asp-controller="PacotesDeUsuarios" asp-action="Index" class="sub-menu-option">Pacotes de Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="ItensDePacotesDeUsuarios" asp-action="Index" class="sub-menu-option">Itens de Pacotes de Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="Estados" asp-action="Index" class="sub-menu-option">Estados</a></li>
+                                    <li><a asp-area="" asp-controller="Fornecedores" asp-action="Index" class="sub-menu-option">Fornecedores</a></li>
+                                    <li><a asp-area="" asp-controller="FornecedoresIndicados" asp-action="Index" class="sub-menu-option">Fornecedores Indicados</a></li>
+                                    <li><a asp-area="" asp-controller="Tendencias" asp-action="Index" class="sub-menu-option">Tendências</a></li>
+                                    <li><a asp-area="" asp-controller="Usuarios" asp-action="Index" class="sub-menu-option">Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="Feedbacks" asp-action="Index" class="sub-menu-option">Feedbacks</a></li>
+                                    <li><a asp-area="" asp-controller="Sugestões" asp-action="Index" class="sub-menu-option">Sugestões</a></li>
                                     <!-- Adicionar mais subseleções conforme necessário -->
                                 </ul>
                                 <hr />

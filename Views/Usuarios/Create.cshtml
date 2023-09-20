@@ -1,0 +1,200 @@
+﻿@{
+    ViewData["Title"] = "Cadastro Usuários";
+}
+<style>
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <form asp-action="Create">
+                        <div class="form-group">
+                            <label @*asp-for=""*@>Nome</label>
+                            <input @*asp-for="Nome"*@ class="form-control" />
+                            <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+
+                            <label @*asp-for=""*@>Email</label>
+                            <input @*asp-for="Email"*@ class="form-control" />
+                            <span @*asp-validation-for="Email"*@ class="text-danger"></span>
+
+                            <label @*asp-for=""*@>Password</label>
+                            <input type="password" @*asp-for="Nome"*@ class="form-control" />
+                            <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Status"*@>Status</label>
+                            <select @*asp-for="Status"*@ class="form-control">
+                                <option value="Opção1">Opção 1</option>
+                                <option value="Opção2">Opção 2</option>
+                                <option value="Opção3">Opção 3</option>
+                            </select>
+                            <span @*asp-validation-for="Status"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Tipo"*@>Tipo</label>
+                            <select @*asp-for="Tipo"*@ class="form-control">
+                                <option value="Opção1">Opção 1</option>
+                                <option value="Opção2">Opção 2</option>
+                                <option value="Opção3">Opção 3</option>
+                            </select>
+                            <span @*asp-validation-for="Tipo"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Exclusao"*@>Solicitou exclusão</label>
+                            <select @*asp-for="Exclusao"*@ class="form-control">
+                                <option value="Opção1">Não</option>
+                                <option value="Opção2">Sim</option>
+                            </select>
+                            <span @*asp-validation-for="Exclusao"*@ class="text-danger"></span>
+
+                            <label @*asp-for="MotivoExclusao"*@>Motivo Exclusão</label>
+                            <input @*asp-for="MotivoExclusao"*@ class="form-control" />
+                            <span @*asp-validation-for="MotivoExclusao"*@ class="text-danger"></span>
+
+                            <label @*asp-for="IDIdentificacao"*@>ID Identificação</label>
+                            <input @*asp-for="IDIdentificacao"*@ class="form-control" />
+                            <span @*asp-validation-for="IDIdentificacao"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Avaliacao"*@>Avaliação</label>
+                            <input @*asp-for="Avaliacao"*@ class="form-control" />
+                            <span @*asp-validation-for="Avaliacao"*@ class="text-danger"></span>
+
+                            <label @*asp-for="DataNascimento"*@>Data Nascimento</label>
+                            <input @*asp-for="DataNascimento"*@ class="form-control" />
+                            <span @*asp-validation-for="DataNascimento"*@ class="text-danger"></span>
+
+                            <label @*asp-for="RG"*@>RG</label>
+                            <input @*asp-for="RG"*@ class="form-control" />
+                            <span @*asp-validation-for="RG"*@ class="text-danger"></span>
+
+                            <label @*asp-for="CPF"*@>CPF</label>
+                            <input @*asp-for="CPF"*@ class="form-control" />
+                            <span @*asp-validation-for="CPF"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Telefone"*@>Telefone</label>
+                            <input @*asp-for="Telefone"*@ class="form-control" />
+                            <span @*asp-validation-for="Telefone"*@ class="text-danger"></span>
+
+                            <label @*asp-for="CEP"*@>CEP</label>
+                            <input @*asp-for="CEP"*@ class="form-control" />
+                            <span @*asp-validation-for="CEP"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Estado"*@>Estado</label>
+                            <select @*asp-for="Estado"*@ class="form-control">
+                                <option value="Opção1">Opção 1</option>
+                                <option value="Opção2">Opção 2</option>
+                                <option value="Opção3">Opção 3</option>
+                            </select>
+                            <span @*asp-validation-for="Estado"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Cidade"*@>Cidade</label>
+                            <select @*asp-for="Cidade"*@ class="form-control">
+                                <option value="Opção1">Opção 1</option>
+                                <option value="Opção2">Opção 2</option>
+                                <option value="Opção3">Opção 3</option>
+                            </select>
+                            <span @*asp-validation-for="Cidade"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Bairro"*@>Bairro</label>
+                            <input @*asp-for="Bairro"*@ class="form-control" />
+                            <span @*asp-validation-for="Bairro"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Endereco"*@>Endereço</label>
+                            <input @*asp-for="Endereco"*@ class="form-control" />
+                            <span @*asp-validation-for="Endereco"*@ class="text-danger"></span>
+
+                            <label @*asp-for="Numero"*@>Número</label>
+                            <input @*asp-for="Numero"*@ class="form-control" />
+                            <span @*asp-validation-for="Numero"*@ class="text-danger"></span>
+
+                        </div>
+                        <!-- Adicionar outros campos relevantes aqui, se necessário -->
+                        <hr />
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Verifica se há uma mensagem de sucesso
+        var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+</script>
