@@ -44,7 +44,7 @@
         }
 
         .desktopCard {
-            width: 40%;
+            width: 100%;
             margin-left: 5%;
         }
 
@@ -67,73 +67,38 @@
     </style>
 </head>
 <body>
-    <div style="display: flex; flex-wrap: wrap; margin-left:10%">
+    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px;">
+        <h2 style="font-weight: 600; font-size: 24px;">Agenda</h2>
+        <h3 style="font-weight: 500; font-size: 20px;">@ViewBag.CurrentDate.ToString("MMMM yyyy")</h3>
 
-        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
-            <h2 style="font-weight: 600; font-size: 24px;">Agenda</h2>
-            <h3 style="font-weight: 500; font-size: 20px;">@ViewBag.CurrentDate.ToString("MMMM yyyy")</h3>
-
-            <div>
-                <a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.AddMonths(-1).Month, year = ViewBag.CurrentDate.AddMonths(-1).Year })" class="btn btn-outline-danger mr-2" style="font-size:10px"><i class="fas fa-chevron-left"></i> Mês Anterior</a>
-                <a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.AddMonths(1).Month, year = ViewBag.CurrentDate.AddMonths(1).Year })" class="btn btn-outline-danger ml-2" style="font-size:10px">Próximo Mês <i class="fas fa-chevron-right"></i></a>
-                @*<a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.Month, year = ViewBag.CurrentDate.Year - 1 })" class="btn btn-outline-secondary mr-2" style="font-size:10px"><i class="fas fa-chevron-left"></i> Ano Anterior</a>*@
-                @*<a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.Month, year = ViewBag.CurrentDate.Year + 1 })" class="btn btn-outline-secondary ml-2" style="font-size:10px">Próximo Ano <i class="fas fa-chevron-right"></i></a>*@
-            </div>
-
-            <div class="calendar card-body">
-                <div class="day bg-light">Dom</div>
-                <div class="day bg-light">Seg</div>
-                <div class="day bg-light">Ter</div>
-                <div class="day bg-light">Qua</div>
-                <div class="day bg-light">Qui</div>
-                <div class="day bg-light">Sex</div>
-                <div class="day bg-light">Sáb</div>
-
-                @for (var day = 1; day <= DateTime.DaysInMonth(ViewBag.CurrentDate.Year, ViewBag.CurrentDate.Month); day++)
-                {
-                    var date = new DateTime(ViewBag.CurrentDate.Year, ViewBag.CurrentDate.Month, day);
-                    var dayName = date.ToString("ddd");
-                    var offset = (int)date.DayOfWeek; // Obter o deslocamento para o primeiro dia da semana
-
-                    <div class="day @(date.Date == ViewBag.CurrentDate.Date ? "today" : "")" style="grid-column: @(offset + 1) / span 1;">
-                        <span class="day-number">@day</span>
-                    </div>
-                }
-            </div>
+        <div>
+            <a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.AddMonths(-1).Month, year = ViewBag.CurrentDate.AddMonths(-1).Year })" class="btn btn-outline-danger mr-2" style="font-size:10px"><i class="fas fa-chevron-left"></i> Mês Anterior</a>
+            <a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.AddMonths(1).Month, year = ViewBag.CurrentDate.AddMonths(1).Year })" class="btn btn-outline-danger ml-2" style="font-size:10px">Próximo Mês <i class="fas fa-chevron-right"></i></a>
+            @*<a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.Month, year = ViewBag.CurrentDate.Year - 1 })" class="btn btn-outline-secondary mr-2" style="font-size:10px"><i class="fas fa-chevron-left"></i> Ano Anterior</a>*@
+            @*<a href="@Url.Action("Index", new { month = ViewBag.CurrentDate.Month, year = ViewBag.CurrentDate.Year + 1 })" class="btn btn-outline-secondary ml-2" style="font-size:10px">Próximo Ano <i class="fas fa-chevron-right"></i></a>*@
         </div>
 
-        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
-            <h2 style="font-weight: 600; font-size: 24px;">Valor disponível para recebimento</h2>
-            <h3> 123456789</h3>
-        </div>
+        <div class="calendar card-body">
+            <div class="day bg-light">Dom</div>
+            <div class="day bg-light">Seg</div>
+            <div class="day bg-light">Ter</div>
+            <div class="day bg-light">Qua</div>
+            <div class="day bg-light">Qui</div>
+            <div class="day bg-light">Sex</div>
+            <div class="day bg-light">Sáb</div>
 
-        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
-            <h2 style="font-weight: 600; font-size: 24px;">Notificações</h2>
-            <h5> Notificação 1</h5>
-            <h5> Notificação 2</h5>
-            <h5> Notificação 3</h5>
-            <h5> Notificação 4</h5>
-        </div>
+            @for (var day = 1; day <= DateTime.DaysInMonth(ViewBag.CurrentDate.Year, ViewBag.CurrentDate.Month); day++)
+            {
+                var date = new DateTime(ViewBag.CurrentDate.Year, ViewBag.CurrentDate.Month, day);
+                var dayName = date.ToString("ddd");
+                var offset = (int)date.DayOfWeek; // Obter o deslocamento para o primeiro dia da semana
 
-        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
-            <h2 style="font-weight: 600; font-size: 24px;">Ative seu plano</h2>
-            <h3 style="font-weight: 500; font-size: 20px;">@ViewBag.CurrentDate.ToString("MMMM yyyy")</h3>
-
-            <div>
-                <a href="" class="btn btn-outline-danger mr-2" style="font-size:10px">Ativar</a>
-                <a href="" class="btn btn-outline-danger mr-2" style="font-size:10px">Inativar</a>
-            </div>
-        </div>
-
-        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
-            <h2 style="font-weight: 600; font-size: 24px;">Últimas vendas</h2>
-            <h5> Venda 1</h5>
-            <h5> Venda 2</h5>
-            <h5> Venda 3</h5>
-            <h5> Venda 4</h5>
+                <div class="day @(date.Date == ViewBag.CurrentDate.Date ? "today" : "")" style="grid-column: @(offset + 1) / span 1;">
+                    <span class="day-number">@day</span>
+                </div>
+            }
         </div>
     </div>
-
     <!-- Modal de Marcar Agenda -->
     <div class="modal fade" id="agendaModal" tabindex="-1" aria-labelledby="agendaModalLabel" aria-hidden="true">
         <div class="modal-dialog">

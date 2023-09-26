@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Cadastro Cidade";
+}
+<style>
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <form asp-action="Create">
+                        <div class="form-group">
+                            <label @*asp-for=""*@>Nome da Cidade</label>
+                            <input @*asp-for="Nome"*@ class="form-control" />
+                            <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+                        </div>
+                        <!-- Adicionar outros campos relevantes aqui, se necessário -->
+                        <hr />
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        // Verifica se há uma mensagem de sucesso
+        var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+</script>
