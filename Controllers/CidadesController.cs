@@ -1,10 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HojeEuCaso.Interfaces;
+using HojeEuCaso.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace HojeEuCaso.Controllers
 {
     public class CidadesController : Controller
     {
+        private readonly ILogger<CidadesController> _logger;
+        private readonly ICidadeService _cidadeService;
+
+        public CidadesController(ILogger<CidadesController> logger, ICidadeService cidadeService)
+        {
+            _logger = logger;
+            _cidadeService = cidadeService;
+        }
+
         // GET: CidadesController
         public ActionResult Index()
         {
@@ -26,10 +38,11 @@ namespace HojeEuCaso.Controllers
         // POST: CidadesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection) //Alterar para a entidade
+        public ActionResult Create(Cidade cidade)
         {
             try
             {
+                _cidadeService.CreateNewCidade(cidade);
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
                 //return RedirectToAction(nameof(Index));
@@ -42,22 +55,27 @@ namespace HojeEuCaso.Controllers
         }
 
         // GET: CidadesController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int ID)
         {
+            _cidadeService.GetCidadeById(ID);
             return View();
         }
 
         // POST: CidadesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Cidade cidade)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _cidadeService.UpdateCidade(cidade);
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                return View();
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
         }
