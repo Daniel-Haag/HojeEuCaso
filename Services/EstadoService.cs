@@ -8,30 +8,30 @@ using System.Linq;
 
 namespace HojeEuCaso.Services
 {
-    public class CidadeService : ICidadeService
+    public class EstadoService : IEstadoService
     {
         private readonly HojeEuCasoDbContext _HojeEuCasoDbContext;
 
-        public CidadeService(HojeEuCasoDbContext HojeEuCasoDbContext)
+        public EstadoService(HojeEuCasoDbContext HojeEuCasoDbContext)
         {
             _HojeEuCasoDbContext = HojeEuCasoDbContext;
         }
 
-        public List<Cidade> GetAllCidades()
+        public List<Estado> GetAllEstados()
         {
-            return _HojeEuCasoDbContext.Cidades.ToList();
+            return _HojeEuCasoDbContext.Estados.ToList();
         }
 
-        public Cidade GetCidadeById(int ID)
+        public Estado GetEstadoById(int ID)
         {
-            return _HojeEuCasoDbContext.Cidades.Where(x => x.CidadeID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.Estados.Where(x => x.EstadoID == ID).FirstOrDefault();
         }
 
-        public void CreateNewCidade(Cidade Cidade)
+        public void CreateNewEstado(Estado Estado)
         {
             try
             {
-                _HojeEuCasoDbContext.Cidades.Add(Cidade);
+                _HojeEuCasoDbContext.Estados.Add(Estado);
                 _HojeEuCasoDbContext.SaveChanges();
             }
             catch (Exception e)
@@ -40,11 +40,11 @@ namespace HojeEuCaso.Services
             }
         }
 
-        public void UpdateCidade(Cidade cidade)
+        public void UpdateEstado(Estado Estado)
         {
             try
             {
-                _HojeEuCasoDbContext.Cidades.Update(cidade);
+                _HojeEuCasoDbContext.Estados.Update(Estado);
                 _HojeEuCasoDbContext.SaveChanges();
             }
             catch (Exception e)
@@ -53,12 +53,12 @@ namespace HojeEuCaso.Services
             }
         }
 
-        public void DeleteCidade(int ID)
+        public void DeleteEstado(int ID)
         {
             try
             {
-                var cidade = GetCidadeById(ID);
-                _HojeEuCasoDbContext.Cidades.Remove(cidade);
+                var Estado = GetEstadoById(ID);
+                _HojeEuCasoDbContext.Estados.Remove(Estado);
                 _HojeEuCasoDbContext.SaveChanges();
             }
             catch (Exception e)

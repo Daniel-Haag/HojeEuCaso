@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Estado
+@{
     ViewData["Title"] = "Cadastro Estados";
 }
 <style>
@@ -67,18 +68,18 @@
                     }
                     <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for="UF"*@>UF</label>
-                            <input @*asp-for="UF"*@ class="form-control" />
-                            <span @*asp-validation-for="UF"*@ class="text-danger"></span>
+                            <label asp-for="UF">UF</label>
+                            <input asp-for="UF" class="form-control" />
+                            <span asp-validation-for="UF" class="text-danger"></span>
 
-                            <label @*asp-for="Nome"*@>Nome</label>
-                            <input @*asp-for="Nome"*@ class="form-control" />
-                            <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+                            <label asp-for="Nome">Nome</label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
