@@ -41,9 +41,12 @@ namespace HojeEuCaso
                     policy.RequireAuthenticatedUser();
                 });
             });
+
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<ICidadeService, CidadeService>();
             services.AddScoped<ISessionUsuarioService, SessionUsuarioService>();
+
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<HojeEuCasoDbContext>(options =>
                 options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 1, 0))));

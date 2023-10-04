@@ -1,6 +1,6 @@
 ﻿@page
 @{
-    var Fornecedor = new List<object>
+    var Cidades = new List<object>
     {
         new { Id = 1, Nome = "Cidade 1" },
         new { Id = 2, Nome = "Cidade 2" },
@@ -60,15 +60,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fornecedor</title>
+    <title>Cidades</title>
 </head>
 <body>
     <div class="container mt-4" style="margin-left:10%">
-        <h2>Fornecedor</h2>
+        <h2>Cidades</h2>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive">
-                    <a href="/Fornecedor/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
+                    <a href="/Cidades/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
                         <i class="fas fa-plus"></i> Novo
                     </a>
                     <table id="listagem" class="table table-striped" style="width:100%">
@@ -82,19 +82,19 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (var cidade in Fornecedor)
+                                foreach (var cidade in ViewBag.Cidades)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@cidade.ID">
+                                            <input type="checkbox" name="selecao[]" value="@cidade.CidadeID">
                                         </td>
-                                        <td>@@cidade.ID</td>
-                                        <td>@@cidade.Nome</td>
+                                        <td>@cidade.CidadeID</td>
+                                        <td>@cidade.Nome</td>
                                         <td>
-                                            <a href="/Fornecedor/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/Cidades/Edit/@cidade.CidadeID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-cidade-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-cidade-id="@cidade.CidadeID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -146,25 +146,24 @@
         $("#confirmDelete").click(function () {
             var cidadeId = $(this).data("cidade-id");
 
-            // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
+            // Envia uma solicitação AJAX para confirmar a exclusão
             $.ajax({
                 type: 'POST',
-                url: '/Fornecedor/Delete/' + cidadeId, // Verifique se o URL corresponde à sua rota de exclusão
+                url: '/Cidades/Delete/' + cidadeId,
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-                    // Fecha o modal
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });
         });
     });
+
 </script>
 
 

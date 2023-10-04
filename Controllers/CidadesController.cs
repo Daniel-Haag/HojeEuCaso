@@ -3,6 +3,7 @@ using HojeEuCaso.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace HojeEuCaso.Controllers
 {
@@ -20,6 +21,7 @@ namespace HojeEuCaso.Controllers
         // GET: CidadesController
         public ActionResult Index()
         {
+            ViewBag.Cidades = _cidadeService.GetAllCidades().ToList();
             return View();
         }
 
@@ -32,6 +34,7 @@ namespace HojeEuCaso.Controllers
         // GET: CidadesController/Create
         public ActionResult Create()
         {
+            TempData["SuccessMessage"] = null;
             return View();
         }
 
@@ -57,7 +60,7 @@ namespace HojeEuCaso.Controllers
         // GET: CidadesController/Edit/5
         public ActionResult Edit(int ID)
         {
-            _cidadeService.GetCidadeById(ID);
+            ViewBag.Cidade = _cidadeService.GetCidadeById(ID);
             return View();
         }
 
@@ -70,8 +73,8 @@ namespace HojeEuCaso.Controllers
             {
                 _cidadeService.UpdateCidade(cidade);
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                ViewBag.Cidade = cidade;
                 return View();
-                //return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -80,24 +83,20 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: CidadesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: CidadesController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _cidadeService.DeleteCidade(id);
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return RedirectToAction("Index");
             }
         }
     }
