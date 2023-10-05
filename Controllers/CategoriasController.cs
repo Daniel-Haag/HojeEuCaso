@@ -1,13 +1,31 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HojeEuCaso.Interfaces;
+using HojeEuCaso.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace HojeEuCaso.Controllers
 {
     public class CategoriasController : Controller
     {
+        private readonly ILogger<CategoriasController> _logger;
+        private readonly ICategoriaService _categoriaService;
+        private readonly ITipoCategoriaService _tipoCategoriaService;
+
+        public CategoriasController(ILogger<CategoriasController> logger, 
+                                    ICategoriaService CategoriaService,
+                                    ITipoCategoriaService tipoCategoriaService)
+        {
+            _logger = logger;
+            _categoriaService = CategoriaService;
+            _tipoCategoriaService = tipoCategoriaService;
+        }
+
         // GET: CategoriasController
         public ActionResult Index()
         {
+            ViewBag.Categorias = _categoriaService.GetAllCategorias();
             return View();
         }
 
@@ -20,18 +38,28 @@ namespace HojeEuCaso.Controllers
         // GET: CategoriasController/Create
         public ActionResult Create()
         {
+            ViewBag.TipoCategorias = _tipoCategoriaService.GetAllTipoCategorias();
+            TempData["SuccessMessage"] = null;
             return View();
         }
 
         // POST: CategoriasController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection) //Alterar para a entidade
+        public ActionResult Create(Categoria categoria)
         {
             try
             {
+                var tipoCategorias = _tipoCategoriaService.GetAllTipoCategorias();
+                ViewBag.TipoCategorias = tipoCategorias;
+
+                categoria.TipoCategoria = tipoCategorias.FirstOrDefault(x => x.TipoCategoriaID == categoria.TipoCategoriaID);
+
+                _categoriaService.CreateNewCategoria(categoria);
+
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -41,44 +69,57 @@ namespace HojeEuCaso.Controllers
         }
 
         // GET: CategoriasController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int ID)
         {
+            var tipoCategorias = _tipoCategoriaService.GetAllTipoCategorias();
+            ViewBag.TipoCategorias = tipoCategorias;
+
+            var categoria = _categoriaService.GetCategoriaById(ID);
+            ViewBag.Categoria = categoria;
+            ViewBag.TipoCategoria = tipoCategorias.FirstOrDefault(x => x.TipoCategoriaID == categoria.TipoCategoriaID);
             return View();
         }
 
         // POST: CategoriasController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Categoria categoria)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var tipoCategorias = _tipoCategoriaService.GetAllTipoCategorias();
+                ViewBag.TipoCategorias = tipoCategorias;
+
+                var tipoCategoria = tipoCategorias.FirstOrDefault(x => x.TipoCategoriaID == categoria.TipoCategoriaID);
+                categoria.TipoCategoria = tipoCategoria;
+                ViewBag.TipoCategoria = tipoCategoria;
+
+                _categoriaService.UpdateCategoria(categoria);
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                ViewBag.Categoria = categoria;
+                return View();
             }
             catch
             {
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
-        }
-
-        // GET: CategoriasController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
         }
 
         // POST: CategoriasController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _categoriaService.DeleteCategoria(id);
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return RedirectToAction("Index");
             }
         }
     }

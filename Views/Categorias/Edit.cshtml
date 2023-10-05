@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Categoria
+@{
     ViewData["Title"] = "Editar Categoria";
 }
 <style>
@@ -66,23 +67,43 @@
                         </div>
                     }
                     <form asp-action="Edit">
+                        <div class="form-group" style="display:none">
+                            <label asp-for="CategoriaID">Descrição</label>
+                            <input asp-for="CategoriaID" class="form-control" value="@ViewBag.Categoria.CategoriaID" />
+                            <span asp-validation-for="CategoriaID" class="text-danger"></span>
+                        </div>
                         <div class="form-group">
-                            <label @*asp-for=""*@>Descrição</label>
-                            <input @*asp-for="Descricao"*@ class="form-control" />
-                            <span @*asp-validation-for="Descricao"*@ class="text-danger"></span>
+                            <label asp-for="Descricao">Descrição</label>
+                            <input asp-for="Descricao" class="form-control" value="@ViewBag.Categoria.Descricao" />
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TipoCategoriaID">Tipo de Categoria</label>
+                            <select asp-for="TipoCategoriaID" class="form-control">
+                                @foreach (var tipoCategoria in ViewBag.TipoCategorias)
+                                {
+                                    var isSelected = tipoCategoria.TipoCategoriaID == ViewBag.TipoCategoria.TipoCategoriaID ? "selected" : "";
 
-                            <label @*asp-for="TipoCategoria"*@>Tipo de Categoria</label>
-                            <select @*asp-for="TipoCategoria"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                                    if (isSelected == "selected")
+                                    {
+                                        <option value="@tipoCategoria.TipoCategoriaID" selected>
+                                            @tipoCategoria.Descricao
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@tipoCategoria.TipoCategoriaID">
+                                            @tipoCategoria.Descricao
+                                        </option>
+                                    }
+                                }
                             </select>
-                            <span @*asp-validation-for="TipoCategoria"*@ class="text-danger"></span>
+                            <span asp-validation-for="TipoCategoriaID" class="text-danger"></span>
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
