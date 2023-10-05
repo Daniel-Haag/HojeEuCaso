@@ -1,0 +1,122 @@
+﻿@page
+@{
+    
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tipo de Categorias</title>
+</head>
+<body>
+    <div class="container mt-4" style="margin-left:10%">
+        <h2>Tipo de Categorias</h2>
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <a href="/TipoCategoria/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
+                        <i class="fas fa-plus"></i> Novo
+                    </a>
+                    <table id="listagem" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Seleção</th>
+                                <th>ID</th>
+                                <th>Descrição</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var TipoCategoria in ViewBag.TipoCategorias)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="selecao[]" value="@TipoCategoria.TipoCategoriaID">
+                                        </td>
+                                        <td>@TipoCategoria.TipoCategoriaID</td>
+                                        <td>@TipoCategoria.Descricao</td>
+                                        <td>
+                                            <a href="/TipoCategoria/Edit/@TipoCategoria.TipoCategoriaID" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <button class="btn btn-danger btn-sm delete-button" data-tipocategoria-id="@TipoCategoria.TipoCategoriaID">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="confirmDeleteModal" tabindex="-1" role="dialog" style="width:80%; margin-left:10%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir este registro?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var table = new DataTable('#listagem', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json',
+        },
+    });
+
+    $(document).ready(function () {
+        $(".delete-button").click(function () {
+            var tipoCategoria = $(this).data("tipocategoria-id");
+
+            console.log(tipoCategoria);
+
+            $("#confirmDelete").data("tipocategoria-id", tipoCategoria);
+            $("#confirmDeleteModal").modal("show");
+        });
+
+        $("#confirmDelete").click(function () {
+            var tipoCategoriaId = $(this).data("tipocategoria-id");
+
+            // Envia uma solicitação AJAX para confirmar a exclusão
+            $.ajax({
+                type: 'POST',
+                url: '/TipoCategoria/Delete/' + tipoCategoriaId,
+                success: function (response) {
+
+                    $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
+                },
+                error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
+                    console.error(error);
+                }
+            });
+        });
+    });
+
+</script>
+
+
+
+
+
+
+

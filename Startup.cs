@@ -46,6 +46,8 @@ namespace HojeEuCaso
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<ICidadeService, CidadeService>();
             services.AddScoped<IEstadoService, EstadoService>();
+            services.AddScoped<ITipoCategoriaService, TipoCategoriaService>();
+
             services.AddScoped<ISessionUsuarioService, SessionUsuarioService>();
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
