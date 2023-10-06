@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Plano
+@{
     ViewData["Title"] = "Cadastro Planos";
 }
 <style>
@@ -67,26 +68,29 @@
                     }
                     <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for=""*@>Título</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
+                            <label asp-for="Titulo">Título</label>
+                            <input asp-for="Titulo" class="form-control" />
+                            <span asp-validation-for="Titulo" class="text-danger"></span>
 
-                            <label @*asp-for=""*@>Preço</label>
-                            <input @*asp-for="Preco"*@ class="form-control" />
-                            <span @*asp-validation-for="Preco"*@ class="text-danger"></span>
+                            <label asp-for="Preco">Preço</label>
+                            <input type="text" asp-for="Preco" class="form-control" id="precoInput" oninput="RetiraPonto()" />
+                            <span asp-validation-for="Preco" class="text-danger"></span>
 
-                            <label @*asp-for="PeriodoDeRenovacao"*@>Periodo de Renovação</label>
-                            <select @*asp-for="PeriodoDeRenovacao"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                            <label asp-for="PeriodoRenovacao">Periodo de Renovação</label>
+                            <select asp-for="PeriodoRenovacao" class="form-control">
+                                <option value="Semanal">Semanal</option>
+                                <option value="A Cada Duas Semanas">A Cada Duas Semanas</option>
+                                <option value="Mensal">Mensal</option>
+                                <option value="A cada 3 Meses">A cada 3 Meses</option>
+                                <option value="Semestral">Semestral</option>
+                                <option value="Anual">Anual</option>
                             </select>
-                            <span @*asp-validation-for="PeriodoDeRenovacao"*@ class="text-danger"></span>
+                            <span asp-validation-for="PeriodoRenovacao" class="text-danger"></span>
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
@@ -116,5 +120,39 @@
                 errorMessage.removeClass("error-fade-in-out").fadeOut(500);
             }, 3000); // 3000 milissegundos (3 segundos)
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Selecione o campo de preço
+            var precoInput = document.getElementById("precoInput");
+
+            // Adicione um ouvinte de evento para formatar o valor quando o usuário sair do campo
+            precoInput.addEventListener("blur", function () {
+                // Obtenha o valor atual do campo
+                var precoValue = precoInput.value;
+
+                // Verifique se o valor é um número válido
+                if (!isNaN(precoValue)) {
+                    // Formate o valor como moeda (reais e centavos)
+                    var formatter = new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    });
+                    precoInput.value = formatter.format(precoValue);
+                }
+            });
+        });
     });
+
+    function RetiraPonto() {
+        
+        var precoInput = document.getElementById("precoInput");
+
+        var precoValue = precoInput.value;
+
+        if (!isNaN(precoValue)) {
+            var precoFormatado = precoValue.replace(/\./g, ',');
+
+            precoInput.value = precoFormatado;
+        }
+    }
 </script>

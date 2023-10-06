@@ -1,43 +1,6 @@
 ﻿@page
 @{
-    var planos = new List<object>
-    {
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        new { Id = 1, Titulo = "Titulo", Preco = 123, PeriodoDeRenovacao = "Anual" },
-        
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -67,21 +30,21 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (var plano in planos)
+                                foreach (var plano in ViewBag.Planos)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@plano.ID">
+                                            <input type="checkbox" name="selecao[]" value="@plano.PlanoID">
                                         </td>
-                                        <td>@@plano.ID</td>
-                                        <td>@@plano.Titulo</td>
-                                        <td>@@plano.Preco</td>
-                                        <td>@@plano.PeriodoDeRenovacao</td>
+                                        <td>@plano.PlanoID</td>
+                                        <td>@plano.Titulo</td>
+                                        <td>@string.Format("R$ {0:N2}", plano.Preco)</td>
+                                        <td>@plano.PeriodoRenovacao</td>
                                         <td>
-                                            <a href="/Planos/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/Planos/Edit/@plano.PlanoID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-plano-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-plano-id="@plano.PlanoID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -138,13 +101,9 @@
                 type: 'POST',
                 url: '/Planos/Delete/' + planoId, // Verifique se o URL corresponde à sua rota de exclusão
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
-
-                    // Fecha o modal
+                    
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
                 },
                 error: function (error) {
                     console.error(error);

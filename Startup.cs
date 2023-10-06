@@ -48,6 +48,7 @@ namespace HojeEuCaso
             services.AddScoped<IEstadoService, EstadoService>();
             services.AddScoped<ITipoCategoriaService, TipoCategoriaService>();
             services.AddScoped<ICategoriaService, CategoriaService>();
+            services.AddScoped<IPlanoService, PlanoService>();
 
             services.AddScoped<ISessionUsuarioService, SessionUsuarioService>();
 
