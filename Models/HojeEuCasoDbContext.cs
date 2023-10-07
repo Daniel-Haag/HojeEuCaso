@@ -24,5 +24,6 @@ namespace HojeEuCaso.Models
         public DbSet<ItensDePacotesDeUsuarios> ItensDePacotesDeUsuarios { get; set; }
         public DbSet<CategoriaDosPlanos> CategoriasDosPlanos { get; set; }
         public DbSet<PacotesDeUsuarios> PacotesDeUsuarios { get; set; }
+        public DbSet<ClausulaContrato> ClausulasContratos { get; set; }
     }
 }

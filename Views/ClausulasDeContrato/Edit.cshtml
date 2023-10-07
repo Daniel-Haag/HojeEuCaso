@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ClausulaContrato
+@{
     ViewData["Title"] = "Editar Cláusulas de Contrato";
 }
 <style>
@@ -66,23 +67,45 @@
                         </div>
                     }
                     <form asp-action="Edit">
-                        <div class="form-group">
-                            <label @*asp-for=""*@>Descrição</label>
-                            <input @*asp-for="Descricao"*@ class="form-control" />
-                            <span @*asp-validation-for="Descricao"*@ class="text-danger"></span>
+                        <div class="form-group" style="display:none">
+                            <label asp-for="ClausulaContratoID">ID</label>
+                            <input asp-for="ClausulaContratoID" class="form-control" value="@ViewBag.ClausulaContrato.ClausulaContratoID"  />
+                            <span asp-validation-for="ClausulaContratoID" class="text-danger"></span>
+                        </div>
 
-                            <label @*asp-for="DefaultCategory"*@>Default Category</label>
-                            <select @*asp-for="DefaultCategory"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                        <div class="form-group">
+                            <label asp-for="Descricao">Descrição</label>
+                            <input asp-for="Descricao" class="form-control" value="@ViewBag.ClausulaContrato.Descricao" />
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CategoriaID">Categoria</label>
+                            <select asp-for="CategoriaID" class="form-control">
+                                @foreach (var categoria in ViewBag.Categorias)
+                                {
+                                    var isSelected = categoria.CategoriaID == ViewBag.Categoria.CategoriaID ? "selected" : "";
+
+                                    if (isSelected == "selected")
+                                    {
+                                        <option value="@categoria.CategoriaID" selected>
+                                            @categoria.Descricao
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@categoria.CategoriaID">
+                                            @categoria.Descricao
+                                        </option>
+                                    }
+                                }
                             </select>
-                            <span @*asp-validation-for="DefaultCategory"*@ class="text-danger"></span>
+                            <span asp-validation-for="Categoria" class="text-danger"></span>
                         </div>
                         <hr />
                         <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

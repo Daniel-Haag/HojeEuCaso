@@ -1,41 +1,6 @@
 ﻿@page
 @{
-    var clausulas = new List<object>
-    {
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        new { Id = 1, Descricao = "Descrição", DefaultCategory = "Wed Manager" },
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -64,20 +29,20 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (var clausula in clausulas)
+                                foreach (var clausula in ViewBag.ClausulasContratos)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@clausula.ID">
+                                            <input type="checkbox" name="selecao[]" value="@clausula.ClausulaContratoID">
                                         </td>
-                                        <td>@@clausula.ID</td>
-                                        <td>@@clausula.Descricao</td>
-                                        <td>@@clausula.DefaultCategory</td>
+                                        <td>@clausula.ClausulaContratoID</td>
+                                        <td>@clausula.Descricao</td>
+                                        <td>@clausula.Categoria.Descricao</td>
                                         <td>
-                                            <a href="/ClausulasDeContrato/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/ClausulasDeContrato/Edit/@clausula.ClausulaContratoID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-clausula-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-clausula-id="@clausula.ClausulaContratoID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -132,18 +97,15 @@
             // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
             $.ajax({
                 type: 'POST',
-                url: '/ClausulasDeContrato/Delete/' + clausulaId, // Verifique se o URL corresponde à sua rota de exclusão
+                url: '/ClausulasDeContrato/Delete/' + clausulaId, 
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-                    // Fecha o modal
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
                 },
                 error: function (error) {
-                    // Lida com erros, por exemplo, exibe uma mensagem de erro
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });
