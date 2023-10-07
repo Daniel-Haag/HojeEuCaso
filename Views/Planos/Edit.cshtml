@@ -79,7 +79,7 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Preco">Preço</label>
-                            <input type="number" asp-for="Preco" class="form-control" value="@ViewBag.Plano.Preco" />
+                            <input type="text" asp-for="Preco" class="form-control" value="@string.Format("{0:N2}", @ViewBag.Plano.Preco)" />
                             <span asp-validation-for="Preco" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -109,7 +109,7 @@
         // Verifica se há uma mensagem de sucesso
         var successMessage = $(".alert.alert-success");
 
-        // Se houver uma mensagem de sucesso, inicie a animação de fade-in e depois fade-out
+        // Se houver uma mensagem de sucesso, inicia a animação de fade-in e depois fade-out
         if (successMessage.length > 0) {
             successMessage.addClass("fade-in-out");
             setTimeout(function () {
@@ -120,7 +120,7 @@
         // Verifica se há uma mensagem de erro
         var errorMessage = $(".alert.alert-danger");
 
-        // Se houver uma mensagem de erro, inicie a animação de fade-in e depois fade-out
+        // Se houver uma mensagem de erro, inicia a animação de fade-in e depois fade-out
         if (errorMessage.length > 0) {
             errorMessage.addClass("error-fade-in-out");
             setTimeout(function () {
@@ -128,13 +128,10 @@
             }, 3000); // 3000 milissegundos (3 segundos)
         }
 
+        var periodoRenovacao = '@ViewBag.Plano.PeriodoRenovacao';
 
-        // Verifique se a ViewBag contém o valor selecionado anteriormente
-        var valorSelecionado = '@ViewBag.ValorSelecionado';
-
-        // Se a ViewBag tiver um valor válido, defina o valor selecionado no elemento select
-        if (valorSelecionado) {
-            document.getElementById('periodoRenovacaoSelect').value = valorSelecionado;
+        if (periodoRenovacao) {
+            $('#periodoRenovacaoSelect').val(periodoRenovacao);
         }
 
     });
