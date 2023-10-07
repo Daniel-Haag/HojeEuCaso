@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CategoriaDosPlanos
+@{
     ViewData["Title"] = "Cadastro Categoria dos Planos";
 }
 <style>
@@ -67,26 +68,32 @@
                     }
                     <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for="Categoria"*@>Categoria</label>
-                            <select @*asp-for="Categoria"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                            <label asp-for="CategoriaID">Categoria</label>
+                            <select asp-for="CategoriaID" class="form-control">
+                                @foreach (var categoria in ViewBag.Categorias)
+                                {
+                                    <option value="@categoria.CategoriaID">
+                                        @categoria.Descricao
+                                        </option>
+                                }
                             </select>
-                            <span @*asp-validation-for="Categoria"*@ class="text-danger"></span>
+                            <span asp-validation-for="CategoriaID" class="text-danger"></span>
 
-                            <label @*asp-for="Plano"*@>Plano</label>
-                            <select @*asp-for="Plano"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                            <label asp-for="PlanoID">Plano</label>
+                            <select asp-for="PlanoID" class="form-control">
+                                @foreach (var plano in ViewBag.Planos)
+                                {
+                                    <option value="@plano.PlanoID">
+                                        @plano.Titulo
+                                    </option>
+                                }
                             </select>
-                            <span @*asp-validation-for="Plano"*@ class="text-danger"></span>
+                            <span asp-validation-for="PlanoID" class="text-danger"></span>
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

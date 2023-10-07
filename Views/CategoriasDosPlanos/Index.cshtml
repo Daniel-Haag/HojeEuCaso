@@ -1,43 +1,6 @@
 ﻿@page
 @{
-    var categoriasDosPlanos = new List<object>
-    {
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" },
-        new { Id = 1, Categoria = "Categoria", Plano = "Plano" }
-        
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -66,20 +29,20 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (var categoriaDosPlanos in categoriasDosPlanos)
+                                foreach (var categoriaDosPlanos in ViewBag.CategoriasDosPlanos)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@categoriaDosPlanos.ID">
+                                            <input type="checkbox" name="selecao[]" value="@categoriaDosPlanos.CategoriaDosPlanosID">
                                         </td>
-                                        <td>@@categoriaDosPlanos.ID</td>
-                                        <td>@@categoriaDosPlanos.Categoria</td>
-                                        <td>@@categoriaDosPlanos.Plano</td>
+                                        <td>@categoriaDosPlanos.CategoriaDosPlanosID</td>
+                                        <td>@categoriaDosPlanos.Categoria.Descricao</td>
+                                        <td>@categoriaDosPlanos.Plano.Titulo</td>
                                         <td>
-                                            <a href="/CategoriasDosPlanos/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/CategoriasDosPlanos/Edit/@categoriaDosPlanos.CategoriaDosPlanosID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-categoriaDosPlanos-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-categoriadosplanos-id="@categoriaDosPlanos.CategoriaDosPlanosID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -122,29 +85,26 @@
 
     $(document).ready(function () {
         $(".delete-button").click(function () {
-            var categoriaDosPlanos = $(this).data("categoriaDosPlanos-id");
+            var categoriaDosPlanos = $(this).data("categoriadosplanos-id");
 
-            $("#confirmDelete").data("categoriaDosPlanos-id", categoriaDosPlanos);
+            $("#confirmDelete").data("categoriadosplanos-id", categoriaDosPlanos);
             $("#confirmDeleteModal").modal("show");
         });
 
         $("#confirmDelete").click(function () {
-            var categoriaDosPlanosId = $(this).data("categoriaDosPlanos-id");
+            var categoriaDosPlanosId = $(this).data("categoriadosplanos-id");
 
             // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
             $.ajax({
                 type: 'POST',
-                url: '/categoriaDosPlanoss/Delete/' + categoriaDosPlanosId, // Verifique se o URL corresponde à sua rota de exclusão
+                url: '/CategoriasDosPlanos/Delete/' + categoriaDosPlanosId, 
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-                    // Fecha o modal
-                    $("#confirmDeleteModal").modal("hide");
+                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });
