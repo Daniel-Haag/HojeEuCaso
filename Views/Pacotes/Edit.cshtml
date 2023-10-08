@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Pacote
+@{
     ViewData["Title"] = "Editar Pacote";
 }
 <style>
@@ -66,35 +67,56 @@
                         </div>
                     }
                     <form asp-action="Edit">
+                        <div class="form-group" style="display:none">
+                            <label asp-for="PacoteID">ID</label>
+                            <input asp-for="PacoteID" class="form-control" value="@ViewBag.Pacote.PacoteID"/>
+                            <span asp-validation-for="PacoteID" class="text-danger"></span>
+                        </div>
                         <div class="form-group">
-                            <label @*asp-for=""*@>Título</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
+                            <label asp-for="Titulo">Título</label>
+                            <input asp-for="Titulo" class="form-control" value="@ViewBag.Pacote.Titulo" />
+                            <span asp-validation-for="Titulo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Preco">Preço</label>
+                            <input type="text" asp-for="Preco" class="form-control" value="@string.Format("{0:N2}", @ViewBag.Pacote.Preco)"  />
+                            <span asp-validation-for="Preco" class="text-danger"></span>
+                        </div>
+                        <label asp-for="QtdMaximaEventosDia">Quantidade Máxima de Eventos por Dia</label>
+                        <input asp-for="QtdMaximaEventosDia" class="form-control" value="@ViewBag.Pacote.QtdMaximaEventosDia" />
+                        <span asp-validation-for="QtdMaximaEventosDia" class="text-danger"></span>
+                        <div class="form-group">
+                            <label asp-for="QtdMaximaPessoas">Quantidade Máxima de Pessoas</label>
+                            <input asp-for="QtdMaximaPessoas" class="form-control" value="@ViewBag.Pacote.QtdMaximaPessoas" />
+                            <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CategoriaID">Categoria</label>
+                            <select asp-for="CategoriaID" class="form-control">
+                                @foreach (var categoria in ViewBag.Categorias)
+                                {
+                                    var isSelected = categoria.CategoriaID == ViewBag.Categoria.CategoriaID ? "selected" : "";
 
-                            <label @*asp-for=""*@>Preço</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
-
-                            <label @*asp-for=""*@>Quantidade Máxima de Eventos por Dia</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
-
-                            <label @*asp-for=""*@>Quantidade Máxima de Pessoas</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
-
-                            <label @*asp-for="DefaultCategory"*@>Default Category</label>
-                            <select @*asp-for="DefaultCategory"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                                    if (isSelected == "selected")
+                                    {
+                                        <option value="@categoria.CategoriaID" selected>
+                                            @categoria.Descricao
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@categoria.CategoriaID">
+                                            @categoria.Descricao
+                                        </option>
+                                    }
+                                }
                             </select>
-                            <span @*asp-validation-for="DefaultCategory"*@ class="text-danger"></span>
+                            <span asp-validation-for="CategoriaID" class="text-danger"></span>
                         </div>
                         <hr />
                         <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

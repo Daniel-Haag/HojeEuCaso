@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Pacote
+@{
     ViewData["Title"] = "Cadastrar Pacote";
 }
 <style>
@@ -67,34 +68,37 @@
                     }
                     <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for=""*@>Título</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
+                            <label asp-for="Titulo">Título</label>
+                            <input asp-for="Titulo" class="form-control" />
+                            <span asp-validation-for="Titulo" class="text-danger"></span>
 
-                            <label @*asp-for=""*@>Preço</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
+                            <label asp-for="Preco">Preço</label>
+                            <input type="text" asp-for="Preco" class="form-control" id="inputPrecoPacote" oninput="RetiraPonto('inputPrecoPacote')" />
+                            <span asp-validation-for="Preco" class="text-danger"></span>
 
-                            <label @*asp-for=""*@>Quantidade Máxima de Eventos por Dia</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
+                            <label asp-for="QtdMaximaEventosDia">Quantidade Máxima de Eventos por Dia</label>
+                            <input asp-for="QtdMaximaEventosDia" class="form-control" />
+                            <span asp-validation-for="QtdMaximaEventosDia" class="text-danger"></span>
 
-                            <label @*asp-for=""*@>Quantidade Máxima de Pessoas</label>
-                            <input @*asp-for="Titulo"*@ class="form-control" />
-                            <span @*asp-validation-for="Titulo"*@ class="text-danger"></span>
+                            <label asp-for="QtdMaximaPessoas">Quantidade Máxima de Pessoas</label>
+                            <input asp-for="QtdMaximaPessoas" class="form-control" />
+                            <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
 
-                            <label @*asp-for="DefaultCategory"*@>Default Category</label>
-                            <select @*asp-for="DefaultCategory"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                            <label asp-for="CategoriaID">Categoria</label>
+                            <select asp-for="CategoriaID" class="form-control">
+                                @foreach (var categoria in ViewBag.Categorias)
+                                {
+                                    <option value="@categoria.CategoriaID">
+                                        @categoria.Descricao
+                                    </option>
+                                }
                             </select>
-                            <span @*asp-validation-for="DefaultCategory"*@ class="text-danger"></span>
+                            <span asp-validation-for="CategoriaID" class="text-danger"></span>
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

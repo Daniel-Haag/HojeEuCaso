@@ -1,38 +1,6 @@
 ﻿@page
 @{
-    var pacotes = new List<object>
-    {
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" },
-        new { Id = 1, Titulo = "Titulo", Preco = "", QtdMaximaEventosDia = 1, QtdMaximaPessoas = 1, DefaultCategory = "texto" }
-        
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -56,31 +24,31 @@
                                 <th>ID</th>
                                 <th>Título</th>
                                 <th>Preço</th>
-                                <th>Quantidade Máxima de Eventos por dia</th>
-                                <th>Quantidade Máxima de Pessoas</th>
-                                <th>DefaultCategory</th>
+                                <th style="font-size:9px">Quantidade Máxima de Eventos por dia</th>
+                                <th style="font-size:9px">Quantidade Máxima de Pessoas</th>
+                                <th>Categoria</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
-                                foreach (var pacote in pacotes)
+                                foreach (var pacote in ViewBag.Pacotes)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@pacote.ID">
+                                            <input type="checkbox" name="selecao[]" value="@pacote.PacoteID">
                                         </td>
-                                        <td>@@categoria.ID</td>
-                                        <td>@@categoria.Titulo</td>
-                                        <td>@@categoria.Preco</td>
-                                        <td>@@categoria.QtdMaximaEventosDia</td>
-                                        <td>@@categoria.QtdMaximaPessoas</td>
-                                        <td>@@categoria.DefaultCategory</td>
+                                        <td>@pacote.PacoteID</td>
+                                        <td>@pacote.Titulo</td>
+                                        <td>@string.Format("R$ {0:N2}", pacote.Preco)</td>
+                                        <td>@pacote.QtdMaximaEventosDia</td>
+                                        <td>@pacote.QtdMaximaPessoas</td>
+                                        <td>@pacote.Categoria.Descricao</td>
                                         <td>
-                                            <a href="/Pacotes/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/Pacotes/Edit/@pacote.PacoteID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-pacote-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-pacote-id="@pacote.PacoteID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -137,15 +105,13 @@
                 type: 'POST',
                 url: '/Pacotes/Delete/' + pacoteId, // Verifique se o URL corresponde à sua rota de exclusão
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-                    // Fecha o modal
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });
