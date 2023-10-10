@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Fornecedor
+@{
     ViewData["Title"] = "Cadastro Fornecedores";
 }
 <style>
@@ -67,54 +68,194 @@
                     }
                     <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for="Nome"*@>Nome</label>
-                            <input @*asp-for="Nome"*@ class="form-control" />
-                            <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+                            <label asp-for="Nome">Nome</label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
 
-                            <label @*asp-for="Email"*@>Email</label>
-                            <input @*asp-for="Email"*@ class="form-control" />
-                            <span @*asp-validation-for="Email"*@ class="text-danger"></span>
+                            <label asp-for="Email">Email</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
 
-                            <label @*asp-for="Status"*@>Status</label>
-                            <input @*asp-for="Status"*@ class="form-control" />
-                            <span @*asp-validation-for="Status"*@ class="text-danger"></span>
+                            <label asp-for="Senha">Password</label>
+                            <input type="password" asp-for="Senha" class="form-control" />
+                            <span asp-validation-for="Senha" class="text-danger"></span>
 
-                            <label @*asp-for="Tipo"*@>Tipo</label>
-                            <input @*asp-for="Tipo"*@ class="form-control" />
-                            <span @*asp-validation-for="Tipo"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Exclusao"*@>Solicitou exclusão</label>
-                            <select @*asp-for="Exclusao"*@ class="form-control">
-                                <option value="Opção1">Não</option>
-                                <option value="Opção2">Sim</option>
+                            <label asp-for="Status">Status</label>
+                            <select asp-for="Status" class="form-control">
+                                <option value="true">Ativo</option>
+                                <option value="false">Inativo</option>
                             </select>
-                            <span @*asp-validation-for="Exclusao"*@ class="text-danger"></span>
+                            <span asp-validation-for="Status" class="text-danger"></span>
 
-                            <label @*asp-for="MotivoExclusao"*@>Motivo Exclusão</label>
-                            <input @*asp-for="MotivoExclusao"*@ class="form-control" />
-                            <span @*asp-validation-for="MotivoExclusao"*@ class="text-danger"></span>
-
-                            <label @*asp-for="IdIdentificacao"*@>ID de Identificação</label>
-                            <input @*asp-for="IdIdentificacao"*@ class="form-control" />
-                            <span @*asp-validation-for="IdIdentificacao"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Avaliacao"*@>Avaliação</label>
-                            <input @*asp-for="Avaliacao"*@ class="form-control" />
-                            <span @*asp-validation-for="Avaliacao"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Categoria"*@>Categoria</label>
-                            <select @*asp-for="Categoria"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                            <label asp-for="Tipo">Tipo</label>
+                            <select asp-for="Tipo" class="form-control">
+                                <option value="Pessoa Física">Pessoa Física</option>
+                                <option value="Jurídico">Jurídico</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Mobile">Mobile</option>
                             </select>
-                            <span @*asp-validation-for="Categoria"*@ class="text-danger"></span>
+                            <span asp-validation-for="Tipo" class="text-danger"></span>
+
+                            <label asp-for="SolicitouExclusao">Solicitou exclusão</label>
+                            <select asp-for="SolicitouExclusao" class="form-control">
+                                <option value="false">Não</option>
+                                <option value="true">Sim</option>
+                            </select>
+                            <span asp-validation-for="SolicitouExclusao" class="text-danger"></span>
+
+                            <label asp-for="MotivoExclusao">Motivo Exclusão</label>
+                            <input asp-for="MotivoExclusao" class="form-control" />
+                            <span asp-validation-for="MotivoExclusao" class="text-danger"></span>
+
+                            <label asp-for="IDIdentificacao">ID Identificação</label>
+                            <input asp-for="IDIdentificacao" class="form-control" />
+                            <span asp-validation-for="IDIdentificacao" class="text-danger"></span>
+
+                            <label asp-for="Avaliacao">Avaliação</label>
+                            <input asp-for="Avaliacao" class="form-control" />
+                            <span asp-validation-for="Avaliacao" class="text-danger"></span>
+                           
+                            <label asp-for="RG">RG</label>
+                            <input asp-for="RG" class="form-control" />
+                            <span asp-validation-for="RG" class="text-danger"></span>
+
+                            <label asp-for="CPF">CPF</label>
+                            <input asp-for="CPF" class="form-control" />
+                            <span asp-validation-for="CPF" class="text-danger"></span>
+
+                            <label asp-for="Telefone">Telefone</label>
+                            <input asp-for="Telefone" class="form-control" />
+                            <span asp-validation-for="Telefone" class="text-danger"></span>
+
+                            <label asp-for="CEP">CEP</label>
+                            <input asp-for="CEP" class="form-control" />
+                            <span asp-validation-for="CEP" class="text-danger"></span>
+
+                            <label asp-for="EstadoID">Estado</label>
+                            <select asp-for="EstadoID" class="form-control">
+                                @foreach (var estado in ViewBag.Estados)
+                                {
+                                    <option value="@estado.EstadoID">
+                                        @estado.Nome
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="EstadoID" class="text-danger"></span>
+
+                            <label asp-for="CidadeID">Cidade</label>
+                            <select asp-for="CidadeID" class="form-control">
+                                @foreach (var cidade in ViewBag.Cidades)
+                                {
+                                    <option value="@cidade.CidadeID">
+                                        @cidade.Nome
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="CidadeID" class="text-danger"></span>
+
+                            <label asp-for="Bairro">Bairro</label>
+                            <input asp-for="Bairro" class="form-control" />
+                            <span asp-validation-for="Bairro" class="text-danger"></span>
+
+                            <label asp-for="Endereco">Endereço</label>
+                            <input asp-for="Endereco" class="form-control" />
+                            <span asp-validation-for="Endereco" class="text-danger"></span>
+
+                            <label asp-for="Numero">Número</label>
+                            <input asp-for="Numero" class="form-control" />
+                            <span asp-validation-for="Numero" class="text-danger"></span>
+
+                            <label asp-for="RazaoSocial">Razão Social</label>
+                            <input asp-for="RazaoSocial" class="form-control" />
+                            <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+
+                            <label asp-for="NomeFantasia">Nome Fantasia</label>
+                            <input asp-for="NomeFantasia" class="form-control" />
+                            <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+
+                            <label asp-for="CNPJ">CNPJ</label>
+                            <input asp-for="CNPJ" class="form-control" />
+                            <span asp-validation-for="CNPJ" class="text-danger"></span>
+
+                            <label asp-for="InscricaoEstadual">Inscrição Estadual</label>
+                            <input asp-for="InscricaoEstadual" class="form-control" />
+                            <span asp-validation-for="InscricaoEstadual" class="text-danger"></span>
+
+                            <label asp-for="Banco">Banco</label>
+                            <input asp-for="Banco" class="form-control" />
+                            <span asp-validation-for="Banco" class="text-danger"></span>
+
+                            <label asp-for="Agencia">Agência</label>
+                            <input asp-for="Agencia" class="form-control" />
+                            <span asp-validation-for="Agencia" class="text-danger"></span>
+
+                            <label asp-for="NumeroConta">Número Conta</label>
+                            <input asp-for="NumeroConta" class="form-control" />
+                            <span asp-validation-for="NumeroConta" class="text-danger"></span>
+
+                            <label asp-for="TipoConta">Tipo Conta</label>
+                            <input asp-for="TipoConta" class="form-control" />
+                            <span asp-validation-for="TipoConta" class="text-danger"></span>
+
+                            <label asp-for="CPFCNPJResponsavelConta">CPF ou CNPJ Responsável Conta</label>
+                            <input asp-for="CPFCNPJResponsavelConta" class="form-control" />
+                            <span asp-validation-for="CPFCNPJResponsavelConta" class="text-danger"></span>
+
+                            <label asp-for="Facebook">Facebook</label>
+                            <input asp-for="Facebook" class="form-control" />
+                            <span asp-validation-for="Facebook" class="text-danger"></span>
+
+                            <label asp-for="Instagram">Instagram</label>
+                            <input asp-for="Instagram" class="form-control" />
+                            <span asp-validation-for="Instagram" class="text-danger"></span>
+
+                            <label asp-for="Site">Site</label>
+                            <input asp-for="Site" class="form-control" />
+                            <span asp-validation-for="Site" class="text-danger"></span>
+
+                            <label asp-for="NomeResponsavel">Nome Responsável</label>
+                            <input asp-for="NomeResponsavel" class="form-control" />
+                            <span asp-validation-for="NomeResponsavel" class="text-danger"></span>
+
+                            <label asp-for="TelefoneResponsavel">Telefone Responsável</label>
+                            <input asp-for="TelefoneResponsavel" class="form-control" />
+                            <span asp-validation-for="TelefoneResponsavel" class="text-danger"></span>
+
+                            <label asp-for="AceitaMultiplosEventos">Aceita Múltiplos Eventos</label>
+                            <select asp-for="AceitaMultiplosEventos" class="form-control">
+                                <option value="false">Não</option>
+                                <option value="true">Sim</option>
+                            </select>
+                            <span asp-validation-for="AceitaMultiplosEventos" class="text-danger"></span>
+
+                            <label asp-for="CategoriaID">Categoria</label>
+                            <select asp-for="CategoriaID" class="form-control">
+                                @foreach (var categoria in ViewBag.Categorias)
+                                {
+                                    <option value="@categoria.CategoriaID">
+                                        @categoria.Descricao
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="CidadeID" class="text-danger"></span>
+
+                            <label asp-for="DisponivelParaRecebimento">Disponível para recebimento</label>
+                            <input type="text" asp-for="DisponivelParaRecebimento" class="form-control" id="disponivelRecebimento" oninput="RetiraPonto('disponivelRecebimento')" />
+                            <span asp-validation-for="DisponivelParaRecebimento" class="text-danger"></span>
+
+                            <label asp-for="TotalRecebido">Total Recebido</label>
+                            <input type="text" asp-for="TotalRecebido" class="form-control" id="totalRecebido" oninput="RetiraPonto('totalRecebido')" />
+                            <span asp-validation-for="TotalRecebido" class="text-danger"></span>
+
+                            <label asp-for="TotalAReceber">Total à Receber</label>
+                            <input type="text" asp-for="TotalAReceber" class="form-control" id="totalAReceber" oninput="RetiraPonto('totalAReceber')" />
+                            <span asp-validation-for="TotalAReceber" class="text-danger"></span>
 
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

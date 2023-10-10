@@ -1,46 +1,6 @@
 ﻿@page
 @{
-    var fornecedores = new List<object>
-    {
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        new { Id = 1, Nome = "Nome", Email = "Email", Status = "Ativo", Tipo = "Pessoa Física", SolicitouExclusao = "false", MotivoExclusao = "motivo", IdDeIndicacao = 123, Avalicao = 10, Categoria = "Categoria" },
-        
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -68,7 +28,7 @@
                                 <th>Tipo</th>
                                 <th>Solicitou Exclusão</th>
                                 <th>Motivo da Exclusão</th>
-                                <th>ID de Indicação</th>
+                                <th>ID de Indicação</th> @*corrigir o nome da variavel depois*@
                                 <th>Avaliação</th>
                                 <th>Categoria</th>
                                 <th>Ações</th>
@@ -76,27 +36,45 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (var fornecedor in fornecedores)
+                                foreach (var fornecedor in ViewBag.Fornecedores)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@fornecedor.ID">
+                                            <input type="checkbox" name="selecao[]" value="@fornecedor.FornecedorID">
                                         </td>
-                                        <td>@@fornecedor.ID</td>
-                                        <td>@@fornecedor.Nome</td>
-                                        <td>@@fornecedor.Email</td>
-                                        <td>@@fornecedor.Status</td>
-                                        <td>@@fornecedor.Tipo</td>
-                                        <td>@@fornecedor.SolicitouExclusao</td>
-                                        <td>@@fornecedor.MotivodaExclusao</td>
-                                        <td>@@fornecedor.IDdeIndicacao</td>
-                                        <td>@@fornecedor.Avaliacao</td>
-                                        <td>@@fornecedor.Categoria</td>
+                                        <td>@fornecedor.FornecedorID</td>
+                                        <td>@fornecedor.Nome</td>
+                                        <td>@fornecedor.Email</td>
                                         <td>
-                                            <a href="/Fornecedores/Edit/1" class="btn btn-primary btn-sm">
+                                            @if (bool.Parse(fornecedor.Status))
+                                            {
+                                                <span class="badge badge-success">Ativo</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger">Inativo</span>
+                                            }
+                                        </td>
+                                        <td>@fornecedor.Tipo</td>
+                                        <td>
+                                            @if (fornecedor.SolicitouExclusao)
+                                            {
+                                                <span class="badge badge-danger">Sim</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-success">Não</span>
+                                            }
+                                        </td>
+                                        <td>@fornecedor.MotivoExclusao</td>
+                                        <td>@fornecedor.IDIdentificacao</td> 
+                                        <td>@fornecedor.Avaliacao</td>
+                                        <td>@fornecedor.Categoria.Descricao</td>
+                                        <td>
+                                            <a href="/Fornecedores/Edit/@fornecedor.FornecedorID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-fornecedor-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-fornecedor-id="@fornecedor.FornecedorID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -153,15 +131,15 @@
                 type: 'POST',
                 url: '/Fornecedores/Delete/' + fornecedorId, // Verifique se o URL corresponde à sua rota de exclusão
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
+
+                    $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
 
                     // Fecha o modal
                     $("#confirmDeleteModal").modal("hide");
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });
