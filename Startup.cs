@@ -52,6 +52,7 @@ namespace HojeEuCaso
             services.AddScoped<IClausulaContratoService, ClausulaContratoService>();
             services.AddScoped<ICategoriasDosPlanosService, CategoriasDosPlanosService>();
             services.AddScoped<IPacoteService, PacoteService>();
+            services.AddScoped<IUsuarioSistemaService, UsuarioSistemaService>();
 
             services.AddScoped<ISessionUsuarioService, SessionUsuarioService>();
 
