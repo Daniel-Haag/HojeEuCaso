@@ -1,43 +1,6 @@
 ﻿@page
 @{
-    var fornecedoresIndicados = new List<object>
-    {
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        new { Id = 1, FornecedorPai = "Fornecedor", Fornecedor = "Fornecedor", TotalReceber = 123 },
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -67,21 +30,21 @@
                         </thead>
                         <tbody>
                             @{
-                                foreach (var fornecedor in fornecedoresIndicados)
+                                foreach (var fornecedor in ViewBag.FornecedoresIndicados)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@fornecedor.ID">
+                                            <input type="checkbox" name="selecao[]" value="@fornecedor.FornecedorIndicadoID">
                                         </td>
-                                        <td>@@fornecedor.ID</td>
-                                        <td>@@fornecedor.FornecedorPai</td>
-                                        <td>@@fornecedor.Fornecedor</td>
-                                        <td>@@fornecedor.TotalReceber</td>
+                                        <td>@fornecedor.FornecedorIndicadoID</td>
+                                        <td>@fornecedor.FornecedorPai.Nome</td>
+                                        <td>@fornecedor.NomeFornecedor</td>
+                                        <td>@string.Format("R$ {0:N2}", fornecedor.TotalAReceber)</td>
                                         <td>
-                                            <a href="/FornecedoresIndicados/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/FornecedoresIndicados/Edit/@fornecedor.FornecedorIndicadoID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-fornecedor-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-fornecedor-id="@fornecedor.FornecedorIndicadoID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -138,15 +101,13 @@
                 type: 'POST',
                 url: '/FornecedoresIndicados/Delete/' + fornecedorId, // Verifique se o URL corresponde à sua rota de exclusão
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
-
-                    // Fecha o modal
+                     
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });

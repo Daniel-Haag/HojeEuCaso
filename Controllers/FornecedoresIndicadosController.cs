@@ -1,38 +1,65 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using HojeEuCaso.Interfaces;
+using HojeEuCaso.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace HojeEuCaso.Controllers
 {
     public class FornecedoresIndicadosController : Controller
     {
-        // GET: FornecedoresIndicadosController
+        private readonly ILogger<FornecedoresIndicadosController> _logger;
+        private readonly IFornecedorIndicadoService _fornecedorIndicadoService;
+        private readonly IFornecedorService _fornecedorService;
+
+        public FornecedoresIndicadosController(ILogger<FornecedoresIndicadosController> logger,
+                                    IFornecedorIndicadoService fornecedorIndicadoService,
+                                    IFornecedorService fornecedorService)
+        {
+            _logger = logger;
+            _fornecedorIndicadoService = fornecedorIndicadoService;
+            _fornecedorService = fornecedorService;
+        }
+
+        // GET: FornecedorIndicadosController
         public ActionResult Index()
         {
+            ViewBag.FornecedoresIndicados = _fornecedorIndicadoService.GetAllFornecedorIndicados();
             return View();
         }
 
-        // GET: FornecedoresIndicadosController/Details/5
+        // GET: FornecedorIndicadosController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: FornecedoresIndicadosController/Create
+        // GET: FornecedorIndicadosController/Create
         public ActionResult Create()
         {
+            ViewBag.Fornecedores = _fornecedorService.GetAllFornecedor();
+            TempData["SuccessMessage"] = null;
             return View();
         }
 
-        // POST: FornecedoresIndicadosController/Create
+        // POST: FornecedorIndicadosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection) //Alterar para a entidade
+        public ActionResult Create(FornecedorIndicado fornecedorIndicado)
         {
             try
             {
+                var fornecedores = _fornecedorService.GetAllFornecedor();
+                ViewBag.Fornecedores = fornecedores;
+
+                fornecedorIndicado.FornecedorPai = fornecedores
+                    .FirstOrDefault(x => x.FornecedorID == fornecedorIndicado.FornecedorID);
+
+                _fornecedorIndicadoService.CreateNewFornecedorIndicado(fornecedorIndicado);
+
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
-                //return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -41,45 +68,58 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: FornecedoresIndicadosController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: FornecedorIndicadosController/Edit/5
+        public ActionResult Edit(int ID)
         {
+            var fornecedores = _fornecedorService.GetAllFornecedor();
+            ViewBag.Fornecedores = fornecedores;
+
+            var fornecedorIndicado = _fornecedorIndicadoService.GetFornecedorIndicadoById(ID);
+            ViewBag.FornecedorIndicado = fornecedorIndicado;
+            ViewBag.Fornecedor = fornecedores.FirstOrDefault(x => x.FornecedorID == fornecedorIndicado.FornecedorID);
             return View();
         }
 
-        // POST: FornecedoresIndicadosController/Edit/5
+        // POST: FornecedorIndicadosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(FornecedorIndicado fornecedorIndicado)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var fornecedores = _fornecedorService.GetAllFornecedor();
+                ViewBag.Fornecedores = fornecedores;
+
+                var fornecedor = fornecedores.FirstOrDefault(x => x.FornecedorID == fornecedorIndicado.FornecedorID);
+                fornecedorIndicado.FornecedorPai = fornecedor;
+                ViewBag.Fornecedor = fornecedor;
+
+                _fornecedorIndicadoService.UpdateFornecedorIndicado(fornecedorIndicado);
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                ViewBag.FornecedorIndicado = fornecedorIndicado;
+                return View();
             }
             catch
             {
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
         }
 
-        // GET: FornecedoresIndicadosController/Delete/5
+        // POST: FornecedorIndicadosController/Delete/5
+        [HttpPost]
         public ActionResult Delete(int id)
         {
-            return View();
-        }
-
-        // POST: FornecedoresIndicadosController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _fornecedorIndicadoService.DeleteFornecedorIndicado(id);
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return RedirectToAction("Index");
             }
         }
     }

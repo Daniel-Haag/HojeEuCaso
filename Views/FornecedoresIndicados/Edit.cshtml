@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FornecedorIndicado
+@{
     ViewData["Title"] = "Editar Fornecedores Indicados";
 }
 <style>
@@ -66,27 +67,47 @@
                         </div>
                     }
                     <form asp-action="Edit">
+                         <div class="form-group" style="display:none">
+                            <label asp-for="FornecedorIndicadoID">ID</label>
+                            <input asp-for="FornecedorIndicadoID" class="form-control" value="@ViewBag.FornecedorIndicado.FornecedorIndicadoID" />
+                            <span asp-validation-for="FornecedorIndicadoID" class="text-danger"></span>
+                        </div>
                         <div class="form-group">
-                            <label @*asp-for="FornecedorPai"*@>Fornecedor Pai</label>
-                            <select @*asp-for="FornecedorPai"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
+                            <label asp-for="FornecedorID">Fornecedor Pai</label>
+                            <select asp-for="FornecedorID" class="form-control">
+                                @foreach (var fornecedor in ViewBag.Fornecedores)
+                                {
+                                    var isSelected = fornecedor.FornecedorID == ViewBag.Fornecedor.FornecedorID ? "selected" : "";
+
+                                    if (isSelected == "selected")
+                                    {
+                                        <option value="@fornecedor.FornecedorID" selected>
+                                            @fornecedor.Nome
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@fornecedor.FornecedorID">
+                                            @fornecedor.Nome
+                                        </option>
+                                    }
+                                }
                             </select>
-                            <span @*asp-validation-for="FornecedorPai"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Fornecedor"*@>Fornecedor</label>
-                            <input @*asp-for="Fornecedor"*@ class="form-control" />
-                            <span @*asp-validation-for="Fornecedor"*@ class="text-danger"></span>
-
-                            <label @*asp-for="TotalReceber"*@>Total a Receber (Indicação)</label>
-                            <input @*asp-for="TotalReceber"*@ class="form-control" />
-                            <span @*asp-validation-for="TotalReceber"*@ class="text-danger"></span>
+                            <span asp-validation-for="FornecedorID" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NomeFornecedor">Fornecedor</label>
+                            <input asp-for="NomeFornecedor" class="form-control" value="@ViewBag.FornecedorIndicado.NomeFornecedor"/>
+                            <span asp-validation-for="NomeFornecedor" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TotalAReceber">Total a Receber (Indicação)</label>
+                            <input type="text" asp-for="TotalAReceber" class="form-control" id="receberInput" oninput="RetiraPonto('receberInput')" value="@string.Format("{0:N2}", @ViewBag.FornecedorIndicado.TotalAReceber)" />
+                            <span asp-validation-for="TotalAReceber" class="text-danger"></span>
                         </div>
                         <hr />
-                        <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
