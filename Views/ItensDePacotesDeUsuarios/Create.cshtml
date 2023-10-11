@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Cadastro Itens de Pacotes de Usuários";
+﻿@model ItensDePacotesDeUsuarios
+@{
+    ViewData["Title"] = "Cadastro Itens De Pacotes de Usuários";
 }
 <style>
     fade-in-out {
@@ -67,26 +68,30 @@
                     }
                     <form asp-action="Create">
                         <div class="form-group">
-                            <label @*asp-for="Descricao"*@>Descrição</label>
-                            <input @*asp-for="Descricao"*@ class="form-control" />
-                            <span @*asp-validation-for="Descricao"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Quantidade"*@>Quantidade</label>
-                            <input @*asp-for="Quantidade"*@ class="form-control" />
-                            <span @*asp-validation-for="Quantidade"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Service"*@>Service</label>
-                            <select @*asp-for="Service"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
-                            </select>
-                            <span @*asp-validation-for="Service"*@ class="text-danger"></span>
+                            <label asp-for="Descricao">Descrição</label>
+                            <input asp-for="Descricao" class="form-control" />
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
                         </div>
-                        <!-- Adicionar outros campos relevantes aqui, se necessário -->
+
+                        <div class="form-group">
+                            <label asp-for="Quantidade">Quantidade</label>
+                            <input asp-for="Quantidade" class="form-control" />
+                            <span asp-validation-for="Quantidade" class="text-danger"></span>
+                        </div>
+
+                        <label asp-for="PacoteID">Pacote</label>
+                        <select asp-for="PacoteID" class="form-control">
+                            @foreach (var pacote in ViewBag.Pacotes)
+                            {
+                                <option value="@pacote.PacoteID">
+                                    @pacote.Titulo
+                                </option>
+                            }
+                        </select>
+                        <span asp-validation-for="PacoteID" class="text-danger"></span>
                         <hr />
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

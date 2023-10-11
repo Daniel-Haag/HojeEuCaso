@@ -1,54 +1,16 @@
 ﻿@page
 @{
-    var itensDePacotesDeUsuarios = new List<object>
-    {
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, Service = "Service" }
-        // dados mockados pois não há modelo ainda
-    };
+
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Itens de Pacotes de Usuários</title>
+    <title>Itens De Pacotes de Usuários</title>
 </head>
 <body>
     <div class="container mt-4" style="margin-left:10%">
-        <h2>Itens de Pacotes de Usuários</h2>
+        <h2>Itens De Pacotes de Usuários</h2>
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive">
@@ -62,27 +24,27 @@
                                 <th>ID</th>
                                 <th>Descrição</th>
                                 <th>Quantidade</th>
-                                <th>Service</th>
+                                <th>Pacote</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
-                                foreach (var item in itensDePacotesDeUsuarios)
+                                foreach (var itemDePacote in ViewBag.ItensDePacotesDeUsuarios)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@item.ID">
+                                            <input type="checkbox" name="selecao[]" value="@itemDePacote.ItensDePacotesDeUsuariosID">
                                         </td>
-                                        <td>@@item.ID</td>
-                                        <td>@@item.Descricao</td>
-                                        <td>@@item.Quantidade</td>
-                                        <td>@@item.Service</td>
+                                        <td>@itemDePacote.ItensDePacotesDeUsuariosID</td>
+                                        <td>@itemDePacote.Descricao</td>
+                                        <td>@itemDePacote.Quantidade</td>
+                                        <td>@itemDePacote.Pacote.Titulo</td>
                                         <td>
-                                            <a href="/ItensDePacotesDeUsuarios/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/ItensDePacotesDeUsuarios/Edit/@itemDePacote.ItensDePacotesDeUsuariosID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-item-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-itemdepacote-id="@itemDePacote.ItensDePacotesDeUsuariosID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -125,29 +87,27 @@
 
     $(document).ready(function () {
         $(".delete-button").click(function () {
-            var item = $(this).data("item-id");
+            var itemDePacote = $(this).data("itemdepacote-id");
 
-            $("#confirmDelete").data("item-id", item);
+            $("#confirmDelete").data("itemdepacote-id", itemDePacote);
             $("#confirmDeleteModal").modal("show");
         });
 
         $("#confirmDelete").click(function () {
-            var itemId = $(this).data("item-id");
+            var itemDePacoteId = $(this).data("itemdepacote-id");
 
             // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
             $.ajax({
                 type: 'POST',
-                url: '/ItensDePacotesDeUsuarios/Delete/' + itemId, // Verifique se o URL corresponde à sua rota de exclusão
+                url: '/ItensDePacotesDeUsuarios/Delete/' + itemDePacoteId,
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-                    // Fecha o modal
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });

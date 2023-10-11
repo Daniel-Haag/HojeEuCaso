@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Editar Itens de Pacotes de Usuário";
+﻿@model ItensDePacotesDeUsuarios
+@{
+    ViewData["Title"] = "Editar Itens de Pacotes de Usuários";
 }
 <style>
     fade-in-out {
@@ -66,27 +67,47 @@
                         </div>
                     }
                     <form asp-action="Edit">
-                        <div class="form-group">
-                            <label @*asp-for="Descricao"*@>Descrição</label>
-                            <input @*asp-for="Descricao"*@ class="form-control" />
-                            <span @*asp-validation-for="Descricao"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Quantidade"*@>Quantidade</label>
-                            <input @*asp-for="Quantidade"*@ class="form-control" />
-                            <span @*asp-validation-for="Quantidade"*@ class="text-danger"></span>
-
-                            <label @*asp-for="Service"*@>Service</label>
-                            <select @*asp-for="Service"*@ class="form-control">
-                                <option value="Opção1">Opção 1</option>
-                                <option value="Opção2">Opção 2</option>
-                                <option value="Opção3">Opção 3</option>
-                            </select>
-                            <span @*asp-validation-for="Service"*@ class="text-danger"></span>
+                        <div class="form-group" style="display:none">
+                            <label asp-for="ItensDePacotesDeUsuariosID">ID</label>
+                            <input asp-for="ItensDePacotesDeUsuariosID" class="form-control" value="@ViewBag.ItemDePacote.ItensDePacotesDeUsuariosID" />
+                            <span asp-validation-for="ItensDePacotesDeUsuariosID" class="text-danger"></span>
                         </div>
+
+                        <div class="form-group">
+                            <label asp-for="Descricao">Descrição</label>
+                            <input asp-for="Descricao" class="form-control" value="@ViewBag.ItemDePacote.Descricao" />
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Quantidade">Quantidade</label>
+                            <input asp-for="Quantidade" class="form-control" value="@ViewBag.ItemDePacote.Quantidade" />
+                            <span asp-validation-for="Quantidade" class="text-danger"></span>
+                        </div>
+
+                        <label asp-for="PacoteID">Pacote</label>
+                        <select asp-for="PacoteID" class="form-control">
+                            @foreach (var pacote in ViewBag.Pacotes)
+                            {
+                                var isSelected = pacote.PacoteID == ViewBag.Pacote.PacoteID ? "selected" : "";
+
+                                if (isSelected == "selected")
+                                {
+                                    <option value="@pacote.PacoteID" selected>
+                                        @pacote.Titulo
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@pacote.PacoteID">
+                                        @pacote.Titulo
+                                    </option>
+                                }
+                            }
+                        </select>
                         <hr />
-                        <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
