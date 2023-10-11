@@ -1,43 +1,6 @@
 ﻿@page
 @{
-    var itensDePacotes = new List<object>
-    {
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" },
-        new { Id = 1, Descricao = "Descricao", Quantidade = 1, DefaultService = "Service" }
-        
-        // dados mockados pois não há modelo ainda
-    };
+    
 }
 
 <!DOCTYPE html>
@@ -61,27 +24,27 @@
                                 <th>ID</th>
                                 <th>Descrição</th>
                                 <th>Quantidade</th>
-                                <th>DefaultService</th>
+                                <th>Pacote</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
-                                foreach (var itemDePacote in itensDePacotes)
+                                foreach (var itemDePacote in ViewBag.ItensDePacotes)
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" name="selecao[]" value="@@itemDePacote.ID">
+                                            <input type="checkbox" name="selecao[]" value="@itemDePacote.ItensDePacotesID">
                                         </td>
-                                        <td>@@itemDePacote.ID</td>
-                                        <td>@@itemDePacote.Descricao</td>
-                                        <td>@@itemDePacote.Quantidade</td>
-                                        <td>@@itemDePacote.DefaultService</td>
+                                        <td>@itemDePacote.ItensDePacotesID</td>
+                                        <td>@itemDePacote.Descricao</td>
+                                        <td>@itemDePacote.Quantidade</td>
+                                        <td>@itemDePacote.Pacote.Titulo</td>
                                         <td>
-                                            <a href="/ItensDePacotes/Edit/1" class="btn btn-primary btn-sm">
+                                            <a href="/ItensDePacotes/Edit/@itemDePacote.ItensDePacotesID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                            <button class="btn btn-danger btn-sm delete-button" data-itemdepacote-id="1">
+                                            <button class="btn btn-danger btn-sm delete-button" data-itemdepacote-id="@itemDePacote.ItensDePacotesID">
                                                 <i class="fas fa-trash"></i> Excluir
                                             </button>
                                         </td>
@@ -136,17 +99,15 @@
             // Envia uma solicitação AJAX para excluir o registro com o ID da cláusula
             $.ajax({
                 type: 'POST',
-                url: '/ItensDePacotes/Delete/' + itemDePacoteId, // Verifique se o URL corresponde à sua rota de exclusão
+                url: '/ItensDePacotes/Delete/' + itemDePacoteId, 
                 success: function (response) {
-                    // Lida com a resposta do servidor, por exemplo, atualiza a tabela de cláusulas
-                    // Recarrega a página ou atualiza a tabela de cláusulas de alguma forma
-                    // Usar o DataTables para atualizar a tabela após a exclusão bem-sucedida
-                    table.ajax.reload(); // Isso atualiza a tabela usando DataTables
 
-                    // Fecha o modal
                     $("#confirmDeleteModal").modal("hide");
+                    window.location.reload();
+
                 },
                 error: function (error) {
+                    alert('Erro, exclusão não efetuada!');
                     console.error(error);
                 }
             });
