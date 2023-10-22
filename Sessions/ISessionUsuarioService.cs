@@ -4,6 +4,6 @@ namespace HojeEuCaso.Sessions
 {
     public interface ISessionUsuarioService
     {
-        public Usuario Login(Usuario usuario);
+        public UsuarioSistema Login(UsuarioSistema usuario);
     }
 }

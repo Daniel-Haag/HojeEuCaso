@@ -8,6 +8,7 @@ namespace HojeEuCaso.Interfaces
     {
         public List<UsuarioSistema> GetAllUsuarioSistema();
         public UsuarioSistema GetUsuarioSistemaById(int ID);
+        public UsuarioSistema GetUsuarioSistemaLogin(UsuarioSistema usuarioSistema);
         public void CreateNewUsuarioSistema(UsuarioSistema UsuarioSistema);
         public void UpdateUsuarioSistema(UsuarioSistema UsuarioSistema);
         public void DeleteUsuarioSistema(int ID);

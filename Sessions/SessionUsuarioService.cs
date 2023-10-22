@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
 
 namespace HojeEuCaso.Sessions
@@ -7,40 +8,17 @@ namespace HojeEuCaso.Sessions
     public class SessionUsuarioService : ISessionUsuarioService
     {
         private List<Usuario> usuarios;
+        private readonly IUsuarioSistemaService _usuarioSistemaService;
 
-        public SessionUsuarioService()
+        public SessionUsuarioService(IUsuarioSistemaService usuarioSistemaService)
         {
-            usuarios = new List<Usuario>()
-            {
-                new Usuario()
-                {
-                    Nome = "Usuario 1",
-                    Senha = "123",
-                    Role = new Role()
-                    {
-                        RoleID = 1,
-                        Nome = "Piscineiro",
-                        Ativo = true
-                    }
-                },
-                new Usuario()
-                {
-                    Nome = "Usuario 2",
-                    Senha = "123",
-                    Role = new Role()
-                    {
-                        RoleID = 1,
-                        Nome = "Piscineiro",
-                        Ativo = true
-                    }
-                }
-            };
-
+            _usuarioSistemaService = usuarioSistemaService; 
         }
 
-        public Usuario Login(Usuario usuario)
+        public UsuarioSistema Login(UsuarioSistema usuario)
         {
-            return usuarios.SingleOrDefault(x => x.Nome == usuario.Nome && x.Senha == usuario.Senha);
+            var usuarioSistema = _usuarioSistemaService.GetUsuarioSistemaLogin(usuario);
+            return usuarioSistema;
         }
     }
 }

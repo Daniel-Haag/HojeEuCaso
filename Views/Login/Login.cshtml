@@ -1,4 +1,4 @@
-﻿@model HojeEuCaso.Models.Usuario
+﻿@model HojeEuCaso.Models.UsuarioSistema
 @{
     ViewData["Title"] = "Login";
 }
@@ -118,11 +118,11 @@ a[data-toggle="modal"]:hover {
                     <input asp-for="CPF" type="text" id="cpf" class="form-control">
                     <span id="cpfError" class="text-danger" style="display: none;">Campo obrigatório.</span>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label for="cnpj">CNPJ:</label>
                     <input asp-for="CNPJ" type="text" id="cnpj" class="form-control">
                     <span id="cnpjError" class="text-danger" style="display: none;">Campo obrigatório.</span>
-                </div>
+                </div>*@
 
                 <!-- Campos específicos para Cliente -->
                 <div class="form-group" id="clienteCampos" style="display: none;">

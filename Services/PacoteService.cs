@@ -21,13 +21,27 @@ namespace HojeEuCaso.Services
         public List<Pacote> GetAllPacotes()
         {
             return _HojeEuCasoDbContext.Pacotes
+                .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
                 .ToList();
         }
 
         public Pacote GetPacoteById(int ID)
         {
-            return _HojeEuCasoDbContext.Pacotes.Where(x => x.PacoteID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.Pacotes
+                .Include(x => x.Fornecedor)
+                .Include(x => x.Categoria)
+                .Where(x => x.PacoteID == ID)
+                .FirstOrDefault();
+        }
+
+        public Pacote GetPacoteByFornecedor(int fornecedorID)
+        {
+            return _HojeEuCasoDbContext.Pacotes
+                .Include(x => x.Fornecedor)
+                .Include(x => x.Categoria)
+                .Where(x => x.FornecedorID == fornecedorID)
+                .FirstOrDefault();
         }
 
         public void CreateNewPacote(Pacote Pacote)

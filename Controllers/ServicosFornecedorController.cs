@@ -23,9 +23,17 @@ namespace HojeEuCaso.Controllers
             _categoriaService = categoriaService;
         }
 
+        public ActionResult AdicionarServico()
+        {
+            int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+            ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+            return View();
+        }
+
         // GET: PacotesController
         public ActionResult Index()
         {
+            //Aqui deve buscar os Servicos/Pacotes do Fornecedor Logado!
             ViewBag.Pacotes = _pacoteService.GetAllPacotes();
             return View();
         }

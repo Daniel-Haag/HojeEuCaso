@@ -8,6 +8,7 @@ namespace HojeEuCaso.Interfaces
     {
         public List<Fornecedor> GetAllFornecedor();
         public Fornecedor GetFornecedorById(int ID);
+        public Fornecedor GetFornecedorLogin(UsuarioSistema usuarioSistema);
         public void CreateNewFornecedor(Fornecedor Fornecedor);
         public void UpdateFornecedor(Fornecedor Fornecedor);
         public void DeleteFornecedor(int ID);

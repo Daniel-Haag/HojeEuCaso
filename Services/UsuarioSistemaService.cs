@@ -28,7 +28,16 @@ namespace HojeEuCaso.Services
 
         public UsuarioSistema GetUsuarioSistemaById(int ID)
         {
-            return _HojeEuCasoDbContext.UsuariosSistema.Where(x => x.UsuarioSistemaID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.UsuariosSistema
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
+                .Where(x => x.UsuarioSistemaID == ID).FirstOrDefault();
+        }
+
+        public UsuarioSistema GetUsuarioSistemaLogin(UsuarioSistema usuarioSistema)
+        {
+            return _HojeEuCasoDbContext.UsuariosSistema
+                .Where(x => x.Email == usuarioSistema.Email && x.Senha == usuarioSistema.Senha).FirstOrDefault();
         }
 
         public void CreateNewUsuarioSistema(UsuarioSistema UsuarioSistema)

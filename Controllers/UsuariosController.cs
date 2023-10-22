@@ -84,7 +84,7 @@ namespace HojeEuCaso.Controllers
 
 
 
-            ViewBag.Usuario.DataNascimento = ((DateTime)usuarioSistema.DataNascimento).ToString("yyyy-MM-dd");
+            //ViewBag.Usuario.DataNascimento = ((DateTime)usuarioSistema.DataNascimento).ToString("yyyy-MM-dd");
 
 
             var cidades = _cidadeService.GetAllCidades();

@@ -29,7 +29,16 @@ namespace HojeEuCaso.Services
 
         public Fornecedor GetFornecedorById(int ID)
         {
-            return _HojeEuCasoDbContext.Fornecedores.Where(x => x.FornecedorID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.Fornecedores
+                .Where(x => x.FornecedorID == ID)
+                .FirstOrDefault();
+        }
+
+        public Fornecedor GetFornecedorLogin(UsuarioSistema usuarioSistema)
+        {
+            return _HojeEuCasoDbContext.Fornecedores
+                .Where(x => x.Email == usuarioSistema.Email && x.Senha == usuarioSistema.Senha)
+                .FirstOrDefault();
         }
 
         public void CreateNewFornecedor(Fornecedor Fornecedor)

@@ -20,17 +20,17 @@ namespace HojeEuCaso.Controllers
         private readonly ILogger<LoginController> _logger;
         private ISessionUsuarioService _sessionUsuarioService;
         private ILoginService _loginService;
-        private IUsuarioService _usuarioService;
+        private readonly IFornecedorService _fornecedorService;
 
         public LoginController(ILogger<LoginController> logger,
                                ISessionUsuarioService sessionUsuarioService,
                                ILoginService loginService,
-                               IUsuarioService usuarioService)
+                               IFornecedorService fornecedorService)
         {
             _logger = logger;
             _sessionUsuarioService = sessionUsuarioService;
             _loginService = loginService;
-            _usuarioService = usuarioService;
+            _fornecedorService = fornecedorService;
         }
 
         public IActionResult Login()
@@ -40,55 +40,32 @@ namespace HojeEuCaso.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Usuario usuarioLogin)
+        public IActionResult Login(UsuarioSistema usuarioLogin)
         {
-            if ((usuarioLogin.Email == "teste@teste.com.br" && usuarioLogin.Senha == "123"))
+            var usuario = _sessionUsuarioService.Login(usuarioLogin);
+
+            if (usuario != null)
             {
-                var usuarioLogando = new Usuario
-                {
-                    Nome = "Usuario 1",
-                    Senha = "123",
-                    Role = new Role()
-                    {
-                        RoleID = 1,
-                        Nome = "Franqueado",
-                        Ativo = true
-                    }
-                };
-
-                var usuario = _sessionUsuarioService.Login(usuarioLogando);
-
-                if (usuario != null)
-                {
-                    HttpContext.Session.SetString("Nome", usuario.Nome);
-                    HttpContext.Session.SetString("Role", usuario.Role.Nome);
-                    return RedirectToAction("Index", "Home");
-                }
-
-                //-----------------------------------
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, usuario.Nome), // substituir por um nome de usuário real
-                    //Adicionar outras claims aqui, se necessário
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = true, 
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1)
-                };
-
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
+                _loginService.AddSession(HttpContext, usuario);
                 return RedirectToAction("Index", "Home");
             }
-            else
+            else if (usuario == null)
             {
-                ModelState.AddModelError(string.Empty, "Tentativa inválida de login.");
-                return View();
+                var fornecedor = _fornecedorService.GetFornecedorLogin(usuarioLogin);
+
+                if (fornecedor != null)
+                {
+                    _loginService.AddSession(HttpContext, fornecedor);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Tentativa inválida de login.");
+                    return View();
+                }
             }
+
+            return View();
         }
 
         [HttpGet]
@@ -105,24 +82,25 @@ namespace HojeEuCaso.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUsuario([FromBody]Usuario usuario)
+        public IActionResult CreateUsuario([FromBody] Usuario usuario)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new ApiResponse 
-                {
-                    Success = false,
-                    Message = "Erro de validação do modelo."
-                });
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return Json(new ApiResponse
+            //    {
+            //        Success = false,
+            //        Message = "Erro de validação do modelo."
+            //    });
+            //}
 
-            _usuarioService.CreateNewUser(usuario);
+            //_usuarioService.CreateNewUser(usuario);
 
-            return Json(new ApiResponse
-            {
-                Success = true,
-                Message = "Usuário cadastrado com sucesso."
-            });
+            //return Json(new ApiResponse
+            //{
+            //    Success = true,
+            //    Message = "Usuário cadastrado com sucesso."
+            //});
+            return null;
         }
     }
 }

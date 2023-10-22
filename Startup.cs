@@ -32,7 +32,11 @@ namespace HojeEuCaso
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+            });
+
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthorization(options =>
             {
@@ -89,6 +93,17 @@ namespace HojeEuCaso
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Login}/{action=Login}/{id?}");
+            });
+
+            app.Use(async (context, next) =>
+            {
+                if (context.Session.Keys.Count() == 0)
+                {
+                    context.Response.Redirect("/Login/Logout");
+                    return;
+                }
+
+                await next();
             });
         }
     }
