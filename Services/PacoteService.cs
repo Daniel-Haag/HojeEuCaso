@@ -17,7 +17,7 @@ namespace HojeEuCaso.Services
         {
             _HojeEuCasoDbContext = HojeEuCasoDbContext;
         }
-         
+
         public List<Pacote> GetAllPacotes()
         {
             return _HojeEuCasoDbContext.Pacotes
@@ -35,13 +35,13 @@ namespace HojeEuCaso.Services
                 .FirstOrDefault();
         }
 
-        public Pacote GetPacoteByFornecedor(int fornecedorID)
+        public List<Pacote> GetPacoteByFornecedor(int fornecedorID)
         {
             return _HojeEuCasoDbContext.Pacotes
                 .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
                 .Where(x => x.FornecedorID == fornecedorID)
-                .FirstOrDefault();
+                .ToList();
         }
 
         public void CreateNewPacote(Pacote Pacote)

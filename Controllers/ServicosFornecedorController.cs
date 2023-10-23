@@ -25,16 +25,16 @@ namespace HojeEuCaso.Controllers
 
         public ActionResult AdicionarServico()
         {
-            int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
-            ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+            ViewBag.Pacotes = _pacoteService.GetAllPacotes();
             return View();
         }
 
         // GET: PacotesController
         public ActionResult Index()
         {
-            //Aqui deve buscar os Servicos/Pacotes do Fornecedor Logado!
-            ViewBag.Pacotes = _pacoteService.GetAllPacotes();
+            //Buscando os Servicos/Pacotes do Fornecedor Logado!
+            int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+            ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
             return View();
         }
 

@@ -72,12 +72,20 @@ body {
 
 /* Estilos do site
 -------------------------------------------------- */
+/*Estilo para fonte sutil*/ 
+.greyFontStyle {
+    font-size: 12px;
+    color: grey;
+}
+
+/*Calendario*/
 .calendar {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     gap: 2px;
 }
 
+/*Dia do calendario*/
 .day {
     border: 1px solid #ccc;
     padding: 5px;
@@ -86,6 +94,7 @@ body {
     font-size: 10px;
 }
 
+/*Dia de hoje do calendario*/
 .today {
     background-color: lightcoral;
 }

@@ -6,87 +6,99 @@
 </head>
 <body>
     <div class="container mt-4">
-        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2" style="margin-left:7%"> Adicionar Pacote</a>
+        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2" style="margin-left:15%"> Adicionar Pacote</a>
         <button class="btn btn-outline-danger mb-2"> Suporte</button>
+        <hr style="margin-left:15%" />
+
+        @if (ViewBag.Pacotes == null)
+        {
+            <p style="margin-left:15%">Não há serviços cadastrados.</p>
+        }
 
         <div style="display: flex; flex-wrap: wrap; margin-left:10%">
 
-            <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
-                <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
-                    <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
-                        <button type="button" class="btn btn-outline-danger">Imprimir</button>
-                        <button type="button" class="btn btn-outline-danger">Duplicar</button>
-                        <button type="button" class="btn btn-outline-danger">Editar</button>
-                        <button type="button" class="btn btn-outline-danger">Deletar</button>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-6">
-                            <h5 class="card-title">Preço</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
+            @if (ViewBag.Pacotes != null)
+            {
+                @foreach (var item in ViewBag.Pacotes)
+                {
+                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
+                        <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
+                        <div class="card-body">
+                            <h5 class="card-title">Título</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
+                            <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
+                                <button type="button" class="btn btn-outline-danger">Imprimir</button>
+                                <button type="button" class="btn btn-outline-danger">Duplicar</button>
+                                <button type="button" class="btn btn-outline-danger">Editar</button>
+                                <button type="button" class="btn btn-outline-danger">Deletar</button>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="card-title">Preço</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">$100</h6>
+                                </div>
+                                <div class="col-6 text-md-right">
+                                    <h5 class="card-title">Status</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6 text-md-right">
-                            <h5 class="card-title">Status</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
-                        </div>
                     </div>
-                </div>
-            </div>
+                }
+            }
 
             @*<div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
-                <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
-                    <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
-                        <button type="button" class="btn btn-outline-danger">Imprimir</button>
-                        <button type="button" class="btn btn-outline-danger">Duplicar</button>
-                        <button type="button" class="btn btn-outline-danger">Editar</button>
-                        <button type="button" class="btn btn-outline-danger">Deletar</button>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-6">
-                            <h5 class="card-title">Preço</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
-                        </div>
-                        <div class="col-6 text-md-right">
-                            <h5 class="card-title">Status</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
-                        </div>
-                    </div>
-                </div>
+            <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
+            <div class="card-body">
+            <h5 class="card-title">Título</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
+            <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
+            <button type="button" class="btn btn-outline-danger">Imprimir</button>
+            <button type="button" class="btn btn-outline-danger">Duplicar</button>
+            <button type="button" class="btn btn-outline-danger">Editar</button>
+            <button type="button" class="btn btn-outline-danger">Deletar</button>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-6">
+            <h5 class="card-title">Preço</h5>
+            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
+            </div>
+            <div class="col-6 text-md-right">
+            <h5 class="card-title">Status</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
+            </div>
+            </div>
+            </div>
             </div>
 
             <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
-                <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
-                <div class="card-body">
-                    <h5 class="card-title">Título</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
-                    <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
-                        <button type="button" class="btn btn-outline-danger">Imprimir</button>
-                        <button type="button" class="btn btn-outline-danger">Duplicar</button>
-                        <button type="button" class="btn btn-outline-danger">Editar</button>
-                        <button type="button" class="btn btn-outline-danger">Deletar</button>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-6">
-                            <h5 class="card-title">Preço</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
-                        </div>
-                        <div class="col-6 text-md-right">
-                            <h5 class="card-title">Status</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
-                        </div>
-                    </div>
-                </div>
+            <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
+            <div class="card-body">
+            <h5 class="card-title">Título</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
+            <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
+            <button type="button" class="btn btn-outline-danger">Imprimir</button>
+            <button type="button" class="btn btn-outline-danger">Duplicar</button>
+            <button type="button" class="btn btn-outline-danger">Editar</button>
+            <button type="button" class="btn btn-outline-danger">Deletar</button>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-6">
+            <h5 class="card-title">Preço</h5>
+            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
+            </div>
+            <div class="col-6 text-md-right">
+            <h5 class="card-title">Status</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
+            </div>
+            </div>
+            </div>
             </div>*@
 
-            
+
         </div>
     </div>
 

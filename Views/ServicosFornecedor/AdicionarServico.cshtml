@@ -1,9 +1,14 @@
 ﻿@*@model Cidade*@
 
 @{
-    ViewData["Title"] = "Adicionar Pacote";
+    ViewData["Title"] = "Adicionar Serviço";
 }
 <style>
+
+    input[type=checkbox] {
+        accent-color: red;
+    }
+
     fade-in-out {
         animation: fadeInOut 3s ease-in-out;
     }
@@ -55,6 +60,7 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-body">
+                    <h5>Geral</h5>
                     @if (TempData["SuccessMessage"] != null)
                     {
                         <div class="alert alert-success">
@@ -69,7 +75,7 @@
                     }
                     <form asp-action="Create">
                         <div class="row">
-                            <div class="flex-column">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label @*asp-for="???"*@>Título</label>
                                     <select @*asp-for="???"*@ class="form-control">
@@ -92,7 +98,7 @@
                                     <span @*asp-validation-for="???"*@ class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="flex-column">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label @*asp-for=""*@>Subtítulo</label>
                                     <input @*asp-for=""*@ class="form-control" />
@@ -100,58 +106,177 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label @*asp-for=""*@>Quantidade máxima desse evento por dia</label>
-                            <input @*asp-for=""*@ class="form-control" />
-                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label style="font-size:12px" @*asp-for=""*@>Quantidade máxima desse evento por dia</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Número de convidados</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Estados</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Cidades</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label @*asp-for=""*@>Número de convidados</label>
-                            <input @*asp-for=""*@ class="form-control" />
-                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                            <label @*asp-for="Ativo"*@>Ativo</label>
+                            <div>
+                                <input type="checkbox" @*asp-for="Ativo"*@ />
+                                <span @*asp-validation-for="Ativo"*@ class="text-danger"></span>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label @*asp-for=""*@>Estados</label>
-                            <input @*asp-for=""*@ class="form-control" />
-                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                            <span class="greyFontStyle">Itens</span>
                         </div>
                         <div class="form-group">
-                            <label @*asp-for=""*@>Cidades</label>
-                            <input @*asp-for=""*@ class="form-control" />
-                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                            <a href="" style="color:red"><i class="fa fa-circle-plus" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow" style="margin-top:10px">
+                <div class="card-body">
+                    <h5>Fotos e Vídeos</h5>
+                    <div class="form-group">
+                        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2"> Adicionar Foto</a>
+                        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2"> Adicionar Vídeo</a>
+                    </div>
+                    <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
+                </div>
+            </div>
+
+            <div class="card shadow" style="margin-top:10px">
+                <div class="card-body">
+                    <h5>Informações sobre valores</h5>
+                    <form asp-action="Create">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Preço</label>
+                                    <span class="greyFontStyle">(Não visível para o usuário)</span>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Reajuste anual (Em %)</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="greyFontStyle">Descontos por dia (Em %)</span>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Segunda Feira</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Terça Feira</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Quarta Feira</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Quinta Feira</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Sexta Feira</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Sábado</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label @*asp-for=""*@>Domingo</label>
+                                    <input @*asp-for=""*@ class="form-control" />
+                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-danger">Salvar</button>
                         <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
-</div>
-<script>
-    $(document).ready(function () {
-        // Verifica se há uma mensagem de sucesso
-        var successMessage = $(".alert.alert-success");
+    <script>
+        $(document).ready(function () {
+            // Verifica se há uma mensagem de sucesso
+            var successMessage = $(".alert.alert-success");
 
-        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
-        if (successMessage.length > 0) {
-            successMessage.addClass("fade-in-out");
-            setTimeout(function () {
-                successMessage.removeClass("fade-in-out").fadeOut(500);
-            }, 3000); // 3000 milissegundos (3 segundos)
-        }
+            // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+            if (successMessage.length > 0) {
+                successMessage.addClass("fade-in-out");
+                setTimeout(function () {
+                    successMessage.removeClass("fade-in-out").fadeOut(500);
+                }, 3000); // 3000 milissegundos (3 segundos)
+            }
 
-        // Verifica se há uma mensagem de erro
-        var errorMessage = $(".alert.alert-danger");
+            // Verifica se há uma mensagem de erro
+            var errorMessage = $(".alert.alert-danger");
 
-        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
-        if (errorMessage.length > 0) {
-            errorMessage.addClass("error-fade-in-out");
-            setTimeout(function () {
-                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
-            }, 3000); // 3000 milissegundos (3 segundos)
-        }
-    });
-</script>
+            // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+            if (errorMessage.length > 0) {
+                errorMessage.addClass("error-fade-in-out");
+                setTimeout(function () {
+                    errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+                }, 3000); // 3000 milissegundos (3 segundos)
+            }
+        });
+    </script>
