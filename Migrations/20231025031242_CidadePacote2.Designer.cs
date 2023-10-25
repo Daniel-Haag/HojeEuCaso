@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025031242_CidadePacote2")]
+    partial class CidadePacote2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,9 +343,6 @@ namespace HojeEuCaso.Migrations
                     b.Property<int?>("CidadeID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EstadoID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("FornecedorID")
                         .HasColumnType("int");
 
@@ -367,8 +366,6 @@ namespace HojeEuCaso.Migrations
                     b.HasIndex("CategoriaID");
 
                     b.HasIndex("CidadeID");
-
-                    b.HasIndex("EstadoID");
 
                     b.HasIndex("FornecedorID");
 
@@ -684,10 +681,6 @@ namespace HojeEuCaso.Migrations
                         .WithMany()
                         .HasForeignKey("CidadeID");
 
-                    b.HasOne("HojeEuCaso.Models.Estado", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoID");
-
                     b.HasOne("HojeEuCaso.Models.Fornecedor", "Fornecedor")
                         .WithMany()
                         .HasForeignKey("FornecedorID");
@@ -695,8 +688,6 @@ namespace HojeEuCaso.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Cidade");
-
-                    b.Navigation("Estado");
 
                     b.Navigation("Fornecedor");
                 });

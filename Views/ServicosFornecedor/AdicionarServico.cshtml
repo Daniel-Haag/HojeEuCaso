@@ -1,4 +1,5 @@
-﻿@*@model Cidade*@
+﻿@using HojeEuCaso.Dtos
+@model PacoteComItensDoPacote
 
 @{
     ViewData["Title"] = "Adicionar Serviço";
@@ -73,27 +74,18 @@
                             @TempData["ErrorMessage"]
                         </div>
                     }
-                    <form asp-action="Create">
+                    <form asp-action="Create" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label @*asp-for="???"*@>Título</label>
-                                    <select @*asp-for="???"*@ class="form-control">
-                                        <option value="1">
-                                            Titulo
-                                        </option>
-                                        <option value="1">
-                                            Titulo
-                                        </option>
-                                        <option value="1">
-                                            Titulo
-                                        </option>
-                                        @*@foreach (var titulo in ViewBag.Titulos)
+                                    <label asp-for="Titulo">Título</label>
+                                    <select asp-for="Titulo" class="form-control">
+                                        @foreach (var pacote in ViewBag.Pacotes)
                                         {
-                                        <option value="@titulo.TipoCategoriaID">
-                                        @titulo.Descricao
-                                        </option>
-                                        }*@
+                                            <option value="@pacote.Titulo">
+                                                @pacote.Titulo
+                                            </option>
+                                        }
                                     </select>
                                     <span @*asp-validation-for="???"*@ class="text-danger"></span>
                                 </div>
@@ -151,20 +143,26 @@
                         <div class="form-group">
                             <a href="" style="color:red"><i class="fa fa-circle-plus" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
                         </div>
+
+                        <div class="card shadow" style="margin-top:10px">
+                            <div class="card-body">
+                                <h5>Fotos e Vídeos</h5>
+
+                                <div class="form-group">
+                                    <input type="file" asp-for="Foto" class="btn btn-outline-danger mb-2"> Adicionar Foto
+                                    <input type="file" asp-for="Video" class="btn btn-outline-danger mb-2"> Adicionar Vídeo
+                                </div>
+
+                                <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger">Salvar</button>
+                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>
 
-            <div class="card shadow" style="margin-top:10px">
-                <div class="card-body">
-                    <h5>Fotos e Vídeos</h5>
-                    <div class="form-group">
-                        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2"> Adicionar Foto</a>
-                        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2"> Adicionar Vídeo</a>
-                    </div>
-                    <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
-                </div>
-            </div>
+
 
             <div class="card shadow" style="margin-top:10px">
                 <div class="card-body">
@@ -247,8 +245,6 @@
                         </div>
                         <!-- Adicionar outros campos relevantes aqui, se necessário -->
                         <hr />
-                        <button type="submit" class="btn btn-danger">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
                 </div>
             </div>

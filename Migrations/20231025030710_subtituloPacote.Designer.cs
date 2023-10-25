@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231025030710_subtituloPacote")]
+    partial class subtituloPacote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -332,16 +334,7 @@ namespace HojeEuCaso.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("CategoriaID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CidadeID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EstadoID")
                         .HasColumnType("int");
 
                     b.Property<int?>("FornecedorID")
@@ -365,10 +358,6 @@ namespace HojeEuCaso.Migrations
                     b.HasKey("PacoteID");
 
                     b.HasIndex("CategoriaID");
-
-                    b.HasIndex("CidadeID");
-
-                    b.HasIndex("EstadoID");
 
                     b.HasIndex("FornecedorID");
 
@@ -680,23 +669,11 @@ namespace HojeEuCaso.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HojeEuCaso.Models.Cidade", "Cidade")
-                        .WithMany()
-                        .HasForeignKey("CidadeID");
-
-                    b.HasOne("HojeEuCaso.Models.Estado", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoID");
-
                     b.HasOne("HojeEuCaso.Models.Fornecedor", "Fornecedor")
                         .WithMany()
                         .HasForeignKey("FornecedorID");
 
                     b.Navigation("Categoria");
-
-                    b.Navigation("Cidade");
-
-                    b.Navigation("Estado");
 
                     b.Navigation("Fornecedor");
                 });

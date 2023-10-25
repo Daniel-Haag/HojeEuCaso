@@ -1,10 +1,13 @@
-﻿using HojeEuCaso.Interfaces;
+﻿using AutoMapper;
+using HojeEuCaso.Dtos;
+using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
 using HojeEuCaso.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace HojeEuCaso.Controllers
 {
@@ -13,14 +16,17 @@ namespace HojeEuCaso.Controllers
         private readonly ILogger<PacotesController> _logger;
         private readonly IPacoteService _pacoteService;
         private readonly ICategoriaService _categoriaService;
+        private readonly IMapper _mapper;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
-                                    ICategoriaService categoriaService)
+                                    ICategoriaService categoriaService,
+                                    IMapper mapper)
         {
             _logger = logger;
             _pacoteService = pacoteService;
             _categoriaService = categoriaService;
+            _mapper = mapper;
         }
 
         public ActionResult AdicionarServico()
@@ -55,15 +61,18 @@ namespace HojeEuCaso.Controllers
         // POST: PacotesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Pacote pacote)
+        public ActionResult Create(PacoteComItensDoPacote pacoteDto)
         {
+            //Receber dto e transformar nos modelos disponíveis...
+            Pacote pacote = _mapper.Map<Pacote>(pacoteDto);
+            List<ItensDePacotes> itensDePacotes = _mapper.Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
             try
             {
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
                 pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
 
-                _pacoteService.CreateNewPacote(pacote);
+                //_pacoteService.CreateNewPacote(pacote);
 
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();

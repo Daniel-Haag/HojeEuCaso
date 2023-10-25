@@ -2,6 +2,7 @@
 
 namespace HojeEuCaso.Models
 {
+    //É a mesma coisa que PACOTES com diferença do FornecedorID, abstrair
     public class PacotesDeUsuarios
     {
         public int PacotesDeUsuariosID { get; set; }

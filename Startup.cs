@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using HojeEuCaso.Models;
 using HojeEuCaso.Interfaces;
 using HojeEuCaso.Services;
+using AutoMapper;
 
 namespace HojeEuCaso
 {
@@ -31,6 +32,7 @@ namespace HojeEuCaso
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddSession(options =>
             {
@@ -93,6 +95,7 @@ namespace HojeEuCaso
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Login}/{action=Login}/{id?}");
+
             });
 
             app.Use(async (context, next) =>
@@ -105,6 +108,8 @@ namespace HojeEuCaso
 
                 await next();
             });
+
+            app.UseStaticFiles();
         }
     }
 }

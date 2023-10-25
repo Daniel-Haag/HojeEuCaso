@@ -1,4 +1,4 @@
-﻿@model Cidade
+﻿@*@model Cidade*@
 
 @{
     ViewData["Title"] = "Editar Cidade";
@@ -67,7 +67,7 @@
                             @TempData["ErrorMessage"]
                         </div>
                     }
-                    <form asp-action="Edit">
+                    @*<form asp-action="Edit">
                         <div class="form-group" style="display:none">
                             <label asp-for="CidadeID">Nome da Cidade</label>
                             <input asp-for="CidadeID" class="form-control" value="@ViewBag.Cidade.CidadeID" />
@@ -82,7 +82,7 @@
                         <!-- Adicione outros campos relevantes aqui, se necessário -->
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-                    </form>
+                    </form>*@
                 </div>
             </div>
         </div>
