@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HojeEuCaso.Controllers
 {
@@ -17,21 +19,33 @@ namespace HojeEuCaso.Controllers
         private readonly IPacoteService _pacoteService;
         private readonly ICategoriaService _categoriaService;
         private readonly IMapper _mapper;
+        private readonly ICidadeService _cidadeService;
+        private readonly IEstadoService _estadoService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFornecedorService _fornecedorService;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
                                     ICategoriaService categoriaService,
-                                    IMapper mapper)
+                                    IMapper mapper,
+                                    ICidadeService cidadeService,
+                                    IEstadoService estadoService,
+                                    IWebHostEnvironment webHostEnvironment,
+                                    IFornecedorService fornecedorService)
         {
             _logger = logger;
             _pacoteService = pacoteService;
             _categoriaService = categoriaService;
             _mapper = mapper;
+            _cidadeService = cidadeService;
+            _estadoService = estadoService;
+            _webHostEnvironment = webHostEnvironment;
+            _fornecedorService = fornecedorService;
         }
 
         public ActionResult AdicionarServico()
         {
-            ViewBag.Pacotes = _pacoteService.GetAllPacotes();
+            SetData();
             return View();
         }
 
@@ -53,7 +67,9 @@ namespace HojeEuCaso.Controllers
         // GET: PacotesController/Create
         public ActionResult Create()
         {
-            ViewBag.Categorias = _categoriaService.GetAllCategorias();
+            //Talvez entre em desuso
+            SetData();
+
             TempData["SuccessMessage"] = null;
             return View();
         }
@@ -61,13 +77,59 @@ namespace HojeEuCaso.Controllers
         // POST: PacotesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(PacoteComItensDoPacote pacoteDto)
+        public ActionResult AdicionarServico(PacoteComItensDoPacote pacoteDto)
         {
-            //Receber dto e transformar nos modelos disponíveis...
-            Pacote pacote = _mapper.Map<Pacote>(pacoteDto);
-            List<ItensDePacotes> itensDePacotes = _mapper.Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
             try
             {
+                //Não esquecer de delegar todas estas funcionalidades em métodos menores
+
+                SetData();
+
+                if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
+                {
+                    long maxFileSize = 10 * 1024 * 1024; // 10MB
+                    if (pacoteDto.Foto.Length > maxFileSize)
+                    {
+                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                        return View();
+                    }
+
+                    var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", pacoteDto.Foto.FileName);
+
+                    using (var stream = new FileStream(caminhoFoto, FileMode.Create))
+                    {
+                        pacoteDto.Foto.CopyTo(stream);
+                    }
+                }
+
+                if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
+                {
+                    long maxVideoSize = 10 * 1024 * 1024; // 10MB
+                    if (pacoteDto.Video.Length > maxVideoSize)
+                    {
+                        ModelState.AddModelError("Video", "O tamanho do vídeo excede o limite de 10MB.");
+                        return View();
+                    }
+
+                    var caminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", pacoteDto.Video.FileName);
+
+                    using (var stream = new FileStream(caminhoVideo, FileMode.Create))
+                    {
+                        pacoteDto.Video.CopyTo(stream);
+                    }
+                }
+
+                //Receber dto e transformar nos modelos disponíveis...
+                Pacote pacote = _mapper.Map<Pacote>(pacoteDto);
+                List<ItensDePacotes> itensDePacotes = _mapper
+                    .Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
+
+                pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
+                pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
+
+                pacote.Fornecedor = _fornecedorService
+                    .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
                 pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
@@ -82,6 +144,13 @@ namespace HojeEuCaso.Controllers
                 TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
+        }
+
+        private void SetData()
+        {
+            ViewBag.Pacotes = _pacoteService.GetAllPacotes();
+            ViewBag.Estados = _estadoService.GetAllEstados();
+            ViewBag.Cidades = _cidadeService.GetAllCidades();
         }
 
         // GET: PacotesController/Edit/5

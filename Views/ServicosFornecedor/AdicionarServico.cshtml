@@ -74,7 +74,7 @@
                             @TempData["ErrorMessage"]
                         </div>
                     }
-                    <form asp-action="Create" enctype="multipart/form-data">
+                    <form asp-action="AdicionarServico" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -87,54 +87,68 @@
                                             </option>
                                         }
                                     </select>
-                                    <span @*asp-validation-for="???"*@ class="text-danger"></span>
+                                    <span asp-validation-for="Titulo" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label @*asp-for=""*@>Subtítulo</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label style="font-size:12px" @*asp-for=""*@>Quantidade máxima desse evento por dia</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Número de convidados</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                    <label asp-for="Subtitulo">Subtítulo</label>
+                                    <input asp-for="Subtitulo" class="form-control" />
+                                    <span asp-validation-for="Subtitulo" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label @*asp-for=""*@>Estados</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                    <label style="font-size:12px" asp-for="QtdMaximaEventosDia">Quantidade máxima desse evento por dia</label>
+                                    <input asp-for="QtdMaximaEventosDia" class="form-control" />
+                                    <span asp-validation-for="QtdMaximaEventosDia" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label @*asp-for=""*@>Cidades</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                    <label asp-for="QtdMaximaPessoas">Número de convidados</label>
+                                    <input asp-for="QtdMaximaPessoas" class="form-control" />
+                                    <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="EstadoID">Estado</label>
+                                    <select asp-for="EstadoID" class="form-control">
+                                        @foreach (var estado in ViewBag.Estados)
+                                        {
+                                            <option value="@estado.EstadoID">
+                                                @estado.Nome
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="EstadoID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="CidadeID">Cidade</label>
+                                    <select asp-for="CidadeID" class="form-control">
+                                        @foreach (var cidade in ViewBag.Cidades)
+                                        {
+                                            <option value="@cidade.CidadeID">
+                                                @cidade.Nome
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CidadeID" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label @*asp-for="Ativo"*@>Ativo</label>
+                            <label asp-for="Ativo">Ativo</label>
                             <div>
-                                <input type="checkbox" @*asp-for="Ativo"*@ />
-                                <span @*asp-validation-for="Ativo"*@ class="text-danger"></span>
+                                <input type="checkbox" asp-for="Ativo" />
+                                <span asp-validation-for="Ativo" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -149,13 +163,113 @@
                                 <h5>Fotos e Vídeos</h5>
 
                                 <div class="form-group">
-                                    <input type="file" asp-for="Foto" class="btn btn-outline-danger mb-2"> Adicionar Foto
-                                    <input type="file" asp-for="Video" class="btn btn-outline-danger mb-2"> Adicionar Vídeo
+                                    <label for="Foto" class="btn btn-outline-danger mb-2">
+                                        Adicionar Foto
+                                        <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
+                                    </label>
+
+                                    <label for="Video" class="btn btn-outline-danger mb-2">
+                                        Adicionar Vídeo
+                                        <input type="file" asp-for="Video" style="display: none;" id="Video" onchange="fileSelected('Video')">
+                                    </label>
+
+                                    <br />
+                                    <span id="FotoSelected" style="display: none; font-size:10px">Foto: <span id="FotoFileName" style="font-size:10px"></span></span>
+                                    <span asp-validation-for="Foto" class="text-danger" style="font-size:10px"></span>
+                                    <br />
+                                    <span id="VideoSelected" style="display: none; font-size:10px">Vídeo: <span id="VideoFileName" style="font-size:10px"></span></span>
+                                    <span asp-validation-for="Video" class="text-danger" style="font-size:10px"></span>
                                 </div>
 
                                 <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
                             </div>
                         </div>
+
+                        <div class="card shadow" style="margin-top:10px">
+                            <div class="card-body">
+                                <h5>Informações sobre valores</h5>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Preço</label>
+                                            <span class="greyFontStyle">(Não visível para o usuário)</span>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Reajuste anual (Em %)</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="greyFontStyle">Descontos por dia (Em %)</span>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Segunda Feira</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Terça Feira</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Quarta Feira</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Quinta Feira</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Sexta Feira</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Sábado</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label @*asp-for=""*@>Domingo</label>
+                                            <input @*asp-for=""*@ class="form-control" />
+                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+
+
+
+
                         <button type="submit" class="btn btn-danger">Salvar</button>
                         <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                     </form>
@@ -164,90 +278,7 @@
 
 
 
-            <div class="card shadow" style="margin-top:10px">
-                <div class="card-body">
-                    <h5>Informações sobre valores</h5>
-                    <form asp-action="Create">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Preço</label>
-                                    <span class="greyFontStyle">(Não visível para o usuário)</span>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Reajuste anual (Em %)</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="greyFontStyle">Descontos por dia (Em %)</span>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Segunda Feira</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Terça Feira</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Quarta Feira</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Quinta Feira</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Sexta Feira</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Sábado</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label @*asp-for=""*@>Domingo</label>
-                                    <input @*asp-for=""*@ class="form-control" />
-                                    <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Adicionar outros campos relevantes aqui, se necessário -->
-                        <hr />
-                    </form>
-                </div>
-            </div>
+
 
         </div>
     </div>
@@ -275,4 +306,20 @@
                 }, 3000); // 3000 milissegundos (3 segundos)
             }
         });
+
+        function fileSelected(inputId) {
+            const fileInput = document.getElementById(inputId);
+            const fileNameSpan = document.getElementById(inputId + 'FileName');
+            const selectedSpan = document.getElementById(inputId + 'Selected');
+
+            if (fileInput.files.length > 0) {
+                fileNameSpan.innerText = fileInput.files[0].name;
+                selectedSpan.style.display = 'inline';
+            } else {
+                fileNameSpan.innerText = '';
+                selectedSpan.style.display = 'none';
+            }
+        }
+
+
     </script>
