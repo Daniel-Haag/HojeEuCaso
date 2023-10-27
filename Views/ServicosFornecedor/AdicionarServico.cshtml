@@ -200,7 +200,7 @@
                                         <div class="form-group">
                                             <label asp-for="Preco">Preço</label>
                                             <span class="greyFontStyle">(Não visível para o usuário)</span>
-                                            <input asp-for="Preco" class="form-control" />
+                                            <input asp-for="Preco" class="form-control" id="inputPrecoServico" oninput="RetiraPonto('inputPrecoServico')" />
                                             <span asp-validation-for="Preco" class="text-danger"></span>
                                         </div>
                                     </div>
