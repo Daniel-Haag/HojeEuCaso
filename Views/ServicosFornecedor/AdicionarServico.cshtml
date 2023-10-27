@@ -76,7 +76,7 @@
                     }
                     <form asp-action="AdicionarServico" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col">
                                 <div class="form-group">
                                     <label asp-for="Titulo">Título</label>
                                     <select asp-for="Titulo" class="form-control">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col">
                                 <div class="form-group">
                                     <label asp-for="Subtitulo">Subtítulo</label>
                                     <input asp-for="Subtitulo" class="form-control" />
@@ -156,8 +156,13 @@
                         <div class="form-group">
                             <span class="greyFontStyle">Itens</span>
                         </div>
+
+                        <div class="itens-container">
+                            <!-- Conteúdo dos pares de inputs será adicionado aqui -->
+                        </div>
+
                         <div class="form-group">
-                            <a href="" style="color:red"><i class="fa fa-circle-plus" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
+                            <a href="javascript:void(0)" style="color:red" onclick="adicionarItem()"><i class="fa fa-plus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
                         </div>
 
                         <div class="card shadow" style="margin-top:10px">
@@ -323,5 +328,50 @@
             }
         }
 
+        var itemCount = -1;
+
+        function adicionarItem() {
+            itemCount++;
+
+            var itensContainer = document.querySelector('.itens-container');
+            var div = document.createElement("div");
+            div.classList.add("item-row");
+
+            var descricaoLabel = document.createElement("label");
+            descricaoLabel.innerText = "Descrição do Item:";
+            div.appendChild(descricaoLabel);
+
+            var descricaoInput = document.createElement("input");
+            descricaoInput.type = "text";
+            descricaoInput.name = "ItensDePacotes[" + itemCount + "].Descricao"; 
+            descricaoInput.classList.add("form-control");
+            div.appendChild(descricaoInput);
+
+            var quantidadeLabel = document.createElement("label");
+            quantidadeLabel.innerText = "Quantidade do Item:";
+            div.appendChild(quantidadeLabel);
+
+            var quantidadeInput = document.createElement("input");
+            quantidadeInput.type = "text";
+            quantidadeInput.name = "ItensDePacotes[" + itemCount + "].Quantidade"; 
+            quantidadeInput.classList.add("form-control");
+            div.appendChild(quantidadeInput);
+
+            var removerBotao = document.createElement("a");
+            removerBotao.href = "javascript:void(0)";
+            removerBotao.style.color = "red";
+            removerBotao.innerHTML = "<i class='fa fa-minus-circle' style='margin-right:5px' aria-hidden='true'></i><span class='greyFontStyle'>Remover</span>";
+            removerBotao.onclick = function () {
+                removerItem(div);
+            };
+            div.appendChild(removerBotao);
+
+            itensContainer.appendChild(div);
+        }
+
+        function removerItem(item) {
+            var itensContainer = document.querySelector('.itens-container');
+            itensContainer.removeChild(item);
+        }
 
     </script>
