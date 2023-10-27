@@ -1,5 +1,5 @@
 ﻿@using HojeEuCaso.Dtos
-@model PacoteComItensDoPacote
+@model PacoteComItensDoPacoteDto
 
 @{
     ViewData["Title"] = "Adicionar Serviço";
@@ -103,14 +103,14 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label style="font-size:12px" asp-for="QtdMaximaEventosDia">Quantidade máxima desse evento por dia</label>
+                                    <label style="font-size:12px" asp-for="QtdMaximaEventosDia">Quantidade máxima deste evento por dia</label>
                                     <input asp-for="QtdMaximaEventosDia" class="form-control" />
                                     <span asp-validation-for="QtdMaximaEventosDia" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label asp-for="QtdMaximaPessoas">Número de convidados</label>
+                                    <label style="font-size:12px" asp-for="QtdMaximaPessoas">Número de convidados</label>
                                     <input asp-for="QtdMaximaPessoas" class="form-control" />
                                     <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
                                 </div>
@@ -149,7 +149,7 @@
                         <div class="form-group">
                             <label asp-for="Ativo">Ativo</label>
                             <div>
-                                <input type="checkbox" asp-for="Ativo" />
+                                <input type="checkbox" asp-for="Ativo" checked />
                                 <span asp-validation-for="Ativo" class="text-danger"></span>
                             </div>
                         </div>
@@ -198,17 +198,17 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Preço</label>
+                                            <label asp-for="Preco">Preço</label>
                                             <span class="greyFontStyle">(Não visível para o usuário)</span>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <input asp-for="Preco" class="form-control" />
+                                            <span asp-validation-for="Preco" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Reajuste anual (Em %)</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <label asp-for="ReajusteAnualPorcentagem">Reajuste anual (Em %)</label>
+                                            <input asp-for="ReajusteAnualPorcentagem" class="form-control" />
+                                            <span asp-validation-for="ReajusteAnualPorcentagem" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -216,77 +216,70 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Segunda Feira</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <label asp-for="DescontoSegundaFeira">Segunda Feira</label>
+                                            <input asp-for="DescontoSegundaFeira" class="form-control" />
+                                            <span asp-validation-for="DescontoSegundaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Terça Feira</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group">
-                                            <label @*asp-for=""*@>Quarta Feira</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group">
-                                            <label @*asp-for=""*@>Quinta Feira</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <label asp-for="DescontoTercaFeira">Terça Feira</label>
+                                            <input asp-for="DescontoTercaFeira" class="form-control" />
+                                            <span asp-validation-for="DescontoTercaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Sexta Feira</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <label asp-for="DescontoQuartaFeira">Quarta Feira</label>
+                                            <input asp-for="DescontoQuartaFeira" class="form-control" />
+                                            <span asp-validation-for="DescontoQuartaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Sábado</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <label asp-for="DescontoQuintaFeira">Quinta Feira</label>
+                                            <input asp-for="DescontoQuintaFeira" class="form-control" />
+                                            <span asp-validation-for="DescontoQuintaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label @*asp-for=""*@>Domingo</label>
-                                            <input @*asp-for=""*@ class="form-control" />
-                                            <span @*asp-validation-for=""*@ class="text-danger"></span>
+                                            <label asp-for="DescontoSextaFeira">Sexta Feira</label>
+                                            <input asp-for="DescontoSextaFeira" class="form-control" />
+                                            <span asp-validation-for="DescontoSextaFeira" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoSabado">Sábado</label>
+                                            <input asp-for="DescontoSabado" class="form-control" />
+                                            <span asp-validation-for="DescontoSabado" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoDomingo">Domingo</label>
+                                            <input asp-for="DescontoDomingo" class="form-control" />
+                                            <span asp-validation-for="DescontoDomingo" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <hr />
                             </div>
                         </div>
-
-
-
-
-                        <button type="submit" class="btn btn-danger">Salvar</button>
-                        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                        <div style="margin-top:10px">
+                            <button type="submit" class="btn btn-danger">Salvar</button>
+                            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                        </div>
                     </form>
                 </div>
             </div>
-
-
-
-
-
         </div>
     </div>
     <script>
@@ -343,7 +336,7 @@
 
             var descricaoInput = document.createElement("input");
             descricaoInput.type = "text";
-            descricaoInput.name = "ItensDePacotes[" + itemCount + "].Descricao"; 
+            descricaoInput.name = "ItensDePacotes[" + itemCount + "].Descricao";
             descricaoInput.classList.add("form-control");
             div.appendChild(descricaoInput);
 
@@ -352,8 +345,8 @@
             div.appendChild(quantidadeLabel);
 
             var quantidadeInput = document.createElement("input");
-            quantidadeInput.type = "text";
-            quantidadeInput.name = "ItensDePacotes[" + itemCount + "].Quantidade"; 
+            quantidadeInput.type = "number";
+            quantidadeInput.name = "ItensDePacotes[" + itemCount + "].Quantidade";
             quantidadeInput.classList.add("form-control");
             div.appendChild(quantidadeInput);
 

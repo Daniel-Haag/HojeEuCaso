@@ -4,12 +4,20 @@ using System.Collections.Generic;
 
 namespace HojeEuCaso.Dtos
 {
-    public class PacoteComItensDoPacote
+    public class PacoteComItensDoPacoteDto
     {
         public int PacoteID { get; set; }
         public string Titulo { get; set; }
         public string Subtitulo { get; set; }
         public decimal Preco { get; set; }
+        public decimal ReajusteAnualPorcentagem { get; set; }
+        public decimal DescontoSegundaFeira { get; set; }
+        public decimal DescontoTercaFeira { get; set; }
+        public decimal DescontoQuartaFeira { get; set; }
+        public decimal DescontoQuintaFeira { get; set; }
+        public decimal DescontoSextaFeira { get; set; }
+        public decimal DescontoSabado { get; set; }
+        public decimal DescontoDomingo { get; set; }
         public int QtdMaximaEventosDia { get; set; }
         public int QtdMaximaPessoas { get; set; }
         public int CategoriaID { get; set; }
@@ -24,5 +32,7 @@ namespace HojeEuCaso.Dtos
         public List<ItensDePacotes> ItensDePacotes { get; set; }
         public IFormFile Foto { get; set; }
         public IFormFile Video { get; set; }
+        public string CaminhoFoto { get; set; }
+        public string CaminhoVideo { get; set; }
     }
 }

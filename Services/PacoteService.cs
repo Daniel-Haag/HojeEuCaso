@@ -44,12 +44,14 @@ namespace HojeEuCaso.Services
                 .ToList();
         }
 
-        public void CreateNewPacote(Pacote Pacote)
+        public int CreateNewPacote(Pacote Pacote)
         {
             try
             {
                 _HojeEuCasoDbContext.Pacotes.Add(Pacote);
                 _HojeEuCasoDbContext.SaveChanges();
+
+                return Pacote.PacoteID;
             }
             catch (Exception e)
             {

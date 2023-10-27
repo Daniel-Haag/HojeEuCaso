@@ -8,8 +8,8 @@ namespace HojeEuCaso.AutoMapper
     {
         public MappingProfile()
         {
-            CreateMap<PacoteComItensDoPacote, Pacote>();
-            CreateMap<PacoteComItensDoPacote, ItensDePacotes>();
+            CreateMap<PacoteComItensDoPacoteDto, Pacote>();
+            CreateMap<PacoteComItensDoPacoteDto, ItensDePacotes>();
         }
     }
 }

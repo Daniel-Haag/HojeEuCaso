@@ -9,7 +9,7 @@ namespace HojeEuCaso.Interfaces
         public List<Pacote> GetAllPacotes();
         public Pacote GetPacoteById(int ID);
         public List<Pacote> GetPacoteByFornecedor(int fornecedorID);
-        public void CreateNewPacote(Pacote Pacote);
+        public int CreateNewPacote(Pacote Pacote);
         public void UpdatePacote(Pacote Pacote);
         public void DeletePacote(int ID);
     }

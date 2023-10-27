@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231027033110_addCamposDiscontoPercentPacote")]
+    partial class addCamposDiscontoPercentPacote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -334,12 +336,6 @@ namespace HojeEuCaso.Migrations
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("CaminhoFoto")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CaminhoVideo")
-                        .HasColumnType("longtext");
 
                     b.Property<int>("CategoriaID")
                         .HasColumnType("int");

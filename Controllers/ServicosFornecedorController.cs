@@ -23,6 +23,7 @@ namespace HojeEuCaso.Controllers
         private readonly IEstadoService _estadoService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFornecedorService _fornecedorService;
+        private readonly IItensDePacotesService _itensDePacotesService;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
@@ -31,7 +32,8 @@ namespace HojeEuCaso.Controllers
                                     ICidadeService cidadeService,
                                     IEstadoService estadoService,
                                     IWebHostEnvironment webHostEnvironment,
-                                    IFornecedorService fornecedorService)
+                                    IFornecedorService fornecedorService,
+                                    IItensDePacotesService itensDePacotesService)
         {
             _logger = logger;
             _pacoteService = pacoteService;
@@ -41,6 +43,7 @@ namespace HojeEuCaso.Controllers
             _estadoService = estadoService;
             _webHostEnvironment = webHostEnvironment;
             _fornecedorService = fornecedorService;
+            _itensDePacotesService = itensDePacotesService;
         }
 
         public ActionResult AdicionarServico()
@@ -77,11 +80,22 @@ namespace HojeEuCaso.Controllers
         // POST: PacotesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AdicionarServico(PacoteComItensDoPacote pacoteDto)
+        public ActionResult AdicionarServico(PacoteComItensDoPacoteDto pacoteDto)
         {
             try
             {
+                //Não esquecer de tratar o campo de preço como valor
+
                 //Não esquecer de delegar todas estas funcionalidades em métodos menores
+
+                pacoteDto.ReajusteAnualPorcentagem = TransformToPercentDiscount(pacoteDto.ReajusteAnualPorcentagem);
+                pacoteDto.DescontoSegundaFeira = TransformToPercentDiscount(pacoteDto.DescontoSegundaFeira);
+                pacoteDto.DescontoTercaFeira = TransformToPercentDiscount(pacoteDto.DescontoTercaFeira);
+                pacoteDto.DescontoQuartaFeira = TransformToPercentDiscount(pacoteDto.DescontoQuartaFeira);
+                pacoteDto.DescontoQuintaFeira = TransformToPercentDiscount(pacoteDto.DescontoQuintaFeira);
+                pacoteDto.DescontoSextaFeira = TransformToPercentDiscount(pacoteDto.DescontoSextaFeira);
+                pacoteDto.DescontoSabado = TransformToPercentDiscount(pacoteDto.DescontoSabado);
+                pacoteDto.DescontoDomingo = TransformToPercentDiscount(pacoteDto.DescontoDomingo);
 
                 SetData();
 
@@ -94,9 +108,9 @@ namespace HojeEuCaso.Controllers
                         return View();
                     }
 
-                    var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", pacoteDto.Foto.FileName);
+                    pacoteDto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", pacoteDto.Foto.FileName);
 
-                    using (var stream = new FileStream(caminhoFoto, FileMode.Create))
+                    using (var stream = new FileStream(pacoteDto.CaminhoFoto, FileMode.Create))
                     {
                         pacoteDto.Foto.CopyTo(stream);
                     }
@@ -111,9 +125,9 @@ namespace HojeEuCaso.Controllers
                         return View();
                     }
 
-                    var caminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", pacoteDto.Video.FileName);
+                    pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", pacoteDto.Video.FileName);
 
-                    using (var stream = new FileStream(caminhoVideo, FileMode.Create))
+                    using (var stream = new FileStream(pacoteDto.CaminhoVideo, FileMode.Create))
                     {
                         pacoteDto.Video.CopyTo(stream);
                     }
@@ -130,11 +144,20 @@ namespace HojeEuCaso.Controllers
                 pacote.Fornecedor = _fornecedorService
                     .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
 
+                //Como fica a definição de categoria???
+                //Por enquanto vou definir de forma paleativa
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
-                pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
+                pacote.Categoria = categorias.FirstOrDefault(/*x => x.CategoriaID == pacote.CategoriaID*/);
 
-                //_pacoteService.CreateNewPacote(pacote);
+                //Primeiro criar o pacote para preencher o PacoteID do itensDePacote
+                var pacoteID = _pacoteService.CreateNewPacote(pacote);
+
+                foreach (var itemDePacote in itensDePacotes)
+                {
+                    itemDePacote.PacoteID = pacoteID;
+                    _itensDePacotesService.CreateNewItensDePacotes(itemDePacote);
+                }
 
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
@@ -144,13 +167,6 @@ namespace HojeEuCaso.Controllers
                 TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
-        }
-
-        private void SetData()
-        {
-            ViewBag.Pacotes = _pacoteService.GetAllPacotes();
-            ViewBag.Estados = _estadoService.GetAllEstados();
-            ViewBag.Cidades = _cidadeService.GetAllCidades();
         }
 
         // GET: PacotesController/Edit/5
@@ -206,6 +222,19 @@ namespace HojeEuCaso.Controllers
                 TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return RedirectToAction("Index");
             }
+        }
+
+        private void SetData()
+        {
+            ViewBag.Pacotes = _pacoteService.GetAllPacotes();
+            ViewBag.Estados = _estadoService.GetAllEstados();
+            ViewBag.Cidades = _cidadeService.GetAllCidades();
+        }
+
+        private decimal TransformToPercentDiscount(decimal number)
+        {
+            number = number / 100;
+            return number;
         }
     }
 }

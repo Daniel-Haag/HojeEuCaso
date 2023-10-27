@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231027032937_addCampoReajustePercentPacote")]
+    partial class addCampoReajustePercentPacote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,38 +337,11 @@ namespace HojeEuCaso.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("CaminhoFoto")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CaminhoVideo")
-                        .HasColumnType("longtext");
-
                     b.Property<int>("CategoriaID")
                         .HasColumnType("int");
 
                     b.Property<int?>("CidadeID")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("DescontoDomingo")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("DescontoQuartaFeira")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("DescontoQuintaFeira")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("DescontoSabado")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("DescontoSegundaFeira")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("DescontoSextaFeira")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<decimal>("DescontoTercaFeira")
-                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int?>("EstadoID")
                         .HasColumnType("int");
