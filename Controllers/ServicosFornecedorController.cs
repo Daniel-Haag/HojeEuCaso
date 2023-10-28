@@ -84,8 +84,6 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                //Não esquecer de tratar o campo de preço como valor
-
                 //Não esquecer de delegar todas estas funcionalidades em métodos menores
 
                 pacoteDto.ReajusteAnualPorcentagem = TransformToPercentDiscount(pacoteDto.ReajusteAnualPorcentagem);
@@ -133,7 +131,6 @@ namespace HojeEuCaso.Controllers
                     }
                 }
 
-                //Receber dto e transformar nos modelos disponíveis...
                 Pacote pacote = _mapper.Map<Pacote>(pacoteDto);
                 List<ItensDePacotes> itensDePacotes = _mapper
                     .Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
