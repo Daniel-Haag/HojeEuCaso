@@ -58,6 +58,8 @@ namespace HojeEuCaso.Controllers
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
             int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+            ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+
             return View();
         }
 

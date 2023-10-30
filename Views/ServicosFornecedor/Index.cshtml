@@ -19,13 +19,52 @@
 
             @if (ViewBag.Pacotes != null)
             {
-                @foreach (var item in ViewBag.Pacotes)
+                @foreach (var pacote in ViewBag.Pacotes)
                 {
-                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
-                        <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
+                    var caminhoImagem = pacote.CaminhoFoto?.Replace(ViewBag.Diretorio, "~");
+                    caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+                    var caminhoVideo = pacote.CaminhoVideo?.Replace(ViewBag.Diretorio, "~");
+                    caminhoVideo = caminhoVideo?.Replace("\\", "/");
+
+                    // Criando um ID de carrossel único com base no índice do pacote
+                    var carouselId = "carousel_" + Guid.NewGuid().ToString();
+
+                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0;">
+
+                        <div id="@carouselId" class="carousel slide" data-ride="carousel" style="background-color:black">
+                            <div class="carousel-inner">
+
+                                <div class="carousel-item active">
+                                    <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="img-fluid" style="max-height: 300px;" />
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="d-flex justify-content-center">
+                                        <video class="img-fluid" controls>
+                                            <source src="@Url.Content(caminhoVideo)" style="max-height: 300px;" type="video/mp4">
+                                            Seu navegador não suporta o elemento de vídeo.
+                                        </video>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <a class="carousel-control-prev" href="#@carouselId" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#@carouselId" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
                         <div class="card-body">
-                            <h5 class="card-title">Título</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
+                            <h3 class="card-title">@pacote.Titulo</h3>
+                            <h6 class="card-subtitle mb-2 text-muted">@pacote.SubTitulo</h6>
+
+                            <label style="font-size:12px">Número de convidados: @pacote.QtdMaximaPessoas</label>
+
                             <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
                                 <button type="button" class="btn btn-outline-danger">Imprimir</button>
                                 <button type="button" class="btn btn-outline-danger">Duplicar</button>
@@ -35,74 +74,67 @@
                             <hr>
                             <div class="row">
                                 <div class="col-6">
-                                    <h5 class="card-title">Preço</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">$100</h6>
+                                    <h5 class="card-title">Valor</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">@string.Format("R$ {0:N2}", pacote.Preco)</h6>
                                 </div>
                                 <div class="col-6 text-md-right">
                                     <h5 class="card-title">Status</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        @if (pacote.Ativo)
+                                        {
+                                            @:Ativo
+                                        }
+                                        else
+                                        {
+                                            @:Inativo
+                                        }
+                                    </h6>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 }
             }
-
-            @*<div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
-            <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
-            <div class="card-body">
-            <h5 class="card-title">Título</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
-            <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
-            <button type="button" class="btn btn-outline-danger">Imprimir</button>
-            <button type="button" class="btn btn-outline-danger">Duplicar</button>
-            <button type="button" class="btn btn-outline-danger">Editar</button>
-            <button type="button" class="btn btn-outline-danger">Deletar</button>
-            </div>
-            <hr>
-            <div class="row">
-            <div class="col-6">
-            <h5 class="card-title">Preço</h5>
-            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
-            </div>
-            <div class="col-6 text-md-right">
-            <h5 class="card-title">Status</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
-            </div>
-            </div>
-            </div>
-            </div>
-
-            <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0">
-            <img src="~/images/imagemPacoteTeste.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 300px;" />
-            <div class="card-body">
-            <h5 class="card-title">Título</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Subtítulo</h6>
-            <div class="btn-group btn-group-sm d-flex justify-content-center" role="group" aria-label="Ações">
-            <button type="button" class="btn btn-outline-danger">Imprimir</button>
-            <button type="button" class="btn btn-outline-danger">Duplicar</button>
-            <button type="button" class="btn btn-outline-danger">Editar</button>
-            <button type="button" class="btn btn-outline-danger">Deletar</button>
-            </div>
-            <hr>
-            <div class="row">
-            <div class="col-6">
-            <h5 class="card-title">Preço</h5>
-            <h6 class="card-subtitle mb-2 text-muted">$100</h6>
-            </div>
-            <div class="col-6 text-md-right">
-            <h5 class="card-title">Status</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Ativo</h6>
-            </div>
-            </div>
-            </div>
-            </div>*@
-
-
         </div>
     </div>
 
+    <style>
+        .carousel {
+            max-height: 300px; /* Definindo a altura máxima desejada para o carrossel */
+            overflow: hidden; /* Para garantir que o conteúdo não ultrapasse a altura máxima */
+        }
+    </style>
 
+    <script>
+        // Aguardando o carregamento completo da página
+        document.addEventListener("DOMContentLoaded", function () {
+            // Selecionando todos os elementos de vídeo e imagem no carrossel
+            var elements = document.querySelectorAll(".carousel-item img, .carousel-item video");
+
+            // Inicializando a altura máxima como 0
+            var maxHeight = 0;
+
+            // Percorrendo todos os elementos para encontrar a altura máxima
+            elements.forEach(function (element) {
+                var elementHeight = element.clientHeight;
+                if (elementHeight > maxHeight) {
+                    maxHeight = elementHeight;
+                }
+            });
+
+            // Definindo a altura de todos os elementos dentro do carrossel com base na altura máxima
+            elements.forEach(function (element) {
+                element.style.height = maxHeight + "px";
+            });
+
+            // Definindo a altura do carrossel com base na altura máxima
+            var carousels = document.querySelectorAll(".carousel");
+            carousels.forEach(function (carousel) {
+                carousel.style.height = maxHeight + "px";
+            });
+        });
+    </script>
 
 
 </body>
