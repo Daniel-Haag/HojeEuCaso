@@ -46,7 +46,7 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Categoria)
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
-                .Where(x => x.FornecedorID == fornecedorID)
+                .Where(x => x.FornecedorID == fornecedorID && x.Ativo == true)
                 .ToList();
         }
 
@@ -82,8 +82,9 @@ namespace HojeEuCaso.Services
         {
             try
             {
-                var Pacote = GetPacoteById(ID);
-                _HojeEuCasoDbContext.Pacotes.Remove(Pacote);
+                var pacote = GetPacoteById(ID);
+                pacote.Ativo = false;
+                _HojeEuCasoDbContext.Pacotes.Update(pacote);
                 _HojeEuCasoDbContext.SaveChanges();
             }
             catch (Exception e)

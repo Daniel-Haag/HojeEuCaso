@@ -222,7 +222,6 @@ namespace HojeEuCaso.Controllers
         }
 
         // POST: PacotesController/Delete/5
-        [HttpPost]
         public ActionResult Delete(int id)
         {
             try
