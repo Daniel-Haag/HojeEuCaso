@@ -27,7 +27,17 @@ namespace HojeEuCaso.Services
 
         public ItensDePacotes GetItensDePacotesById(int ID)
         {
-            return _HojeEuCasoDbContext.ItensDePacotes.Where(x => x.ItensDePacotesID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.ItensDePacotes
+                .Where(x => x.ItensDePacotesID == ID)
+                .FirstOrDefault();
+        }
+
+        public List<ItensDePacotes> GetItensDePacotesByPacoteId(int ID)
+        {
+            return _HojeEuCasoDbContext.ItensDePacotes
+                .Include(x => x.Pacote)
+                .Where(x => x.PacoteID == ID)
+                .ToList();
         }
 
         public void CreateNewItensDePacotes(ItensDePacotes ItensDePacotes)

@@ -23,6 +23,8 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.Pacotes
                 .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
                 .ToList();
         }
 
@@ -31,6 +33,8 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.Pacotes
                 .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
                 .Where(x => x.PacoteID == ID)
                 .FirstOrDefault();
         }
@@ -40,6 +44,8 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.Pacotes
                 .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
                 .Where(x => x.FornecedorID == fornecedorID)
                 .ToList();
         }

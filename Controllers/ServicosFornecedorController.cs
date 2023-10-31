@@ -169,24 +169,38 @@ namespace HojeEuCaso.Controllers
         }
 
         // GET: PacotesController/Edit/5
-        public ActionResult Edit(int ID)
+        public ActionResult EditarServico(int ID)
         {
+            var pacotes = _pacoteService.GetAllPacotes();
+            ViewBag.Pacotes = pacotes;
+
             var categorias = _categoriaService.GetAllCategorias();
             ViewBag.Categorias = categorias;
 
-            var Pacote = _pacoteService.GetPacoteById(ID);
-            ViewBag.Pacote = Pacote;
-            ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == Pacote.CategoriaID);
+            var cidades = _cidadeService.GetAllCidades();
+            ViewBag.Cidades = cidades;
+
+            var estados = _estadoService.GetAllEstados();
+            ViewBag.Estados = estados;
+
+            var pacoteAtual = _pacoteService.GetPacoteById(ID);
+            ViewBag.PacoteAtual = pacoteAtual;
+            ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacoteAtual.CategoriaID);
+            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade.CidadeID);
+            ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado.EstadoID);
+            ViewBag.ItensDePacotes = _itensDePacotesService.GetItensDePacotesByPacoteId(ID);
             return View();
         }
 
         // POST: PacotesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Pacote pacote)
+        public ActionResult EditarServico(Pacote pacote)
         {
             try
             {
+                SetData();
+
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
                 var categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
@@ -195,6 +209,7 @@ namespace HojeEuCaso.Controllers
                 ViewBag.Categoria = categoria;
 
                 _pacoteService.UpdatePacote(pacote);
+
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 ViewBag.Pacote = pacote;
                 return View();
