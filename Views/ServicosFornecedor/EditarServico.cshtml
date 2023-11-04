@@ -74,13 +74,22 @@
                             @TempData["ErrorMessage"]
                         </div>
                     }
-                    <form asp-action="AdicionarServico" enctype="multipart/form-data">
+                    <form asp-action="EditarServico" enctype="multipart/form-data">
                         <div class="row" style="display:none">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="PacoteID">Subtítulo</label>
+                                    <label asp-for="PacoteID">ID</label>
                                     <input asp-for="PacoteID" class="form-control" value="@ViewBag.PacoteAtual.PacoteID" />
                                     <span asp-validation-for="PacoteID" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="CategoriaID">CategoriaID</label>
+                                    <input asp-for="CategoriaID" class="form-control" value="@ViewBag.PacoteAtual.CategoriaID" />
+                                    <span asp-validation-for="CategoriaID" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -147,13 +156,13 @@
 
                                             if (isSelected == "selected")
                                             {
-                                                <option value="@estado.Nome" selected>
+                                                <option value="@estado.EstadoID" selected>
                                                     @estado.Nome
                                                 </option>
                                             }
                                             else
                                             {
-                                                <option value="@estado.Nome">
+                                                <option value="@estado.EstadoID">
                                                     @estado.Nome
                                                 </option>
                                             }
@@ -172,13 +181,13 @@
 
                                             if (isSelected == "selected")
                                             {
-                                                <option value="@cidade.Nome" selected>
+                                                <option value="@cidade.CidadeID" selected>
                                                     @cidade.Nome
                                                 </option>
                                             }
                                             else
                                             {
-                                                <option value="@cidade.Nome">
+                                                <option value="@cidade.CidadeID">
                                                     @cidade.Nome
                                                 </option>
                                             }
@@ -192,7 +201,7 @@
                         <div class="form-group">
                             <label asp-for="Ativo">Ativo</label>
                             <div>
-                                <input type="checkbox" asp-for="Ativo" value="@ViewBag.PacoteAtual.Ativo" />
+                                <input type="checkbox" asp-for="Ativo" checked="ViewBag.PacoteAtual.Ativo" />
                                 <span asp-validation-for="Ativo" class="text-danger"></span>
                             </div>
                         </div>
@@ -201,29 +210,7 @@
                         </div>
 
                         <div class="itens-container">
-                            @if (ViewBag.ItensDePacotes != null)
-                            {
-                                for (var i = 0; i < ViewBag.ItensDePacotes.Count; i++)
-                                {
-                                    <div class="item-row">
-                                        <div class="form-group" style="display:none">
-                                            <label asp-for="ItensDePacotes[i].Descricao">ID:</label>
-                                            <input asp-for="ItensDePacotes[i].Descricao" class="form-control" value="@ViewBag.ItensDePacotes[i].ItensDePacotesID" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="ItensDePacotes[i].Descricao">Descrição do Item:</label>
-                                            <input asp-for="ItensDePacotes[i].Descricao" class="form-control" value="@ViewBag.ItensDePacotes[i].Descricao"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="ItensDePacotes[i].Quantidade">Quantidade do Item:</label>
-                                            <input asp-for="ItensDePacotes[i].Quantidade" class="form-control" value="@ViewBag.ItensDePacotes[i].Quantidade" />
-                                        </div>
-                                        <div class="form-group">
-                                            <a href="javascript:void(0)" style="color:red" onclick="removerItem(this)"><i class="fa fa-minus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Remover</span></a>
-                                        </div>
-                                    </div>
-                                }
-                            }
+                            <!-- Conteúdo dos pares de inputs será adicionado aqui -->
                         </div>
 
                         <div class="form-group">
@@ -236,12 +223,12 @@
 
                                 <div class="form-group">
                                     <label for="Foto" class="btn btn-outline-danger mb-2">
-                                        Adicionar Foto
+                                        Substituir Foto
                                         <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
                                     </label>
 
                                     <label for="Video" class="btn btn-outline-danger mb-2">
-                                        Adicionar Vídeo
+                                        Substituir Vídeo
                                         <input type="file" asp-for="Video" style="display: none;" id="Video" onchange="fileSelected('Video')">
                                     </label>
 
@@ -251,6 +238,27 @@
                                     <br />
                                     <span id="VideoSelected" style="display: none; font-size:10px">Vídeo: <span id="VideoFileName" style="font-size:10px"></span></span>
                                     <span asp-validation-for="Video" class="text-danger" style="font-size:10px"></span>
+                                </div>
+
+                                <div class="form-group" id="visualizacaoFoto">
+                                    <label for="existingFoto">Foto:</label>
+                                    @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
+                                    {
+                                        <img src="@Url.Content(ViewBag.FotoExistente)" alt="Imagens Serviço" class="d-block w-100" />
+                                    }
+                                </div>
+
+                                <div class="form-group" id="visualizacaoVideo">
+                                    <label for="existingVideo">Vídeo:</label>
+                                    @if (!string.IsNullOrEmpty(ViewBag.VideoExistente))
+                                    {
+                                        <div class="d-flex justify-content-center">
+                                            <video class="d-block w-100" controls>
+                                                <source src="@Url.Content(ViewBag.VideoExistente)" type="video/mp4">
+                                                Seu navegador não suporta o elemento de vídeo.
+                                            </video>
+                                        </div>
+                                    }
                                 </div>
 
                                 <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
@@ -265,14 +273,14 @@
                                         <div class="form-group">
                                             <label asp-for="Preco">Preço</label>
                                             <span class="greyFontStyle">(Não visível para o usuário)</span>
-                                            <input asp-for="Preco" class="form-control" id="inputPrecoServico" oninput="RetiraPonto('inputPrecoServico')" />
+                                            <input asp-for="Preco" class="form-control" id="inputPrecoServico" oninput="RetiraPonto('inputPrecoServico')" value="@string.Format("{0:F2}",ViewBag.PacoteAtual.Preco)" />
                                             <span asp-validation-for="Preco" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="ReajusteAnualPorcentagem">Reajuste anual (Em %)</label>
-                                            <input asp-for="ReajusteAnualPorcentagem" class="form-control" />
+                                            <input asp-for="ReajusteAnualPorcentagem" class="form-control" value="@((int)ViewBag.PacoteAtual.ReajusteAnualPorcentagem)" />
                                             <span asp-validation-for="ReajusteAnualPorcentagem" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -282,14 +290,14 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoSegundaFeira">Segunda Feira</label>
-                                            <input asp-for="DescontoSegundaFeira" class="form-control" />
+                                            <input asp-for="DescontoSegundaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoSegundaFeira)" />
                                             <span asp-validation-for="DescontoSegundaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoTercaFeira">Terça Feira</label>
-                                            <input asp-for="DescontoTercaFeira" class="form-control" />
+                                            <input asp-for="DescontoTercaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoTercaFeira)" />
                                             <span asp-validation-for="DescontoTercaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -298,14 +306,14 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoQuartaFeira">Quarta Feira</label>
-                                            <input asp-for="DescontoQuartaFeira" class="form-control" />
+                                            <input asp-for="DescontoQuartaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoQuartaFeira)" />
                                             <span asp-validation-for="DescontoQuartaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoQuintaFeira">Quinta Feira</label>
-                                            <input asp-for="DescontoQuintaFeira" class="form-control" />
+                                            <input asp-for="DescontoQuintaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoQuintaFeira)" />
                                             <span asp-validation-for="DescontoQuintaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -314,14 +322,14 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoSextaFeira">Sexta Feira</label>
-                                            <input asp-for="DescontoSextaFeira" class="form-control" />
+                                            <input asp-for="DescontoSextaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoSextaFeira)" />
                                             <span asp-validation-for="DescontoSextaFeira" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoSabado">Sábado</label>
-                                            <input asp-for="DescontoSabado" class="form-control" />
+                                            <input asp-for="DescontoSabado" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoSabado)" />
                                             <span asp-validation-for="DescontoSabado" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -330,7 +338,7 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label asp-for="DescontoDomingo">Domingo</label>
-                                            <input asp-for="DescontoDomingo" class="form-control" />
+                                            <input asp-for="DescontoDomingo" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoDomingo)" />
                                             <span asp-validation-for="DescontoDomingo" class="text-danger"></span>
                                         </div>
                                     </div>
@@ -350,8 +358,20 @@
 </div>
 <script>
     $(document).ready(function () {
-        // Verifica se há uma mensagem de sucesso
-        var successMessage = $(".alert.alert-success");
+
+    @if (ViewBag.ItensDePacotes != null)
+    {
+        for (var i = 0; i < ViewBag.ItensDePacotes.Count; i++)
+        {
+            var descricao = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].Descricao));
+            var quantidade = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].Quantidade));
+            <text>
+                    adicionarItem('@descricao', @quantidade);
+            </text>
+        }
+    }
+            // Verifica se há uma mensagem de sucesso
+            var successMessage = $(".alert.alert-success");
 
         // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
         if (successMessage.length > 0) {
@@ -378,6 +398,19 @@
         const fileNameSpan = document.getElementById(inputId + 'FileName');
         const selectedSpan = document.getElementById(inputId + 'Selected');
 
+        console.log(typeof(inputId));
+
+        if (inputId == 'Foto'){
+
+            var visualizacaoFoto = document.getElementById('visualizacaoFoto');
+            visualizacaoFoto.style.display = 'none';
+        }
+
+        if (inputId == 'Video'){
+            var visualizacaoVideo = document.getElementById('visualizacaoVideo');
+            visualizacaoVideo.style.display = 'none';
+        }
+
         if (fileInput.files.length > 0) {
             fileNameSpan.innerText = fileInput.files[0].name;
             selectedSpan.style.display = 'inline';
@@ -389,9 +422,12 @@
 
     var itemCount = @(ViewBag.ItensDePacotes.Count - 1);
 
-    function adicionarItem() {
-        itemCount++;
+    function adicionarItem(descricao, quantidade) {
         var itensContainer = document.querySelector('.itens-container');
+
+        var itemRows = document.querySelectorAll('.item-row');
+        itemCount = itemRows.length; // Atualiza o contador de itens
+
         var div = document.createElement("div");
         div.classList.add("item-row");
 
@@ -403,6 +439,7 @@
         descricaoInput.type = "text";
         descricaoInput.name = `ItensDePacotes[${itemCount}].Descricao`;
         descricaoInput.classList.add("form-control");
+        descricaoInput.value = descricao === undefined ? "" : descricao.replace(/"/g, "");
         div.appendChild(descricaoInput);
 
         var quantidadeLabel = document.createElement("label");
@@ -413,6 +450,7 @@
         quantidadeInput.type = "number";
         quantidadeInput.name = `ItensDePacotes[${itemCount}].Quantidade`;
         quantidadeInput.classList.add("form-control");
+        quantidadeInput.value = quantidade;
         div.appendChild(quantidadeInput);
 
         var removerBotao = document.createElement("a");

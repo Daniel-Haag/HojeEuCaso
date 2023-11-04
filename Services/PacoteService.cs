@@ -25,6 +25,7 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Categoria)
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
+                .AsNoTracking()
                 .ToList();
         }
 
@@ -36,6 +37,7 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Where(x => x.PacoteID == ID)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 
@@ -47,6 +49,7 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Where(x => x.FornecedorID == fornecedorID && x.Ativo == true)
+                .AsNoTracking()
                 .ToList();
         }
 
@@ -74,6 +77,7 @@ namespace HojeEuCaso.Services
             }
             catch (Exception e)
             {
+                string erro = e.Message;
                 throw new Exception("Erro na atualização deste registro");
             }
         }

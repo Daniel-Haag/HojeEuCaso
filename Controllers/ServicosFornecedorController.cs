@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using System;
 
 namespace HojeEuCaso.Controllers
 {
@@ -72,7 +73,7 @@ namespace HojeEuCaso.Controllers
         // GET: PacotesController/Create
         public ActionResult Create()
         {
-            //Talvez entre em desuso
+            //Talvez esse método entre em desuso
             SetData();
 
             TempData["SuccessMessage"] = null;
@@ -86,34 +87,22 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
+                //Melhorar estas buscar por todos os registros
                 //Não esquecer de delegar todas estas funcionalidades em métodos menores
-
-                pacoteDto.ReajusteAnualPorcentagem = TransformToPercentDiscount(pacoteDto.ReajusteAnualPorcentagem);
-                pacoteDto.DescontoSegundaFeira = TransformToPercentDiscount(pacoteDto.DescontoSegundaFeira);
-                pacoteDto.DescontoTercaFeira = TransformToPercentDiscount(pacoteDto.DescontoTercaFeira);
-                pacoteDto.DescontoQuartaFeira = TransformToPercentDiscount(pacoteDto.DescontoQuartaFeira);
-                pacoteDto.DescontoQuintaFeira = TransformToPercentDiscount(pacoteDto.DescontoQuintaFeira);
-                pacoteDto.DescontoSextaFeira = TransformToPercentDiscount(pacoteDto.DescontoSextaFeira);
-                pacoteDto.DescontoSabado = TransformToPercentDiscount(pacoteDto.DescontoSabado);
-                pacoteDto.DescontoDomingo = TransformToPercentDiscount(pacoteDto.DescontoDomingo);
-
                 SetData();
+                TransformAllPercentProps(pacoteDto);
 
                 if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
                 {
                     long maxFileSize = 10 * 1024 * 1024; // 10MB
+
                     if (pacoteDto.Foto.Length > maxFileSize)
                     {
                         ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
                         return View();
                     }
 
-                    pacoteDto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", pacoteDto.Foto.FileName);
-
-                    using (var stream = new FileStream(pacoteDto.CaminhoFoto, FileMode.Create))
-                    {
-                        pacoteDto.Foto.CopyTo(stream);
-                    }
+                    CopyPhotoStream(pacoteDto);
                 }
 
                 if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
@@ -125,17 +114,12 @@ namespace HojeEuCaso.Controllers
                         return View();
                     }
 
-                    pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", pacoteDto.Video.FileName);
-
-                    using (var stream = new FileStream(pacoteDto.CaminhoVideo, FileMode.Create))
-                    {
-                        pacoteDto.Video.CopyTo(stream);
-                    }
+                    CopyVideoStream(pacoteDto);
                 }
 
-                Pacote pacote = _mapper.Map<Pacote>(pacoteDto);
-                List<ItensDePacotes> itensDePacotes = _mapper
-                    .Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
+                Pacote pacote;
+                List<ItensDePacotes> itensDePacotes;
+                MapPacoteDtoForPacoteObject(pacoteDto, out pacote, out itensDePacotes);
 
                 pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
@@ -184,38 +168,104 @@ namespace HojeEuCaso.Controllers
             ViewBag.Estados = estados;
 
             var pacoteAtual = _pacoteService.GetPacoteById(ID);
+
+            pacoteAtual.ReajusteAnualPorcentagem = RevertFormatPercentage(pacoteAtual.ReajusteAnualPorcentagem);
+            pacoteAtual.DescontoSegundaFeira = RevertFormatPercentage(pacoteAtual.DescontoSegundaFeira);
+            pacoteAtual.DescontoTercaFeira = RevertFormatPercentage(pacoteAtual.DescontoTercaFeira);
+            pacoteAtual.DescontoQuartaFeira = RevertFormatPercentage(pacoteAtual.DescontoQuartaFeira);
+            pacoteAtual.DescontoQuintaFeira = RevertFormatPercentage(pacoteAtual.DescontoQuintaFeira);
+            pacoteAtual.DescontoSextaFeira = RevertFormatPercentage(pacoteAtual.DescontoSextaFeira);
+            pacoteAtual.DescontoSabado = RevertFormatPercentage(pacoteAtual.DescontoSabado);
+            pacoteAtual.DescontoDomingo = RevertFormatPercentage(pacoteAtual.DescontoDomingo);
+
             ViewBag.PacoteAtual = pacoteAtual;
             ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacoteAtual.CategoriaID);
             ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade.CidadeID);
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado.EstadoID);
             ViewBag.ItensDePacotes = _itensDePacotesService.GetItensDePacotesByPacoteId(ID);
+
+            var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+
+            var caminhoImagem = pacoteAtual.CaminhoFoto?.Replace(diretorio, "~");
+            caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+            var caminhoVideo = pacoteAtual.CaminhoVideo?.Replace(diretorio, "~");
+            caminhoVideo = caminhoVideo?.Replace("\\", "/");
+
+            ViewBag.FotoExistente = caminhoImagem; 
+            ViewBag.VideoExistente = caminhoVideo;
             return View();
         }
 
         // POST: PacotesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditarServico(Pacote pacote)
+        public ActionResult EditarServico(PacoteComItensDoPacoteDto pacoteDto)
         {
             try
             {
+                //Melhorar estas buscas por todos os registros
                 SetData();
+                TransformAllPercentProps(pacoteDto);
+
+                if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
+                {
+                    long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+                    if (pacoteDto.Foto.Length > maxFileSize)
+                    {
+                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                        return View();
+                    }
+
+                    CopyPhotoStream(pacoteDto);
+                }
+
+                if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
+                {
+                    long maxVideoSize = 10 * 1024 * 1024; // 10MB
+                    if (pacoteDto.Video.Length > maxVideoSize)
+                    {
+                        ModelState.AddModelError("Video", "O tamanho do vídeo excede o limite de 10MB.");
+                        return View();
+                    }
+
+                    CopyVideoStream(pacoteDto);
+                }
+
+                Pacote pacote;
+                List<ItensDePacotes> itensDePacotes;
+                MapPacoteDtoForPacoteObject(pacoteDto, out pacote, out itensDePacotes);
+
+                pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
+                pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
+
+                pacote.Fornecedor = _fornecedorService
+                    .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
 
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
                 var categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
 
                 pacote.Categoria = categoria;
-                ViewBag.Categoria = categoria;
+                ViewBag.Categoria = pacote.Categoria;
 
                 _pacoteService.UpdatePacote(pacote);
+
+                foreach (var itemDePacote in itensDePacotes)
+                {
+                    itemDePacote.PacoteID = pacote.PacoteID;
+                    _itensDePacotesService.CreateNewItensDePacotes(itemDePacote);
+                }
 
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 ViewBag.Pacote = pacote;
                 return View();
             }
-            catch
+            catch (Exception e)
             {
+                string erro = e.Message;
+
                 TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
@@ -248,6 +298,57 @@ namespace HojeEuCaso.Controllers
         {
             number = number / 100;
             return number;
+        }
+
+        private void TransformAllPercentProps(PacoteComItensDoPacoteDto pacoteDto)
+        {
+            pacoteDto.ReajusteAnualPorcentagem = TransformToPercentDiscount(pacoteDto.ReajusteAnualPorcentagem);
+            pacoteDto.DescontoSegundaFeira = TransformToPercentDiscount(pacoteDto.DescontoSegundaFeira);
+            pacoteDto.DescontoTercaFeira = TransformToPercentDiscount(pacoteDto.DescontoTercaFeira);
+            pacoteDto.DescontoQuartaFeira = TransformToPercentDiscount(pacoteDto.DescontoQuartaFeira);
+            pacoteDto.DescontoQuintaFeira = TransformToPercentDiscount(pacoteDto.DescontoQuintaFeira);
+            pacoteDto.DescontoSextaFeira = TransformToPercentDiscount(pacoteDto.DescontoSextaFeira);
+            pacoteDto.DescontoSabado = TransformToPercentDiscount(pacoteDto.DescontoSabado);
+            pacoteDto.DescontoDomingo = TransformToPercentDiscount(pacoteDto.DescontoDomingo);
+        }
+
+        public decimal RevertFormatPercentage(decimal fractionValue)
+        {
+            decimal percentageValue = fractionValue * 100;
+            return percentageValue;
+        }
+
+        private void CopyVideoStream(PacoteComItensDoPacoteDto pacoteDto)
+        {
+            pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", pacoteDto.Video.FileName);
+
+            if (!System.IO.File.Exists(pacoteDto.CaminhoVideo))
+            {
+                using (var stream = new FileStream(pacoteDto.CaminhoVideo, FileMode.Create))
+                {
+                    pacoteDto.Video.CopyTo(stream);
+                }
+            }
+        }
+
+        private void CopyPhotoStream(PacoteComItensDoPacoteDto pacoteDto)
+        {
+            pacoteDto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", pacoteDto.Foto.FileName);
+
+            if (!System.IO.File.Exists(pacoteDto.CaminhoFoto))
+            {
+                using (var stream = new FileStream(pacoteDto.CaminhoFoto, FileMode.Create))
+                {
+                    pacoteDto.Foto.CopyTo(stream);
+                }
+            }
+        }
+
+        private void MapPacoteDtoForPacoteObject(PacoteComItensDoPacoteDto pacoteDto, out Pacote pacote, out List<ItensDePacotes> itensDePacotes)
+        {
+            pacote = _mapper.Map<Pacote>(pacoteDto);
+            itensDePacotes = _mapper
+                                .Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
         }
     }
 }
