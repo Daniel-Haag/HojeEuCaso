@@ -2,7 +2,6 @@
 using HojeEuCaso.Dtos;
 using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
-using HojeEuCaso.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,7 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System;
-using System.Runtime.InteropServices;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace HojeEuCaso.Controllers
 {
@@ -285,6 +285,87 @@ namespace HojeEuCaso.Controllers
             {
                 TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return RedirectToAction("Index");
+            }
+        }
+
+        [HttpGet]
+        public ActionResult PrintService(int Id)
+        {
+            var servico = _pacoteService.GetPacoteById(Id);
+            var itensDoPacote = _itensDePacotesService.GetItensDePacotesByPacoteId(Id);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document document = new Document();
+
+                PdfWriter writer = PdfWriter.GetInstance(document, ms);
+
+                document.Open();
+
+                servico.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", "logoSemFundo.png");
+
+                if (System.IO.File.Exists(servico.CaminhoFoto))
+                {
+                    Image logo = Image.GetInstance(servico.CaminhoFoto);
+                    logo.ScaleAbsolute(195f, 40f); 
+                    document.Add(logo);
+                }
+
+                document.Add(new Paragraph(servico.Titulo));
+
+                Paragraph subtitulo = new Paragraph(servico.SubTitulo);
+                subtitulo.Alignment = Element.ALIGN_LEFT;
+                subtitulo.SpacingAfter = 10F;
+
+                document.Add(subtitulo);
+                
+                PdfContentByte cb = writer.DirectContent;
+                cb.SetLineWidth(1); 
+                cb.SetColorStroke(BaseColor.RED); 
+                cb.MoveTo(36, document.PageSize.Height - 125);
+                cb.LineTo(document.PageSize.Width - 36, document.PageSize.Height - 125);
+                cb.Stroke();
+
+                Font titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
+                Paragraph title = new Paragraph("Detalhes", titleFont);
+                title.Alignment = Element.ALIGN_LEFT;
+                document.Add(title);
+
+                document.Add(new Paragraph("Quantidade de pessoas:" + servico.QtdMaximaPessoas));
+
+                Paragraph valorParagraph = new Paragraph("Valor:" + servico.Preco);
+                valorParagraph.Alignment = Element.ALIGN_LEFT;
+                valorParagraph.SpacingAfter = 10F;
+
+                document.Add(valorParagraph);
+
+                PdfContentByte cb2 = writer.DirectContent;
+                cb2.SetLineWidth(-2); 
+                cb2.SetColorStroke(BaseColor.GRAY);
+                cb2.MoveTo(26, document.PageSize.Height - 190);
+                cb2.LineTo(document.PageSize.Width - 26, document.PageSize.Height - 190);
+                cb2.Stroke();
+
+                Font itensDoServicoTituloFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
+                Paragraph itensDoServicoParagrafo = new Paragraph("Itens do Serviço:", itensDoServicoTituloFont);
+                itensDoServicoParagrafo.Alignment = Element.ALIGN_LEFT;
+                document.Add(itensDoServicoParagrafo);
+
+                foreach (var item in itensDoPacote)
+                {
+                    document.Add(new Paragraph(item.Descricao));
+
+                    Paragraph qtdItemParagraph = new Paragraph(item.Quantidade.ToString());
+                    qtdItemParagraph.Alignment = Element.ALIGN_LEFT;
+                    qtdItemParagraph.SpacingAfter = 10F;
+
+                    document.Add(new Paragraph(qtdItemParagraph));
+                }
+
+                document.Close();
+
+                byte[] pdfBytes = ms.ToArray();
+                return File(pdfBytes, "application/pdf", "DetalhesDoServico.pdf");
             }
         }
 
