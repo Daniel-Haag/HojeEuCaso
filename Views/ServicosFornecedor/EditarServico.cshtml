@@ -87,6 +87,24 @@
                         <div class="row" style="display:none">
                             <div class="col">
                                 <div class="form-group">
+                                    <label asp-for="CaminhoFoto">CaminhoFoto</label>
+                                    <input asp-for="CaminhoFoto" class="form-control" value="@ViewBag.CaminhoImagem" />
+                                    <span asp-validation-for="CaminhoFoto" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="CaminhoVideo">CaminhoVideo</label>
+                                    <input asp-for="CaminhoVideo" class="form-control" value="@ViewBag.CaminhoVideo" />
+                                    <span asp-validation-for="CaminhoVideo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
                                     <label asp-for="CategoriaID">CategoriaID</label>
                                     <input asp-for="CategoriaID" class="form-control" value="@ViewBag.PacoteAtual.CategoriaID" />
                                     <span asp-validation-for="CategoriaID" class="text-danger"></span>
@@ -212,7 +230,7 @@
                         <div class="itens-container">
                             <!-- Conteúdo dos pares de inputs será adicionado aqui -->
                         </div>
-
+                        <hr />
                         <div class="form-group">
                             <a href="javascript:void(0)" style="color:red" onclick="adicionarItem()"><i class="fa fa-plus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
                         </div>
@@ -223,12 +241,12 @@
 
                                 <div class="form-group">
                                     <label for="Foto" class="btn btn-outline-danger mb-2">
-                                        Substituir Foto
+                                        Alterar Foto
                                         <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
                                     </label>
 
                                     <label for="Video" class="btn btn-outline-danger mb-2">
-                                        Substituir Vídeo
+                                        Alterar Vídeo
                                         <input type="file" asp-for="Video" style="display: none;" id="Video" onchange="fileSelected('Video')">
                                     </label>
 
@@ -363,15 +381,16 @@
     {
         for (var i = 0; i < ViewBag.ItensDePacotes.Count; i++)
         {
+            var itemID = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].ItensDePacotesID));
             var descricao = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].Descricao));
             var quantidade = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].Quantidade));
             <text>
-                    adicionarItem('@descricao', @quantidade);
+                    adicionarItem('@itemID', '@descricao', @quantidade);
             </text>
         }
     }
-            // Verifica se há uma mensagem de sucesso
-            var successMessage = $(".alert.alert-success");
+                // Verifica se há uma mensagem de sucesso
+                var successMessage = $(".alert.alert-success");
 
         // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
         if (successMessage.length > 0) {
@@ -398,15 +417,15 @@
         const fileNameSpan = document.getElementById(inputId + 'FileName');
         const selectedSpan = document.getElementById(inputId + 'Selected');
 
-        console.log(typeof(inputId));
+        console.log(typeof (inputId));
 
-        if (inputId == 'Foto'){
+        if (inputId == 'Foto') {
 
             var visualizacaoFoto = document.getElementById('visualizacaoFoto');
             visualizacaoFoto.style.display = 'none';
         }
 
-        if (inputId == 'Video'){
+        if (inputId == 'Video') {
             var visualizacaoVideo = document.getElementById('visualizacaoVideo');
             visualizacaoVideo.style.display = 'none';
         }
@@ -422,7 +441,7 @@
 
     var itemCount = @(ViewBag.ItensDePacotes.Count - 1);
 
-    function adicionarItem(descricao, quantidade) {
+    function adicionarItem(ID, descricao, quantidade) {
         var itensContainer = document.querySelector('.itens-container');
 
         var itemRows = document.querySelectorAll('.item-row');
@@ -434,6 +453,14 @@
         var descricaoLabel = document.createElement("label");
         descricaoLabel.innerText = "Descrição do Item:";
         div.appendChild(descricaoLabel);
+
+        var IDInput = document.createElement("input");
+        IDInput.type = "text";
+        IDInput.name = `ItensDePacotes[${itemCount}].ItensDePacotesID`;
+        IDInput.classList.add("form-control");
+        IDInput.value = ID === undefined ? "" : ID.replace(/"/g, "");
+        div.appendChild(IDInput);
+        IDInput.style.display = 'none';
 
         var descricaoInput = document.createElement("input");
         descricaoInput.type = "text";

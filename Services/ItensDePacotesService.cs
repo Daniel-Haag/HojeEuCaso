@@ -22,6 +22,7 @@ namespace HojeEuCaso.Services
         {
             return _HojeEuCasoDbContext.ItensDePacotes
                 .Include(x => x.Pacote)
+                .AsNoTracking()
                 .ToList();
         }
 
@@ -29,6 +30,7 @@ namespace HojeEuCaso.Services
         {
             return _HojeEuCasoDbContext.ItensDePacotes
                 .Where(x => x.ItensDePacotesID == ID)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 
@@ -37,6 +39,7 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.ItensDePacotes
                 .Include(x => x.Pacote)
                 .Where(x => x.PacoteID == ID)
+                .AsNoTracking()
                 .ToList();
         }
 
@@ -62,6 +65,7 @@ namespace HojeEuCaso.Services
             }
             catch (Exception e)
             {
+                string erro = e.Message;
                 throw new Exception("Erro na atualização deste registro");
             }
         }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System;
+using System.Runtime.InteropServices;
 
 namespace HojeEuCaso.Controllers
 {
@@ -184,6 +185,9 @@ namespace HojeEuCaso.Controllers
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado.EstadoID);
             ViewBag.ItensDePacotes = _itensDePacotesService.GetItensDePacotesByPacoteId(ID);
 
+            ViewBag.CaminhoImagem = pacoteAtual.CaminhoFoto;
+            ViewBag.CaminhoVideo = pacoteAtual.CaminhoVideo;
+
             var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
             var caminhoImagem = pacoteAtual.CaminhoFoto?.Replace(diretorio, "~");
@@ -192,7 +196,7 @@ namespace HojeEuCaso.Controllers
             var caminhoVideo = pacoteAtual.CaminhoVideo?.Replace(diretorio, "~");
             caminhoVideo = caminhoVideo?.Replace("\\", "/");
 
-            ViewBag.FotoExistente = caminhoImagem; 
+            ViewBag.FotoExistente = caminhoImagem;
             ViewBag.VideoExistente = caminhoVideo;
             return View();
         }
@@ -252,15 +256,12 @@ namespace HojeEuCaso.Controllers
 
                 _pacoteService.UpdatePacote(pacote);
 
-                foreach (var itemDePacote in itensDePacotes)
-                {
-                    itemDePacote.PacoteID = pacote.PacoteID;
-                    _itensDePacotesService.CreateNewItensDePacotes(itemDePacote);
-                }
+                UpdateOrDeleteItenDePacote(pacote, itensDePacotes);
+                CreateNewItensDePacote(itensDePacotes);
 
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
-                ViewBag.Pacote = pacote;
-                return View();
+                //ViewBag.Pacote = pacote;
+                return RedirectToAction("EditarServico", pacote.PacoteID);
             }
             catch (Exception e)
             {
@@ -349,6 +350,46 @@ namespace HojeEuCaso.Controllers
             pacote = _mapper.Map<Pacote>(pacoteDto);
             itensDePacotes = _mapper
                                 .Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
+        }
+
+        private void CreateNewItensDePacote(List<ItensDePacotes> itensDePacotes)
+        {
+            if (itensDePacotes != null)
+            {
+                foreach (var novoItem in itensDePacotes)
+                {
+                    if (novoItem.ItensDePacotesID == 0)
+                    {
+                        _itensDePacotesService.CreateNewItensDePacotes(novoItem);
+                    }
+                }
+            }
+        }
+
+        private void UpdateOrDeleteItenDePacote(Pacote pacote, List<ItensDePacotes> itensDePacotes)
+        {
+            var itensDePacotesAntesDaEdicao = _itensDePacotesService.GetItensDePacotesByPacoteId(pacote.PacoteID);
+
+            if (itensDePacotesAntesDaEdicao != null)
+            {
+                foreach (var item in itensDePacotesAntesDaEdicao)
+                {
+                    var testeItemDePacote = itensDePacotes
+                        .FirstOrDefault(x => x.ItensDePacotesID == item.ItensDePacotesID);
+
+                    if (testeItemDePacote != null)
+                    {
+                        testeItemDePacote.PacoteID = pacote.PacoteID;
+                        testeItemDePacote.Pacote = pacote;
+
+                        _itensDePacotesService.UpdateItensDePacotes(testeItemDePacote);
+                    }
+                    else if (testeItemDePacote == null)
+                    {
+                        _itensDePacotesService.DeleteItensDePacotes(item.ItensDePacotesID);
+                    }
+                }
+            }
         }
     }
 }
