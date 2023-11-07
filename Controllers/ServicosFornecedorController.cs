@@ -58,9 +58,32 @@ namespace HojeEuCaso.Controllers
         public ActionResult Index()
         {
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
+            try
+            {
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+                ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+            }
+            catch (ArgumentNullException ex)
+            {
+               if (ex.Message == "Value cannot be null. (Parameter 's')")
+                {
+                    RedirectToAction("Logout", "Login");
+                } 
+            }
+
+            return View();
+        }
+
+        // GET: PacotesController
+        public ActionResult Profile()
+        {
+            //Buscando os Servicos/Pacotes do Fornecedor Logado!
             int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+
+            ViewBag.FotoExistente = "/images/backiee-81831.jpg";
 
             return View();
         }
@@ -307,7 +330,7 @@ namespace HojeEuCaso.Controllers
                 if (System.IO.File.Exists(servico.CaminhoFoto))
                 {
                     Image logo = Image.GetInstance(servico.CaminhoFoto);
-                    logo.ScaleAbsolute(195f, 40f); 
+                    logo.ScaleAbsolute(195f, 40f);
                     document.Add(logo);
                 }
 
@@ -318,10 +341,10 @@ namespace HojeEuCaso.Controllers
                 subtitulo.SpacingAfter = 10F;
 
                 document.Add(subtitulo);
-                
+
                 PdfContentByte cb = writer.DirectContent;
-                cb.SetLineWidth(1); 
-                cb.SetColorStroke(BaseColor.RED); 
+                cb.SetLineWidth(1);
+                cb.SetColorStroke(BaseColor.RED);
                 cb.MoveTo(36, document.PageSize.Height - 125);
                 cb.LineTo(document.PageSize.Width - 36, document.PageSize.Height - 125);
                 cb.Stroke();
@@ -340,7 +363,7 @@ namespace HojeEuCaso.Controllers
                 document.Add(valorParagraph);
 
                 PdfContentByte cb2 = writer.DirectContent;
-                cb2.SetLineWidth(-2); 
+                cb2.SetLineWidth(-2);
                 cb2.SetColorStroke(BaseColor.GRAY);
                 cb2.MoveTo(26, document.PageSize.Height - 190);
                 cb2.LineTo(document.PageSize.Width - 26, document.PageSize.Height - 190);

@@ -1,0 +1,134 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+@model Fornecedor;
+
+@{
+    ViewBag.Title = "Perfil";
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pt-BR");
+    System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+    System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div style="display: flex; flex-wrap: wrap; margin-left:10%">
+
+        <div class="card p-4 shadow mobileCard desktopCard full-width-card" style="margin-top: 20px; flex-grow: 1; width: 100%">
+            <h2 style="font-weight: 600; font-size: 24px;">Conta</h2>
+            <div class="row">
+                <div class="col-4" id="visualizacaoFoto">
+                    @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
+                    {
+                        <img src="@Url.Content(ViewBag.FotoExistente)" alt="Imagens Serviço" class="img-fluid" />
+                    }
+                </div>
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Nome</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Usuário teste</span>
+                    <label style="margin-bottom:-5px">E-mail</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">teste@teste.com.br</span>
+                    <label style="margin-bottom:-5px">CPF</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                    <label style="margin-bottom:-5px">RG</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                </div>
+                 <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Status</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Ativo</span>
+                    <label style="margin-bottom:-5px">Tipo</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Pessoa Física</span>
+                    <label style="margin-bottom:-5px">Múltiplos Eventos</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Não</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
+            <h2 style="font-weight: 600; font-size: 24px;">Informações Financeiras</h2>
+            <div class="row">
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Nome</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Usuário teste</span>
+                    <label style="margin-bottom:-5px">E-mail</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">teste@teste.com.br</span>
+                    <label style="margin-bottom:-5px">CPF</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                    <label style="margin-bottom:-5px">RG</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                </div>
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Status</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Ativo</span>
+                    <label style="margin-bottom:-5px">Tipo</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Pessoa Física</span>
+                    <label style="margin-bottom:-5px">Múltiplos Eventos</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Não</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
+            <h2 style="font-weight: 600; font-size: 24px;">Informações</h2>
+
+
+            <div class="row">
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Nome</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Usuário teste</span>
+                    <label style="margin-bottom:-5px">E-mail</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">teste@teste.com.br</span>
+                    <label style="margin-bottom:-5px">CPF</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                    <label style="margin-bottom:-5px">RG</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                </div>
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Status</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Ativo</span>
+                    <label style="margin-bottom:-5px">Tipo</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Pessoa Física</span>
+                    <label style="margin-bottom:-5px">Múltiplos Eventos</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Não</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
+            <h2 style="font-weight: 600; font-size: 24px;">Redes Sociais</h2>
+            <div class="row">
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Nome</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Usuário teste</span>
+                    <label style="margin-bottom:-5px">E-mail</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">teste@teste.com.br</span>
+                    <label style="margin-bottom:-5px">CPF</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                    <label style="margin-bottom:-5px">RG</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">123</span>
+                </div>
+                <div class="col-3 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Status</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Ativo</span>
+                    <label style="margin-bottom:-5px">Tipo</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Pessoa Física</span>
+                    <label style="margin-bottom:-5px">Múltiplos Eventos</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Não</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<script>
+
+</script>
+
