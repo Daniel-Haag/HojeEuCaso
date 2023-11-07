@@ -83,7 +83,12 @@ namespace HojeEuCaso.Controllers
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
+            //Falta definir como será obtida a imagem
             ViewBag.FotoExistente = "/images/backiee-81831.jpg";
+
+            var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
+
+            ViewBag.Fornecedor = fornecedor;
 
             return View();
         }
