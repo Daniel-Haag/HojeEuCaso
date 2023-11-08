@@ -21,6 +21,13 @@ namespace HojeEuCaso.Controllers
 
         public IActionResult Index(int? month, int? year)
         {
+            var usuarioLogado = HttpContext?.Session.GetString("Nome");
+
+            if (string.IsNullOrEmpty(usuarioLogado))
+            {
+                RedirectToAction("Logout", "Login");
+            }
+
             DateTime currentDate = DateTime.Now;
 
             if (month.HasValue && year.HasValue)
