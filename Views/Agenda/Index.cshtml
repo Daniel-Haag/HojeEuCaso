@@ -19,51 +19,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style>
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
-            gap: 2px;
-        }
+        
 
-        .day {
-            border: 1px solid #ccc;
-            padding: 5px;
-            text-align: center;
-            height: 40px;
-            font-size: 10px;
-        }
-
-        .today {
-            background-color: lightcoral;
-        }
-
-        /* Efeito de hover */
-        .day:hover {
-            background-color: lightcoral;
-            cursor: pointer;
-        }
-
-        .desktopCard {
-            width: 100%;
-            margin-left: 5%;
-        }
-
-        /* Estilos condicionais para dispositivos móveis */
-        @@media (max-width: 768px) {
-            .calendar {
-                gap: 1px; /* Espaçamento menor para dispositivos móveis */
-            }
-
-            .day {
-                font-size: 8px; /* Tamanho de fonte menor para dispositivos móveis */
-                height: 30px; /* Altura menor para dispositivos móveis */
-            }
-
-            .mobileCard {
-                width: 80%;
-                margin-left: 17%;
-            }
-        }
+        
     </style>
 </head>
 <body>

@@ -80,17 +80,6 @@
             display: block;
         }
 
-        /* Estilizar o ícone de alternância do menu quando as subseleções estão expandidas */
-        /*#nova-site-toggle i.fa {
-                            transition: transform 0.3s;
-                        }*/
-
-        /*#nova-site-toggle.expanded i.fa {
-                            transform: rotate(90deg);
-                        }*/
-
-
-
         body {
             overflow-x: hidden;
         }
@@ -116,7 +105,7 @@
             z-index: 1000;
             position: fixed;
             left: 250px;
-            width: 500px;
+            width: 185px;
             height: 100%;
             margin-left: -250px;
             overflow-y: auto;
@@ -128,14 +117,10 @@
         }
 
         #wrapper.toggled #sidebar-wrapper {
-            width: 500px;
+            width: 50px;
         }
 
-        #page-content-wrapper {
-            width: 100%;
-            position: absolute;
-            padding: 10px;
-        }
+        
 
         #wrapper.toggled #page-content-wrapper {
             position: absolute;
@@ -192,10 +177,6 @@
                     }
 
         @@media(min-width:768px) {
-            #wrapper {
-                padding-left: 220px;
-            }
-
                 #wrapper.toggled {
                     padding-left: 0;
                 }
@@ -336,11 +317,11 @@
                     <!-- Sidebar -->
                     <div id="sidebar-wrapper">
                         <ul class="sidebar-nav">
-                            <li class="sidebar-brand" style="margin-bottom:100px">
+                            <li class="" style="margin-bottom:30px">
                                 <a href="#menu-toggle" id="menu-toggle" style="float:right;">
-                                    <i class="fa fa-bars" style="font-size:20px !important;" aria-hidden="true"></i>
+                                    <i class="fa fa-bars" style="font-size:20px !important;" aria-hidden="true" onclick="hiddenLogo()"></i>
                                 </a>
-                                <a class="navbar-brand logoWeb logoMobile" id="logo" asp-area="" asp-controller="Home" asp-action="Index">
+                                <a style="margin-right:0px" class="navbar-brand logoWeb logoMobile" id="logo" asp-area="" asp-controller="Home" asp-action="Index">
                                     <img src="~/images/logoSemFundo.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 40px;" />
                                     <hr />
                                 </a>
@@ -376,25 +357,25 @@
                             <li>
                                 <a href="#" id="nova-site-toggle">
                                     <i class="fa fa-keyboard" aria-hidden="true"></i>
-                                    <span style="margin-left: 10px;">Cadastros (Nova)</span>
+                                    <span style="margin-left: 10px;">Cadastros</span>
                                 </a>
                                 @*<span class="menu-toggle nav-link" id="nova-site-toggle"><i class="fa fa-keyboard" aria-hidden="true"></i><span style="margin-left:10px;">Nova Site</span></span>*@
                                 <ul class="sub-menu">
-                                    <li><a asp-area="" asp-controller="Fornecedores" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Fornecedor</a></li>
-                                    <li><a asp-area="" asp-controller="Categorias" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Categorias</a></li>
-                                    <li><a asp-area="" asp-controller="TipoCategoria" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Tipo de Categorias</a></li>
-                                    <li><a asp-area="" asp-controller="ClausulasDeContrato" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Cláusulas de Contrato</a></li>
-                                    <li><a asp-area="" asp-controller="Pacotes" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Pacotes</a></li>
-                                    <li><a asp-area="" asp-controller="ItensDePacotes" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Itens de Pacotes</a></li>
-                                    <li><a asp-area="" asp-controller="Planos" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Planos</a></li>
-                                    <li><a asp-area="" asp-controller="CategoriasDosPlanos" style="margin-left: 20px" asp-action="Index" class="sub-menu-option">Categorias dos Planos</a></li>
-                                    <li><a asp-area="" asp-controller="PacotesDeUsuarios" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Pacotes de Usuários</a></li>
-                                    <li><a asp-area="" asp-controller="ItensDePacotesDeUsuarios" asp-action="Index" style="margin-left: 20px; font-size:9px" class="sub-menu-option">Itens de Pacotes de Usuários</a></li>
-                                    <li><a asp-area="" asp-controller="Cidades" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Cidades</a></li>
-                                    <li><a asp-area="" asp-controller="Estados" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Estados</a></li>
-                                    <li><a asp-area="" asp-controller="FornecedoresIndicados" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Fornecedores Indicados</a></li>
+                                    <li><a asp-area="" asp-controller="Fornecedores" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Fornecedor</a></li>
+                                    <li><a asp-area="" asp-controller="Categorias" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Categorias</a></li>
+                                    <li><a asp-area="" asp-controller="TipoCategoria" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Tipo de Categorias</a></li>
+                                    <li><a asp-area="" asp-controller="ClausulasDeContrato" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Cláusulas de Contrato</a></li>
+                                    <li><a asp-area="" asp-controller="Pacotes" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Pacotes</a></li>
+                                    <li><a asp-area="" asp-controller="ItensDePacotes" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Itens de Pacotes</a></li>
+                                    <li><a asp-area="" asp-controller="Planos" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Planos</a></li>
+                                    <li><a asp-area="" asp-controller="CategoriasDosPlanos" style="margin-left: 25px" asp-action="Index" class="sub-menu-option">Categorias dos Planos</a></li>
+                                    <li><a asp-area="" asp-controller="PacotesDeUsuarios" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Pacotes de Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="ItensDePacotesDeUsuarios" asp-action="Index" style="margin-left: 25px; font-size:9px" class="sub-menu-option">Itens de Pacotes de Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="Cidades" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Cidades</a></li>
+                                    <li><a asp-area="" asp-controller="Estados" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Estados</a></li>
+                                    <li><a asp-area="" asp-controller="FornecedoresIndicados" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Fornecedores Indicados</a></li>
                                     @*<li><a asp-area="" asp-controller="Tendencias" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Tendências</a></li>*@
-                                    <li><a asp-area="" asp-controller="Usuarios" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Usuários</a></li>
+                                    <li><a asp-area="" asp-controller="Usuarios" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Usuários</a></li>
                                     @*<li><a asp-area="" asp-controller="Feedbacks" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Feedbacks</a></li>
                                 <li><a asp-area="" asp-controller="Sugestões" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Sugestões</a></li>*@
                                     <!-- Adicionar mais subseleções conforme necessário -->
@@ -467,6 +448,19 @@
                 subMenu.classList.add("expanded");
             }
         });
+
+
+        function hiddenLogo(){
+            var logo = document.getElementById("logo");
+
+            if (logo && logo.style.marginRight === "0px") {
+                logo.style.marginRight = "300px";
+            }
+            else{
+                logo.style.marginRight = "0px";
+            }
+        }
+
     </script>
 </body>
 </html>

@@ -6,16 +6,16 @@
 </head>
 <body>
     <div class="container mt-4">
-        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2" style="margin-left:15%"> Adicionar Serviço</a>
+        <a href="/ServicosFornecedor/AdicionarServico" class="btn btn-outline-danger mb-2" style="margin-left:7%"> Adicionar Serviço</a>
         <button class="btn btn-outline-danger mb-2"> Suporte</button>
-        <hr style="margin-left:15%" />
+        <hr style="margin-left:5%" />
 
         @if (ViewBag.Pacotes == null)
         {
             <p style="margin-left:15%">Não há serviços cadastrados.</p>
         }
 
-        <div style="display: flex; flex-wrap: wrap; margin-left:10%">
+        <div style="display: flex; flex-wrap: wrap">
 
             @if (ViewBag.Pacotes != null)
             {
