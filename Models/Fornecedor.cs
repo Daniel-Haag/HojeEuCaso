@@ -46,5 +46,6 @@ namespace HojeEuCaso.Models
         public decimal DisponivelParaRecebimento { get; set; }
         public decimal TotalRecebido { get; set; }
         public decimal TotalAReceber { get; set; }
+        public string CaminhoFoto { get; set; }
     }
 }
