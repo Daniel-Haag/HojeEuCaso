@@ -184,6 +184,8 @@ namespace HojeEuCaso.Controllers
         // GET: PacotesController/Edit/5
         public ActionResult EditarServico(int ID)
         {
+            TempData["SuccessMessage"] = null;
+
             var pacotes = _pacoteService.GetAllPacotes();
             ViewBag.Pacotes = pacotes;
 
@@ -290,6 +292,49 @@ namespace HojeEuCaso.Controllers
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 //ViewBag.Pacote = pacote;
                 return RedirectToAction("EditarServico", pacote.PacoteID);
+            }
+            catch (Exception e)
+            {
+                string erro = e.Message;
+
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult EditarPerfil(int ID)
+        {
+            TempData["SuccessMessage"] = null;
+
+            SetData();
+
+            var fornecedor = _fornecedorService.GetFornecedorById(ID);
+            ViewBag.Fornecedor = fornecedor;
+
+            var cidades = _cidadeService.GetAllCidades();
+            ViewBag.Cidades = cidades;
+
+            var estados = _estadoService.GetAllEstados();
+            ViewBag.Estados = estados;
+
+            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.Cidade.CidadeID);
+            ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == fornecedor.Estado.EstadoID);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditarPerfil(Fornecedor pacoteDto)
+        {
+            try
+            {
+                SetData();
+
+                TempData["SuccessMessage"] = "Atualizado com sucesso!";
+                //ViewBag.Pacote = pacote;
+                return RedirectToAction("EditarPerfil", 1);
             }
             catch (Exception e)
             {
