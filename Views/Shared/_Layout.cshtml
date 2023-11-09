@@ -23,13 +23,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <script src="~/js/site.js"></script>
+    <script src="~/js/site.js"></script>
 
     <style>
 
         #sidebar-wrapper::-webkit-scrollbar {
             width: 10px; /* Largura da barra de rolagem */
-            height:10px;
+            height: 10px;
         }
 
         #sidebar-wrapper::-webkit-scrollbar-track {
@@ -120,7 +120,7 @@
             width: 50px;
         }
 
-        
+
 
         #wrapper.toggled #page-content-wrapper {
             position: absolute;
@@ -137,7 +137,7 @@
             margin: 0;
             padding: 0;
             list-style: none;
-            font-size:12px;
+            font-size: 12px;
         }
 
             .sidebar-nav li {
@@ -177,9 +177,9 @@
                     }
 
         @@media(min-width:768px) {
-                #wrapper.toggled {
-                    padding-left: 0;
-                }
+            #wrapper.toggled {
+                padding-left: 0;
+            }
 
             #sidebar-wrapper {
                 width: 230px;
@@ -322,7 +322,7 @@
                                     <i class="fa fa-bars" style="font-size:20px !important;" aria-hidden="true" onclick="hiddenLogo()"></i>
                                 </a>
                                 <a style="margin-right:0px" class="navbar-brand logoWeb logoMobile" id="logo" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <img src="~/images/logoSemFundo.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 40px;" />
+                                    <img src="~/images/logoSemFundo.png" alt="HojeEuCaso Logo" class="img-fluid" style="max-height: 27px;" />
                                     <hr />
                                 </a>
                             </li>
@@ -450,14 +450,22 @@
         });
 
 
-        function hiddenLogo(){
+        function hiddenLogo() {
             var logo = document.getElementById("logo");
 
-            if (logo && logo.style.marginRight === "0px") {
-                logo.style.marginRight = "300px";
-            }
-            else{
+            var windowWidth = window.innerWidth;
+
+            if (windowWidth <= 768) {
                 logo.style.marginRight = "0px";
+            }
+
+            if (windowWidth > 768) {
+                if (logo && logo.style.marginRight === "0px") {
+                    logo.style.marginRight = "300px";
+                }
+                else {
+                    logo.style.marginRight = "0px";
+                }
             }
         }
 
