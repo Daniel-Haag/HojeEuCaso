@@ -12,6 +12,11 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.codec.wmf;
+using Org.BouncyCastle.Asn1.Cmp;
+using Org.BouncyCastle.Asn1.Crmf;
+using RestSharp;
+using System.Threading.Tasks;
 
 namespace HojeEuCaso.Controllers
 {
@@ -83,10 +88,14 @@ namespace HojeEuCaso.Controllers
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
-            //Falta definir como será obtida a imagem
-            ViewBag.FotoExistente = "/images/backiee-81831.jpg";
-
             var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
+
+            var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+
+            var caminhoImagem = fornecedor.CaminhoFoto?.Replace(diretorio, "~");
+            caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+            ViewBag.FotoExistente = caminhoImagem;
 
             ViewBag.Fornecedor = fornecedor;
 
@@ -303,7 +312,7 @@ namespace HojeEuCaso.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditarPerfil(int ID)
+        public async Task<ActionResult> EditarPerfilAsync(int ID)
         {
             TempData["SuccessMessage"] = null;
 
@@ -321,12 +330,29 @@ namespace HojeEuCaso.Controllers
             ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.Cidade.CidadeID);
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == fornecedor.Estado.EstadoID);
 
+            var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+
+            var caminhoImagem = fornecedor.CaminhoFoto?.Replace(diretorio, "~");
+            caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+            ViewBag.FotoExistente = caminhoImagem;
+
+            //Funcionando consumo da api para obter todos os bancos do brasil
+            var options = new RestClientOptions("https://brasilapi.com.br")
+            {
+                MaxTimeout = -1,
+            };
+            var client = new RestClient(options);
+            var request = new RestRequest("/api/banks/v1", Method.Get);
+            RestResponse response = await client.ExecuteAsync(request);
+            Console.WriteLine(response.Content);
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditarPerfil(Fornecedor pacoteDto)
+        public ActionResult EditarPerfil(Fornecedor fornecedor)
         {
             try
             {
@@ -334,7 +360,7 @@ namespace HojeEuCaso.Controllers
 
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 //ViewBag.Pacote = pacote;
-                return RedirectToAction("EditarPerfil", 1);
+                return RedirectToAction("EditarPerfil", fornecedor.FornecedorID);
             }
             catch (Exception e)
             {

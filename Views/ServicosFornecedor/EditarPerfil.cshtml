@@ -74,6 +74,26 @@
                         </div>
                     }
                     <form asp-action="EditarPerfil" enctype="multipart/form-data">
+
+                        <div class="row">
+                            <div class="col d-flex flex-column">
+
+                                @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
+                                {
+                                    <img src="@Url.Content(ViewBag.FotoExistente)" alt="Foto Fornecedor" class="d-block w-50 center-image" style="margin-left:25%" />
+                                }
+
+                                @*<label for="Foto" class="btn btn-outline-danger mb-2">
+                                    Alterar Foto
+                                    <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
+                                </label>
+                                <span id="FotoSelected" style="display: none; font-size:10px">Foto: <span id="FotoFileName" style="font-size:10px"></span></span>
+                                <span asp-validation-for="Foto" class="text-danger" style="font-size:10px"></span>*@
+
+                            </div>
+                        </div>
+
+
                         <div class="row" style="display:none">
                             <div class="col">
                                 <div class="form-group">
@@ -104,7 +124,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="Nome">Nome</label>
+                                    <label style="font-size:12px" asp-for="Nome">Nome</label>
                                     <input asp-for="Nome" class="form-control" value="@ViewBag.Fornecedor.Nome" />
                                     <span asp-validation-for="Nome" class="text-danger"></span>
                                 </div>
@@ -113,7 +133,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="Email">E-mail</label>
+                                    <label style="font-size:12px" asp-for="Email">E-mail</label>
                                     <input asp-for="Email" class="form-control" value="@ViewBag.Fornecedor.Email" />
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
@@ -179,7 +199,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label asp-for="EstadoID">Estado</label>
+                                    <label style="font-size:12px" asp-for="EstadoID">Estado</label>
                                     <select asp-for="EstadoID" class="form-control">
                                         @foreach (var estado in ViewBag.Estados)
                                         {
@@ -204,7 +224,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label asp-for="CidadeID">Cidade</label>
+                                    <label style="font-size:12px" asp-for="CidadeID">Cidade</label>
                                     <select asp-for="CidadeID" class="form-control">
                                         @foreach (var cidade in ViewBag.Cidades)
                                         {
@@ -226,7 +246,6 @@
                                     </select>
                                     <span asp-validation-for="CidadeID" class="text-danger"></span>
                                 </div>
-
                             </div>
                         </div>
                         <div class="row">
@@ -268,63 +287,126 @@
                                 </div>
                             </div>
                         </div>
-
-
-                       @* <div class="form-group">
-                            <label asp-for="Ativo">Ativo</label>
-                            <div>
-                                <input type="checkbox" asp-for="Ativo" checked="ViewBag.PacoteAtual.Ativo" />
-                                <span asp-validation-for="Ativo" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="NomeResponsavel">Nome do Responsável</label>
+                                    <input asp-for="NomeResponsavel" class="form-control" value="@ViewBag.Fornecedor.NomeResponsavel" />
+                                    <span asp-validation-for="NomeResponsavel" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>*@
-                        <div class="form-group">
-                            <span class="greyFontStyle">Itens</span>
-                        </div>
-
-                        <div class="itens-container">
-                            <!-- Conteúdo dos pares de inputs será adicionado aqui -->
-                        </div>
-                        <hr />
-                        <div class="form-group">
-                            <a href="javascript:void(0)" style="color:red" onclick="adicionarItem()"><i class="fa fa-plus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
-                        </div>
-
-                        <div class="card shadow" style="margin-top:10px">
-                            <div class="card-body">
-                                <h5>Fotos e Vídeos</h5>
-
-                               @* <div class="form-group">
-                                    <label for="Foto" class="btn btn-outline-danger mb-2">
-                                        Alterar Foto
-                                        <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
-                                    </label>
-
-                                    <span id="FotoSelected" style="display: none; font-size:10px">Foto: <span id="FotoFileName" style="font-size:10px"></span></span>
-                                    <span asp-validation-for="Foto" class="text-danger" style="font-size:10px"></span>
-                                </div>*@
-
-                                <div class="form-group" id="visualizacaoFoto">
-                                    <label for="existingFoto">Foto:</label>
-                                    @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
-                                    {
-                                        <img src="@Url.Content(ViewBag.FotoExistente)" alt="Imagens Serviço" class="d-block w-100" />
-                                    }
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="TelefoneResponsavel">Telefone do Responsável</label>
+                                    <input asp-for="TelefoneResponsavel" class="form-control" value="@ViewBag.Fornecedor.TelefoneResponsavel" />
+                                    <span asp-validation-for="TelefoneResponsavel" class="text-danger"></span>
                                 </div>
-
-                                <div class="form-group" id="visualizacaoVideo">
-                                    <label for="existingVideo">Vídeo:</label>
-                                    @if (!string.IsNullOrEmpty(ViewBag.VideoExistente))
-                                    {
-                                        <div class="d-flex justify-content-center">
-                                            <video class="d-block w-100" controls>
-                                                <source src="@Url.Content(ViewBag.VideoExistente)" type="video/mp4">
-                                                Seu navegador não suporta o elemento de vídeo.
-                                            </video>
-                                        </div>
-                                    }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="AceitaMultiplosEventos">Eu aceito múltiplos eventos no mesmo dia</label>
+                                    <div>
+                                        <input type="checkbox" asp-for="AceitaMultiplosEventos" checked="ViewBag.PacoteAtual.AceitaMultiplosEventos" />
+                                        <span asp-validation-for="AceitaMultiplosEventos" class="text-danger"></span>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="Banco">Banco</label>
+                                    <select asp-for="Banco" class="form-control">
+                                        @*@foreach (var cidade in ViewBag.Cidades)
+                                        {
+                                        var isSelected = cidade.CidadeID == ViewBag.Cidade.CidadeID ? "selected" : "";
 
-                                <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
+                                        if (isSelected == "selected")
+                                        {
+                                        <option value="@cidade.CidadeID" selected>
+                                        @cidade.Nome
+                                        </option>
+                                        }
+                                        else
+                                        {
+                                        <option value="@cidade.CidadeID">
+                                        @cidade.Nome
+                                        </option>
+                                        }
+                                        }*@
+                                        <option>Banco 1</option>
+                                        <option>Banco 2</option>
+                                        <option>Banco 3</option>
+                                    </select>
+                                    <span asp-validation-for="Banco" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="Agencia">Agência</label>
+                                    <input asp-for="Agencia" class="form-control" value="@ViewBag.Fornecedor.Agencia" />
+                                    <span asp-validation-for="Agencia" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="NumeroConta">Conta</label>
+                                    <input asp-for="NumeroConta" class="form-control" value="@ViewBag.Fornecedor.NumeroConta" />
+                                    <span asp-validation-for="NumeroConta" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="TipoConta">Tipo de Conta</label>
+                                    <select asp-for="TipoConta" class="form-control">
+                                        <option>Conta Corrente PF</option>
+                                        <option>Conta Corrente PJ</option>
+                                        <option>Poupança</option>
+                                    </select>
+                                    <span asp-validation-for="TipoConta" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="ResponsavelConta">Titular da Conta</label>
+                                    <input asp-for="ResponsavelConta" class="form-control" value="@ViewBag.Fornecedor.ResponsavelConta" />
+                                    <span asp-validation-for="ResponsavelConta" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="CPFCNPJResponsavelConta">CPF / CNPJ do Titular</label>
+                                    <input asp-for="CPFCNPJResponsavelConta" class="form-control" value="@ViewBag.Fornecedor.CPFCNPJResponsavelConta" />
+                                    <span asp-validation-for="CPFCNPJResponsavelConta" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="SolicitouExclusao">Solicitar Exclusão de Conta</label>
+                                    <div>
+                                        <input type="checkbox" asp-for="SolicitouExclusao" checked="ViewBag.PacoteAtual.SolicitouExclusao" />
+                                        <span asp-validation-for="SolicitouExclusao" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="SolicitouExclusao">Mostrar apenas em orçamentos com os seguintes fornecedores</label>
+                                    <div>
+                                        <input type="checkbox" asp-for="SolicitouExclusao" checked="ViewBag.PacoteAtual.SolicitouExclusao" />
+                                        <span asp-validation-for="SolicitouExclusao" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
