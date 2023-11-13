@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iTextSharp.text;
+using System;
+using System.Collections.Generic;
 
 namespace HojeEuCaso.Models
 {
@@ -47,5 +49,6 @@ namespace HojeEuCaso.Models
         public decimal TotalRecebido { get; set; }
         public decimal TotalAReceber { get; set; }
         public string CaminhoFoto { get; set; }
+        public List<ClausulaContrato> ClausulasContrato { get; set; }
     }
 }

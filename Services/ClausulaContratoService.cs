@@ -20,12 +20,23 @@ namespace HojeEuCaso.Services
 
         public List<ClausulaContrato> GetAllClausulaContratos()
         {
-            return _HojeEuCasoDbContext.ClausulasContratos.Include(x => x.Categoria).ToList();
+            return _HojeEuCasoDbContext.ClausulasContratos
+                .Include(x => x.Categoria).ToList();
+        }
+
+        public List<ClausulaContrato> GetClausulasDeContratosByFornecedorID(int ID)
+        {
+            return _HojeEuCasoDbContext.ClausulasContratos
+                .Include(x => x.Categoria)
+                .Include(x => x.Fornecedor)
+                .Where(x => x.Fornecedor.FornecedorID == ID)
+                .ToList();
         }
 
         public ClausulaContrato GetClausulaContratoById(int ID)
         {
-            return _HojeEuCasoDbContext.ClausulasContratos.Where(x => x.ClausulaContratoID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.ClausulasContratos
+                .Where(x => x.ClausulaContratoID == ID).FirstOrDefault();
         }
 
         public void CreateNewClausulaContrato(ClausulaContrato ClausulaContrato)

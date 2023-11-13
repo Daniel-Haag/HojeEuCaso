@@ -8,5 +8,6 @@ namespace HojeEuCaso.Models
         public string Descricao { get; set; }
         public int CategoriaID { get; set; }
         public Categoria Categoria { get; set; }
+        public Fornecedor Fornecedor { get; set; }
     }
 }

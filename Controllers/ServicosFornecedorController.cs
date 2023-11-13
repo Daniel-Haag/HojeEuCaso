@@ -31,6 +31,7 @@ namespace HojeEuCaso.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFornecedorService _fornecedorService;
         private readonly IItensDePacotesService _itensDePacotesService;
+        private readonly IClausulaContratoService _clausulasDeContratoService;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
@@ -40,7 +41,8 @@ namespace HojeEuCaso.Controllers
                                     IEstadoService estadoService,
                                     IWebHostEnvironment webHostEnvironment,
                                     IFornecedorService fornecedorService,
-                                    IItensDePacotesService itensDePacotesService)
+                                    IItensDePacotesService itensDePacotesService,
+                                    IClausulaContratoService clausulasDeContratoService)
         {
             _logger = logger;
             _pacoteService = pacoteService;
@@ -51,6 +53,7 @@ namespace HojeEuCaso.Controllers
             _webHostEnvironment = webHostEnvironment;
             _fornecedorService = fornecedorService;
             _itensDePacotesService = itensDePacotesService;
+            _clausulasDeContratoService = clausulasDeContratoService;
         }
 
         public ActionResult AdicionarServico()
@@ -468,6 +471,54 @@ namespace HojeEuCaso.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Contrato()
+        {
+            try
+            {
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+
+                TempData["SuccessMessage"] = null;
+
+                ViewBag.ClausulasDeContrato = _clausulasDeContratoService.GetClausulasDeContratosByFornecedorID(fornecedorID);
+
+                return View();
+            }
+            catch (ArgumentNullException ex)
+            {
+                if (ex.Message == "Value cannot be null. (Parameter 's')")
+                {
+                    RedirectToAction("Logout", "Login");
+                }
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Contrato(List<ClausulaContrato> clausulasDeContrato)
+        {
+            try
+            {
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
+
+                UpdateOrDeleteClausulasDeContrato(fornecedor, clausulasDeContrato);
+                CreateNewClausulasDeContrato(clausulasDeContrato);
+                
+                return View();
+            }
+            catch (ArgumentNullException ex)
+            {
+                if (ex.Message == "Value cannot be null. (Parameter 's')")
+                {
+                    RedirectToAction("Logout", "Login");
+                }
+            }
+
+            return View();
+        }
+
         private void SetData()
         {
             ViewBag.Pacotes = _pacoteService.GetAllPacotes();
@@ -493,7 +544,7 @@ namespace HojeEuCaso.Controllers
             pacoteDto.DescontoDomingo = TransformToPercentDiscount(pacoteDto.DescontoDomingo);
         }
 
-        public decimal RevertFormatPercentage(decimal fractionValue)
+        private decimal RevertFormatPercentage(decimal fractionValue)
         {
             decimal percentageValue = fractionValue * 100;
             return percentageValue;
@@ -567,6 +618,46 @@ namespace HojeEuCaso.Controllers
                     else if (testeItemDePacote == null)
                     {
                         _itensDePacotesService.DeleteItensDePacotes(item.ItensDePacotesID);
+                    }
+                }
+            }
+        }
+
+        private void CreateNewClausulasDeContrato(List<ClausulaContrato> clausulasDeContrato)
+        {
+            if (clausulasDeContrato != null)
+            {
+                foreach (var novoItem in clausulasDeContrato)
+                {
+                    if (novoItem.ClausulaContratoID == 0)
+                    {
+                        _clausulasDeContratoService.CreateNewClausulaContrato(novoItem);
+                    }
+                }
+            }
+        }
+
+        private void UpdateOrDeleteClausulasDeContrato(Fornecedor fornecedor, List<ClausulaContrato> clausulasDeContrato)
+        {
+            var ClausulasContratoAntesDaEdicao = _clausulasDeContratoService.GetClausulasDeContratosByFornecedorID(fornecedor.FornecedorID);
+
+            if (ClausulasContratoAntesDaEdicao != null)
+            {
+                foreach (var item in ClausulasContratoAntesDaEdicao)
+                {
+                    var testeClausulaDeContrato = clausulasDeContrato
+                        .FirstOrDefault(x => x.ClausulaContratoID == item.ClausulaContratoID);
+
+                    if (testeClausulaDeContrato != null)
+                    {
+                        //testeClausulaDeContrato.PacoteID = pacote.PacoteID;
+                        //testeClausulaDeContrato.Pacote = pacote;
+
+                        _clausulasDeContratoService.UpdateClausulaContrato(testeClausulaDeContrato);
+                    }
+                    else if (testeClausulaDeContrato == null)
+                    {
+                        _clausulasDeContratoService.DeleteClausulaContrato(item.ClausulaContratoID);
                     }
                 }
             }
