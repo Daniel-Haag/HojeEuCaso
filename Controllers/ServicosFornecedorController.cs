@@ -355,15 +355,29 @@ namespace HojeEuCaso.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditarPerfil(Fornecedor fornecedor)
+        public ActionResult EditarPerfil(FornecedorDto fornecedorDto)
         {
             try
             {
                 SetData();
 
+                if (fornecedorDto.Foto != null && fornecedorDto.Foto.Length > 0)
+                {
+                    long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+                    if (fornecedorDto.Foto.Length > maxFileSize)
+                    {
+                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                        return View();
+                    }
+
+                    CopyPhotoStream(fornecedorDto);
+                }
+
+
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 //ViewBag.Pacote = pacote;
-                return RedirectToAction("EditarPerfil", fornecedor.FornecedorID);
+                return RedirectToAction("EditarPerfil", fornecedorDto.FornecedorID);
             }
             catch (Exception e)
             {
@@ -563,15 +577,15 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        private void CopyPhotoStream(PacoteComItensDoPacoteDto pacoteDto)
+        private void CopyPhotoStream<T>(T dto) where T : IFotoDto
         {
-            pacoteDto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", pacoteDto.Foto.FileName);
+            dto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", dto.Foto.FileName);
 
-            if (!System.IO.File.Exists(pacoteDto.CaminhoFoto))
+            if (!System.IO.File.Exists(dto.CaminhoFoto))
             {
-                using (var stream = new FileStream(pacoteDto.CaminhoFoto, FileMode.Create))
+                using (var stream = new FileStream(dto.CaminhoFoto, FileMode.Create))
                 {
-                    pacoteDto.Foto.CopyTo(stream);
+                    dto.Foto.CopyTo(stream);
                 }
             }
         }

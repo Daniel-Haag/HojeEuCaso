@@ -1,4 +1,5 @@
-﻿@model Fornecedor
+﻿@using HojeEuCaso.Dtos
+@model FornecedorDto
 
 @{
     ViewData["Title"] = "Editar Perfil";
@@ -77,19 +78,18 @@
 
                         <div class="row">
                             <div class="col d-flex flex-column">
-
-                                @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
-                                {
-                                    <img src="@Url.Content(ViewBag.FotoExistente)" alt="Foto Fornecedor" class="d-block w-50 center-image" style="margin-left:25%" />
-                                }
-
-                                @*<label for="Foto" class="btn btn-outline-danger mb-2">
+                                <div id="visualizacaoFoto">
+                                    @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
+                                    {
+                                        <img src="@Url.Content(ViewBag.FotoExistente)" alt="Foto Fornecedor" class="d-block w-50 center-image" style="margin-left:25%" />
+                                    }
+                                </div>
+                                <span id="FotoSelected" style="display: none; font-size:10px;"><span style="font-weight: bold">Foto Selecionada:</span> <span id="FotoFileName" style="font-size:10px"></span></span>
+                                <span asp-validation-for="Foto" class="text-danger" style="font-size:10px"></span>
+                                <label for="Foto" style="width:25%; margin-top:15px; align-self:center; font-size:10px" class="btn btn-outline-danger mb-2">
                                     Alterar Foto
                                     <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
                                 </label>
-                                <span id="FotoSelected" style="display: none; font-size:10px">Foto: <span id="FotoFileName" style="font-size:10px"></span></span>
-                                <span asp-validation-for="Foto" class="text-danger" style="font-size:10px"></span>*@
-
                             </div>
                         </div>
 
@@ -453,7 +453,6 @@
         const selectedSpan = document.getElementById(inputId + 'Selected');
 
         if (inputId == 'Foto') {
-
             var visualizacaoFoto = document.getElementById('visualizacaoFoto');
             visualizacaoFoto.style.display = 'none';
         }

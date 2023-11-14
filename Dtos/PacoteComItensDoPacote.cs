@@ -1,10 +1,11 @@
 ﻿using HojeEuCaso.Models;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using HojeEuCaso.Interfaces;
 
 namespace HojeEuCaso.Dtos
 {
-    public class PacoteComItensDoPacoteDto
+    public class PacoteComItensDoPacoteDto : IFotoDto
     {
         public int PacoteID { get; set; }
         public string Titulo { get; set; }
