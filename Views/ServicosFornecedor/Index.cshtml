@@ -109,31 +109,17 @@
     <script>
         // Aguardando o carregamento completo da página
         document.addEventListener("DOMContentLoaded", function () {
-            // Selecionando todos os elementos de vídeo e imagem no carrossel
-            var elements = document.querySelectorAll(".carousel-item img, .carousel-item video");
+            // Aguardando o carregamento completo da página
+            document.addEventListener("DOMContentLoaded", function () {
+                // Selecionando todos os elementos de vídeo e imagem no carrossel
+                var elements = document.querySelectorAll(".carousel-item img, .carousel-item video");
 
-            // Inicializando a altura máxima como 0
-            var maxHeight = 0;
-
-            // Percorrendo todos os elementos para encontrar a altura máxima
-            elements.forEach(function (element) {
-                var elementHeight = element.clientHeight;
-                if (elementHeight > maxHeight) {
-                    maxHeight = elementHeight;
-                }
+                // Definindo largura e altura fixas para todos os elementos
+                elements.forEach(function (element) {
+                    element.style.width = "100%";
+                    element.style.height = "200px"; // Ajuste a altura desejada conforme necessário
+                });
             });
-
-            // Definindo a altura de todos os elementos dentro do carrossel com base na altura máxima
-            elements.forEach(function (element) {
-                element.style.height = maxHeight + "px";
-            });
-
-            // Definindo a altura do carrossel com base na altura máxima
-            var carousels = document.querySelectorAll(".carousel");
-            carousels.forEach(function (carousel) {
-                carousel.style.height = maxHeight + "px";
-            });
-        });
     </script>
 
 </body>
