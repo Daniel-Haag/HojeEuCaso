@@ -24,12 +24,17 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Categoria)
+                .Include(x => x.Plano)
                 .ToList();
         }
 
         public Fornecedor GetFornecedorById(int ID)
         {
             return _HojeEuCasoDbContext.Fornecedores
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
+                .Include(x => x.Categoria)
+                .Include(x => x.Plano)
                 .Where(x => x.FornecedorID == ID)
                 .FirstOrDefault();
         }

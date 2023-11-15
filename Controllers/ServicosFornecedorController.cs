@@ -32,6 +32,7 @@ namespace HojeEuCaso.Controllers
         private readonly IFornecedorService _fornecedorService;
         private readonly IItensDePacotesService _itensDePacotesService;
         private readonly IClausulaContratoService _clausulasDeContratoService;
+        private readonly IPlanoService _planoService;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
@@ -42,7 +43,8 @@ namespace HojeEuCaso.Controllers
                                     IWebHostEnvironment webHostEnvironment,
                                     IFornecedorService fornecedorService,
                                     IItensDePacotesService itensDePacotesService,
-                                    IClausulaContratoService clausulasDeContratoService)
+                                    IClausulaContratoService clausulasDeContratoService,
+                                    IPlanoService planoService)
         {
             _logger = logger;
             _pacoteService = pacoteService;
@@ -54,6 +56,7 @@ namespace HojeEuCaso.Controllers
             _fornecedorService = fornecedorService;
             _itensDePacotesService = itensDePacotesService;
             _clausulasDeContratoService = clausulasDeContratoService;
+            _planoService = planoService;
         }
 
         public ActionResult AdicionarServico()
@@ -74,7 +77,7 @@ namespace HojeEuCaso.Controllers
             }
             catch (ArgumentNullException ex)
             {
-               if (ex.Message == "Value cannot be null. (Parameter 's')")
+                if (ex.Message == "Value cannot be null. (Parameter 's')" || ex.Message == "Value cannot be null. Arg_ParamName_Name")
                 {
                     RedirectToAction("Logout", "Login");
                 } 
@@ -525,6 +528,39 @@ namespace HojeEuCaso.Controllers
             catch (ArgumentNullException ex)
             {
                 if (ex.Message == "Value cannot be null. (Parameter 's')")
+                {
+                    RedirectToAction("Logout", "Login");
+                }
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult MeuPlano()
+        {
+            try
+            {
+                TempData["SuccessMessage"] = null;
+
+                int ID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+
+                var fornecedor = _fornecedorService.GetFornecedorById(ID);
+
+                var planos = _planoService.GetAllPlanos();
+                ViewBag.Planos = planos;
+
+                var planoAtual = planos.FirstOrDefault(x => x.PlanoID == fornecedor.Plano?.PlanoID);
+                ViewBag.PlanoAtual = planoAtual;
+
+                var categorias = _categoriaService.GetAllCategorias();
+                ViewBag.Categorias = categorias;
+
+                return View();
+            }
+            catch (ArgumentNullException ex)
+            {
+                if (ex.Message == "Value cannot be null. (Parameter 's')" || ex.Message == "Value cannot be null. Arg_ParamName_Name")
                 {
                     RedirectToAction("Logout", "Login");
                 }

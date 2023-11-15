@@ -49,6 +49,7 @@ namespace HojeEuCaso.Models
         public decimal TotalRecebido { get; set; }
         public decimal TotalAReceber { get; set; }
         public string CaminhoFoto { get; set; }
-        public List<ClausulaContrato> ClausulasContrato { get; set; }
+        public List<ClausulaContrato> ClausulasContrato { get; set; } 
+        public Plano Plano { get; set; }
     }
 }
