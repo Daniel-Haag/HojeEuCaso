@@ -34,17 +34,16 @@
 
                         <div id="@carouselId" class="carousel slide" data-ride="carousel" style="background-color:black">
                             <div class="carousel-inner">
-
                                 <div class="carousel-item active">
                                     <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
                                 </div>
                                 <div class="carousel-item">
-                                    <div class="d-flex justify-content-center">
-                                        <video class="d-block w-100" controls>
-                                            <source src="@Url.Content(caminhoVideo)" type="video/mp4">
+                                    
+                                        <video controls>
+                                        <source src="@Url.Content(caminhoVideo)" type="video/mp4" class="d-block w-100">
                                             Seu navegador não suporta o elemento de vídeo.
                                         </video>
-                                    </div>
+                                    
                                 </div>
 
                             </div>
@@ -102,24 +101,37 @@
     <style>
         .carousel {
             max-height: 300px; /* Definindo a altura máxima desejada para o carrossel */
-            overflow: hidden; /* Para garantir que o conteúdo não ultrapasse a altura máxima */
         }
+
+        .carousel-item {
+            width: 100%;
+            height: 300px; /* Ajuste a altura desejada conforme necessário */
+        }
+
+            .carousel-item img,
+            .carousel-item video {
+                width: 100%;
+                height: 100%;
+                align-items: center; /* Centralizar o conteúdo verticalmente */
+                justify-content: center; /* Centralizar o conteúdo horizontalmente */
+                object-fit: contain;
+            }
+
     </style>
 
     <script>
         // Aguardando o carregamento completo da página
         document.addEventListener("DOMContentLoaded", function () {
-            // Aguardando o carregamento completo da página
-            document.addEventListener("DOMContentLoaded", function () {
-                // Selecionando todos os elementos de vídeo e imagem no carrossel
-                var elements = document.querySelectorAll(".carousel-item img, .carousel-item video");
+            // Selecionando todos os elementos de vídeo e imagem no carrossel
+            var elements = document.querySelectorAll(".carousel-item img, .carousel-item video");
 
-                // Definindo largura e altura fixas para todos os elementos
-                elements.forEach(function (element) {
-                    element.style.width = "100%";
-                    element.style.height = "200px"; // Ajuste a altura desejada conforme necessário
-                });
+            // Definindo largura e altura máximas para todos os elementos
+            elements.forEach(function (element) {
+                element.style.maxWidth = "100%";
+                element.style.maxHeight = "100%";
             });
+        });
+
     </script>
 
 </body>
