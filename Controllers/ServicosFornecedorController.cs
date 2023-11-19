@@ -196,7 +196,7 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // GET: PacotesController/Edit/5
+        [HttpGet]
         public ActionResult EditarServico(int ID)
         {
             TempData["SuccessMessage"] = null;
@@ -320,8 +320,6 @@ namespace HojeEuCaso.Controllers
         [HttpGet]
         public async Task<ActionResult> EditarPerfilAsync(int ID)
         {
-            TempData["SuccessMessage"] = null;
-
             SetData();
 
             var fornecedor = _fornecedorService.GetFornecedorById(ID);
@@ -377,9 +375,10 @@ namespace HojeEuCaso.Controllers
                     CopyPhotoStream(fornecedorDto);
                 }
 
+                Fornecedor fornecedor = _mapper.Map<Fornecedor>(fornecedorDto);
+                _fornecedorService.UpdateFornecedor(fornecedor);
 
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
-                //ViewBag.Pacote = pacote;
                 return RedirectToAction("EditarPerfil", fornecedorDto.FornecedorID);
             }
             catch (Exception e)
@@ -602,7 +601,7 @@ namespace HojeEuCaso.Controllers
 
         private void CopyVideoStream(PacoteComItensDoPacoteDto pacoteDto)
         {
-            pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", pacoteDto.Video.FileName);
+            pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", HttpContext.Session.GetString("FornecedorID") + "_" + pacoteDto.Video.FileName);
 
             if (!System.IO.File.Exists(pacoteDto.CaminhoVideo))
             {
@@ -615,7 +614,7 @@ namespace HojeEuCaso.Controllers
 
         private void CopyPhotoStream<T>(T dto) where T : IFotoDto
         {
-            dto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", dto.Foto.FileName);
+            dto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + dto.Foto.FileName);
 
             if (!System.IO.File.Exists(dto.CaminhoFoto))
             {
@@ -629,8 +628,7 @@ namespace HojeEuCaso.Controllers
         private void MapPacoteDtoForPacoteObject(PacoteComItensDoPacoteDto pacoteDto, out Pacote pacote, out List<ItensDePacotes> itensDePacotes)
         {
             pacote = _mapper.Map<Pacote>(pacoteDto);
-            itensDePacotes = _mapper
-                                .Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
+            itensDePacotes = _mapper.Map<List<ItensDePacotes>>(pacoteDto.ItensDePacotes);
         }
 
         private void CreateNewItensDePacote(List<ItensDePacotes> itensDePacotes)
