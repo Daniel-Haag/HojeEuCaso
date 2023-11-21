@@ -73,6 +73,9 @@
 
         .sub-menu-option {
             font-size: 10px;
+            padding-left: 0 !important; 
+            margin-left: 0 !important; 
+            list-style-type: none !important;
         }
 
         /* Estilizar as subseleções */
@@ -136,7 +139,6 @@
             width: 200px;
             margin: 0;
             padding: 0;
-            list-style: none;
             font-size: 12px;
         }
 
@@ -360,7 +362,7 @@
                                     <span style="margin-left: 10px;">Cadastros</span>
                                 </a>
                                 @*<span class="menu-toggle nav-link" id="nova-site-toggle"><i class="fa fa-keyboard" aria-hidden="true"></i><span style="margin-left:10px;">Nova Site</span></span>*@
-                                <ul class="sub-menu">
+                                <ul class="">
                                     <li><a asp-area="" asp-controller="Fornecedores" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Fornecedor</a></li>
                                     <li><a asp-area="" asp-controller="Categorias" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Categorias</a></li>
                                     <li><a asp-area="" asp-controller="TipoCategoria" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Tipo de Categorias</a></li>
@@ -373,6 +375,7 @@
                                     <li><a asp-area="" asp-controller="ItensDePacotesDeUsuarios" asp-action="Index" style="margin-left: 25px; font-size:9px" class="sub-menu-option">Itens de Pacotes de Usuários</a></li>
                                     <li><a asp-area="" asp-controller="Cidades" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Cidades</a></li>
                                     <li><a asp-area="" asp-controller="Estados" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Estados</a></li>
+                                    <li><a asp-area="" asp-controller="Paises" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Países</a></li>
                                     <li><a asp-area="" asp-controller="FornecedoresIndicados" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Fornecedores Indicados</a></li>
                                     @*<li><a asp-area="" asp-controller="Tendencias" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Tendências</a></li>*@
                                     <li><a asp-area="" asp-controller="Usuarios" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Usuários</a></li>

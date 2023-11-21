@@ -12,6 +12,7 @@ namespace HojeEuCaso.Models
         public DbSet<Role> Roles { get; set; }
         public DbSet<Cidade> Cidades { get; set; }
         public DbSet<Estado> Estados { get; set; }
+        public DbSet<Pais> Paises { get; set; }
         public DbSet<TipoCategoria> TiposCategorias { get; set; }
         public DbSet <Usuario> Usuarios { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
