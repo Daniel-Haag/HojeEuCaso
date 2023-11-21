@@ -16,25 +16,28 @@ namespace HojeEuCaso.Controllers
         private readonly ICidadeService _cidadeService;
         private readonly IEstadoService _estadoService;
         private readonly ICategoriaService _categoriaService;
-
+        private readonly IPaisService _paisService;
 
         public FornecedoresController(ILogger<UsuariosController> logger,
                                     IFornecedorService FornecedorService,
                                     ICidadeService cidadeService,
                                     IEstadoService estadoService,
-                                    ICategoriaService categoriaService)
+                                    ICategoriaService categoriaService,
+                                    IPaisService paisService)
         {
             _logger = logger;
             _FornecedorService = FornecedorService;
             _cidadeService = cidadeService;
             _estadoService = estadoService;
             _categoriaService = categoriaService;
+            _paisService = paisService;
         }
 
         // GET: UsuariosController
         public ActionResult Index()
         {
             ViewBag.Fornecedores = _FornecedorService.GetAllFornecedor();
+
             return View();
         }
 
@@ -49,6 +52,7 @@ namespace HojeEuCaso.Controllers
         {
             ViewBag.Cidades = _cidadeService.GetAllCidades();
             ViewBag.Estados = _estadoService.GetAllEstados();
+            ViewBag.Paises = _paisService.GetAllPaises();
             ViewBag.Categorias = _categoriaService.GetAllCategorias();
             TempData["SuccessMessage"] = null;
             return View();
@@ -68,6 +72,10 @@ namespace HojeEuCaso.Controllers
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
                 Fornecedor.Estado = estados.FirstOrDefault(x => x.EstadoID == Fornecedor.EstadoID);
+
+                var paises = _paisService.GetAllPaises();
+                ViewBag.Paises = paises;
+                Fornecedor.Pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.Pais.PaisID);
 
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
@@ -99,6 +107,10 @@ namespace HojeEuCaso.Controllers
             ViewBag.Estados = estados;
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == fornecedor.EstadoID);
 
+            var paises = _paisService.GetAllPaises();
+            ViewBag.Paises = paises;
+            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == fornecedor.Pais?.PaisID);
+
             var categorias = _categoriaService.GetAllCategorias();
             ViewBag.Categorias = categorias;
             ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == fornecedor.CategoriaID);
@@ -127,6 +139,13 @@ namespace HojeEuCaso.Controllers
 
                 Fornecedor.Estado = estado;
                 ViewBag.Estado = estado;
+
+                var paises = _paisService.GetAllPaises();
+                ViewBag.Paises = paises;
+                var pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.Pais?.PaisID);
+
+                Fornecedor.Pais = pais;
+                ViewBag.Pais = pais;
 
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;

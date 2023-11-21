@@ -25,6 +25,7 @@ namespace HojeEuCaso.Models
         public bool Ativo { get; set; }
         public Cidade Cidade { get; set; }
         public Estado Estado { get; set; }
+        public Pais Pais { get; set; }
         public string CaminhoFoto { get; set; }
         public string CaminhoVideo { get; set; }
     }

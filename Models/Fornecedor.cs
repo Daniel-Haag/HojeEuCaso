@@ -24,6 +24,7 @@ namespace HojeEuCaso.Models
         public Estado Estado { get; set; }
         public int CidadeID { get; set; }
         public Cidade Cidade { get; set; }
+        public Pais Pais { get; set; }
         public string Bairro { get; set; }
         public string Endereco { get; set; }
         public int Numero { get; set; }

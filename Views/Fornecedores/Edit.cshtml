@@ -150,6 +150,29 @@
                                 <span asp-validation-for="CEP" class="text-danger"></span>
                             </div>
                             <div class="form-group">
+                                <label asp-for="Pais.PaisID">País</label>
+                                <select asp-for="Pais.PaisID" class="form-control">
+                                    @foreach (var pais in ViewBag.Paises)
+                                    {
+                                        var isSelected = pais.PaisID == ViewBag.Pais?.PaisID ? "selected" : "";
+
+                                        if (isSelected == "selected")
+                                        {
+                                            <option value="@pais.PaisID" selected>
+                                                @pais.Nome
+                                            </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@pais.PaisID">
+                                                @pais.Nome
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="Pais.PaisID" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
                                 <label asp-for="EstadoID">Estado</label>
                                 <select asp-for="EstadoID" class="form-control">
                                     @foreach (var estado in ViewBag.Estados)
@@ -351,7 +374,7 @@
         return doc.documentElement.textContent;
     }
 
-    var valorSelecionadoStatus = '@(bool.Parse(ViewBag.Fornecedor.Status) ? "true" : "false")';
+    var valorSelecionadoStatus = '@ViewBag.Fornecedor.Status' === 'True' ? 'true' : 'false';
     var valorSelecionadoTipo = htmlDecode('@ViewBag.Fornecedor.Tipo');
     var valorSelecionadoExclusao = '@(ViewBag.Fornecedor.SolicitouExclusao ? "true" : "false")';
     var valorSelecionadoselectMultiplosEventos = '@(ViewBag.Fornecedor.AceitaMultiplosEventos ? "true" : "false")';

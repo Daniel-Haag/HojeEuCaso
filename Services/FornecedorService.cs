@@ -23,6 +23,7 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.Fornecedores
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
+                .Include(x => x.Pais)
                 .Include(x => x.Categoria)
                 .Include(x => x.Plano)
                 .ToList();
@@ -33,6 +34,7 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.Fornecedores
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
+                .Include(x => x.Pais)
                 .Include(x => x.Categoria)
                 .Include(x => x.Plano)
                 .Where(x => x.FornecedorID == ID)

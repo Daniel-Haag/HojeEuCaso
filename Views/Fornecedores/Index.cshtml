@@ -46,7 +46,7 @@
                                         <td>@fornecedor.Nome</td>
                                         <td>@fornecedor.Email</td>
                                         <td>
-                                            @if (bool.Parse(fornecedor.Status))
+                                            @if (!string.IsNullOrEmpty(fornecedor.Status) && bool.Parse(fornecedor.Status))
                                             {
                                                 <span class="badge badge-success">Ativo</span>
                                             }

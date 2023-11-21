@@ -131,6 +131,17 @@
                             <input asp-for="CEP" class="form-control" />
                             <span asp-validation-for="CEP" class="text-danger"></span>
 
+                            <label asp-for="Pais.PaisID">País</label>
+                            <select asp-for="Pais.PaisID" class="form-control">
+                                @foreach (var pais in ViewBag.Paises)
+                                {
+                                    <option value="@pais.PaisID">
+                                        @pais.Nome
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="Pais.PaisID" class="text-danger"></span>
+
                             <label asp-for="EstadoID">Estado</label>
                             <select asp-for="EstadoID" class="form-control">
                                 @foreach (var estado in ViewBag.Estados)
