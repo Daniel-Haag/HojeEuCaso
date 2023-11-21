@@ -78,12 +78,11 @@
 
                             <label asp-for="PeriodoRenovacao">Periodo de Renovação</label>
                             <select asp-for="PeriodoRenovacao" class="form-control">
-                                <option value="Semanal">Semanal</option>
-                                <option value="A Cada Duas Semanas">A Cada Duas Semanas</option>
                                 <option value="Mensal">Mensal</option>
-                                <option value="A cada 3 Meses">A cada 3 Meses</option>
+                                <option value="Mensal">Trienal</option>
                                 <option value="Semestral">Semestral</option>
                                 <option value="Anual">Anual</option>
+                                <option value="Anual">Licensiamento</option>
                             </select>
                             <span asp-validation-for="PeriodoRenovacao" class="text-danger"></span>
                         </div>
