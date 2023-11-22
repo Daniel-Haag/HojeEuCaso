@@ -62,12 +62,6 @@ namespace HojeEuCaso.Controllers
             _paisService = paisService;
         }
 
-        public ActionResult AdicionarServico()
-        {
-            SetData();
-            return View();
-        }
-
         // GET: PacotesController
         public ActionResult Index()
         {
@@ -94,6 +88,7 @@ namespace HojeEuCaso.Controllers
         {
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
             int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
@@ -124,6 +119,16 @@ namespace HojeEuCaso.Controllers
             SetData();
 
             TempData["SuccessMessage"] = null;
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult AdicionarServico()
+        {
+            var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+            ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(fornecedor.CategoriaID);
+
+            SetData();
             return View();
         }
 
@@ -189,6 +194,8 @@ namespace HojeEuCaso.Controllers
                     itemDePacote.PacoteID = pacoteID;
                     _itensDePacotesService.CreateNewItensDePacotes(itemDePacote);
                 }
+
+                ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(pacote.Fornecedor.CategoriaID);
 
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();

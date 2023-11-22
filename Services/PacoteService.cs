@@ -30,6 +30,19 @@ namespace HojeEuCaso.Services
                 .ToList();
         }
 
+        public List<Pacote> GetPacotesByCategoriaID(int categoriaID)
+        {
+            return _HojeEuCasoDbContext.Pacotes
+                .Include(x => x.Fornecedor)
+                .Include(x => x.Categoria)
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
+                .Include(x => x.Pais)
+                .AsNoTracking()
+                .Where(x => x.Categoria.CategoriaID == categoriaID)
+                .ToList();
+        }
+
         public Pacote GetPacoteById(int ID)
         {
             return _HojeEuCasoDbContext.Pacotes

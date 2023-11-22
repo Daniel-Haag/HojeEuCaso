@@ -7,6 +7,7 @@ namespace HojeEuCaso.Interfaces
     public interface IPacoteService
     {
         public List<Pacote> GetAllPacotes();
+        public List<Pacote> GetPacotesByCategoriaID(int categoriaID);
         public Pacote GetPacoteById(int ID);
         public List<Pacote> GetPacoteByFornecedor(int fornecedorID);
         public int CreateNewPacote(Pacote Pacote);

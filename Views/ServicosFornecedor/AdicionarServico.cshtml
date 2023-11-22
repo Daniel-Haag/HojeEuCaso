@@ -80,9 +80,8 @@
                                 <div class="form-group">
                                     <label asp-for="Titulo">Título</label>
                                     <div class="input-group" style="display: flex;">
-                                        <input asp-for="Titulo" class="form-control" id="tituloInput">
-                                        <select asp-for="Titulo" class="form-control" id="tituloSelect">
-                                            @foreach (var pacote in ViewBag.Pacotes)
+                                        <select asp-for="Titulo" class="form-control">
+                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
                                             {
                                                 <option value="@pacote.Titulo">
                                                     @pacote.Titulo
@@ -323,26 +322,6 @@
                 errorMessage.removeClass("error-fade-in-out").fadeOut(500);
             }, 3000); // 3000 milissegundos (3 segundos)
         }
-
-        function toggleInputType() {
-            var pacotes = @Html.Raw(Json.Serialize(ViewBag.Pacotes));
-            var tituloInput = document.getElementById('tituloInput');
-            var tituloSelect = document.getElementById('tituloSelect');
-
-            if (pacotes.length > 0) {
-                tituloInput.disabled = true;
-                tituloInput.style.display = "none";
-                tituloSelect.disabled = false;
-                tituloSelect.style.display = "block";
-            } else {
-                tituloInput.disabled = false;
-                tituloInput.style.display = "block";
-                tituloSelect.disabled = true;
-                tituloSelect.style.display = "none";
-            }
-        }
-
-        toggleInputType();
     });
 
     function fileSelected(inputId) {
