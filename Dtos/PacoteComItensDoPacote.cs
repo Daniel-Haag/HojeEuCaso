@@ -25,6 +25,7 @@ namespace HojeEuCaso.Dtos
         public Categoria Categoria { get; set; }
         public int? FornecedorID { get; set; } //Pode ou não ter um fornecedor
         public Fornecedor Fornecedor { get; set; }
+        public Pais Pais { get; set; }
         public int EstadoID { get; set; }
         public Estado Estado { get; set; }
         public int CidadeID { get; set; }

@@ -131,7 +131,7 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                //Melhorar estas buscar por todos os registros
+                //Melhorar estas buscas por todos os registros
                 //Não esquecer de delegar todas estas funcionalidades em métodos menores
                 SetData();
                 TransformAllPercentProps(pacoteDto);
