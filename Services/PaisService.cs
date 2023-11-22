@@ -5,6 +5,7 @@ using HojeEuCaso.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace HojeEuCaso.Services
 {
@@ -19,13 +20,16 @@ namespace HojeEuCaso.Services
 
         public List<Pais> GetAllPaises()
         {
-            return _HojeEuCasoDbContext.Paises.ToList();
+            return _HojeEuCasoDbContext.Paises
+                .AsNoTracking()
+                .ToList();
         }
 
         public Pais GetPaisById(int ID)
         {
             return _HojeEuCasoDbContext.Paises
                 .Where(x => x.PaisID == ID)
+                .AsNoTracking()
                 .FirstOrDefault();
         }
 

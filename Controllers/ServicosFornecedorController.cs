@@ -33,6 +33,7 @@ namespace HojeEuCaso.Controllers
         private readonly IItensDePacotesService _itensDePacotesService;
         private readonly IClausulaContratoService _clausulasDeContratoService;
         private readonly IPlanoService _planoService;
+        private readonly IPaisService _paisService;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
@@ -44,7 +45,8 @@ namespace HojeEuCaso.Controllers
                                     IFornecedorService fornecedorService,
                                     IItensDePacotesService itensDePacotesService,
                                     IClausulaContratoService clausulasDeContratoService,
-                                    IPlanoService planoService)
+                                    IPlanoService planoService,
+                                    IPaisService paisService)
         {
             _logger = logger;
             _pacoteService = pacoteService;
@@ -57,6 +59,7 @@ namespace HojeEuCaso.Controllers
             _itensDePacotesService = itensDePacotesService;
             _clausulasDeContratoService = clausulasDeContratoService;
             _planoService = planoService;
+            _paisService = paisService;
         }
 
         public ActionResult AdicionarServico()
@@ -167,6 +170,7 @@ namespace HojeEuCaso.Controllers
 
                 pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
+                pacote.Pais = _paisService.GetPaisById(pacoteDto.Pais.PaisID);
 
                 pacote.Fornecedor = _fornecedorService
                     .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
@@ -213,6 +217,9 @@ namespace HojeEuCaso.Controllers
             var estados = _estadoService.GetAllEstados();
             ViewBag.Estados = estados;
 
+            var paises = _paisService.GetAllPaises();
+            ViewBag.Paises = paises;
+
             var pacoteAtual = _pacoteService.GetPacoteById(ID);
 
             pacoteAtual.ReajusteAnualPorcentagem = RevertFormatPercentage(pacoteAtual.ReajusteAnualPorcentagem);
@@ -226,8 +233,10 @@ namespace HojeEuCaso.Controllers
 
             ViewBag.PacoteAtual = pacoteAtual;
             ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacoteAtual.CategoriaID);
-            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade.CidadeID);
-            ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado.EstadoID);
+            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade?.CidadeID);
+            ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado?.EstadoID);
+            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == pacoteAtual.Pais?.PaisID);
+
             ViewBag.ItensDePacotes = _itensDePacotesService.GetItensDePacotesByPacoteId(ID);
 
             ViewBag.CaminhoImagem = pacoteAtual.CaminhoFoto;
@@ -288,6 +297,7 @@ namespace HojeEuCaso.Controllers
 
                 pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
+                pacote.Pais = _paisService.GetPaisById(pacoteDto.Pais.PaisID);
 
                 pacote.Fornecedor = _fornecedorService
                     .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
@@ -571,6 +581,7 @@ namespace HojeEuCaso.Controllers
         private void SetData()
         {
             ViewBag.Pacotes = _pacoteService.GetAllPacotes();
+            ViewBag.Paises = _paisService.GetAllPaises();
             ViewBag.Estados = _estadoService.GetAllEstados();
             ViewBag.Cidades = _cidadeService.GetAllCidades();
         }

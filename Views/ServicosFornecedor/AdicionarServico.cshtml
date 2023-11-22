@@ -123,7 +123,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="Pais.PaisID">Pais</label>
+                                    <select asp-for="Pais.PaisID" class="form-control">
+                                        @foreach (var pais in ViewBag.Paises)
+                                        {
+                                            <option value="@pais.PaisID">
+                                                @pais.Nome
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Pais.PaisID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="EstadoID">Estado</label>
                                     <select asp-for="EstadoID" class="form-control">
@@ -137,7 +151,7 @@
                                     <span asp-validation-for="EstadoID" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4">
                                 <div class="form-group">
                                     <label asp-for="CidadeID">Cidade</label>
                                     <select asp-for="CidadeID" class="form-control">
