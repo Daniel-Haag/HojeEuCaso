@@ -89,9 +89,6 @@
                                                 </option>
                                             }
                                         </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="editIcon" style="cursor: pointer;" title="Novo Título">+</span>
-                                        </div>
                                     </div>
                                     <span asp-validation-for="Titulo" class="text-danger"></span>
                                 </div>
@@ -326,26 +323,6 @@
                 errorMessage.removeClass("error-fade-in-out").fadeOut(500);
             }, 3000); // 3000 milissegundos (3 segundos)
         }
-        // Função para alternar entre o input e o select quando o ícone de edição for clicado
-        document.getElementById("editIcon").addEventListener("click", function () {
-            var tituloInput = document.getElementById('tituloInput');
-            var tituloSelect = document.getElementById('tituloSelect');
-
-            if (tituloInput.style.display === "none") {
-                // Se o input estiver invisível, torne-o visível e desabilite o select
-                tituloInput.style.display = "block";
-                tituloInput.disabled = false;
-                tituloSelect.style.display = "none";
-                tituloSelect.disabled = true;
-            } else {
-                // Se o input estiver visível, torne o select visível e desabilite o input
-                tituloInput.style.display = "none";
-                tituloInput.disabled = true;
-                tituloSelect.style.display = "block";
-                tituloSelect.disabled = false;
-            }
-        });
-
 
         function toggleInputType() {
             var pacotes = @Html.Raw(Json.Serialize(ViewBag.Pacotes));
