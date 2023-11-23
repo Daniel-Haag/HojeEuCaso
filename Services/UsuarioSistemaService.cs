@@ -23,6 +23,8 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.UsuariosSistema
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
+                .Include(x => x.Pais)
+                .AsNoTracking()
                 .ToList();
         }
 
@@ -31,13 +33,20 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.UsuariosSistema
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
+                .Include(x => x.Pais)
+                .AsNoTracking()
                 .Where(x => x.UsuarioSistemaID == ID).FirstOrDefault();
         }
 
         public UsuarioSistema GetUsuarioSistemaLogin(UsuarioSistema usuarioSistema)
         {
             return _HojeEuCasoDbContext.UsuariosSistema
-                .Where(x => x.Email == usuarioSistema.Email && x.Senha == usuarioSistema.Senha).FirstOrDefault();
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
+                .Include(x => x.Pais)
+                .AsNoTracking()
+                .Where(x => x.Email == usuarioSistema.Email && x.Senha == usuarioSistema.Senha)
+                .FirstOrDefault();
         }
 
         public void CreateNewUsuarioSistema(UsuarioSistema UsuarioSistema)

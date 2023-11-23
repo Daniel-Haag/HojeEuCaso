@@ -15,41 +15,42 @@ namespace HojeEuCaso.Controllers
         private readonly IUsuarioSistemaService _usuarioSistemaService;
         private readonly ICidadeService _cidadeService;
         private readonly IEstadoService _estadoService;
+        private readonly IPaisService _paisService;
 
         public UsuariosController(ILogger<UsuariosController> logger,
                                     IUsuarioSistemaService usuarioSistemaService,
                                     ICidadeService cidadeService,
-                                    IEstadoService estadoService)
+                                    IEstadoService estadoService,
+                                    IPaisService paisService)
         {
             _logger = logger;
             _usuarioSistemaService = usuarioSistemaService;
             _cidadeService = cidadeService;
             _estadoService = estadoService;
+            _paisService = paisService;
         }
 
-        // GET: UsuariosController
         public ActionResult Index()
         {
             ViewBag.UsuariosSistema = _usuarioSistemaService.GetAllUsuarioSistema();
             return View();
         }
 
-        // GET: UsuariosController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: UsuariosController/Create
+        [HttpGet]
         public ActionResult Create()
         {
             ViewBag.Cidades = _cidadeService.GetAllCidades();
             ViewBag.Estados = _estadoService.GetAllEstados();
+            ViewBag.Paises = _paisService.GetAllPaises();
             TempData["SuccessMessage"] = null;
             return View();
         }
 
-        // POST: UsuariosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UsuarioSistema usuarioSistema)
@@ -63,6 +64,10 @@ namespace HojeEuCaso.Controllers
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
                 usuarioSistema.Estado = estados.FirstOrDefault(x => x.EstadoID == usuarioSistema.EstadoID);
+
+                var paises = _paisService.GetAllPaises();
+                ViewBag.Paises = paises;
+                usuarioSistema.Pais = paises.FirstOrDefault(x => x.PaisID == usuarioSistema.Pais?.PaisID);
 
                 _usuarioSistemaService.CreateNewUsuarioSistema(usuarioSistema);
 
@@ -82,11 +87,7 @@ namespace HojeEuCaso.Controllers
             var usuarioSistema = _usuarioSistemaService.GetUsuarioSistemaById(ID);
             ViewBag.Usuario = usuarioSistema;
 
-
-
             //ViewBag.Usuario.DataNascimento = ((DateTime)usuarioSistema.DataNascimento).ToString("yyyy-MM-dd");
-
-
             var cidades = _cidadeService.GetAllCidades();
             ViewBag.Cidades = cidades;
             ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
@@ -94,6 +95,10 @@ namespace HojeEuCaso.Controllers
             var estados = _estadoService.GetAllEstados();
             ViewBag.Estados = estados;
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == usuarioSistema.EstadoID);
+
+            var paises = _paisService.GetAllPaises();
+            ViewBag.Paises = paises;
+            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == usuarioSistema.Pais?.PaisID);
 
             return View();
         }
@@ -116,6 +121,13 @@ namespace HojeEuCaso.Controllers
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
                 var estado = estados.FirstOrDefault(x => x.EstadoID == usuarioSistema.EstadoID);
+
+                usuarioSistema.Estado = estado;
+                ViewBag.Estado = estado;
+
+                var paises = _paisService.GetAllPaises();
+                ViewBag.Paises = paises;
+                var pais = paises.FirstOrDefault(x => x.PaisID == usuarioSistema.Pais?.PaisID);
 
                 usuarioSistema.Estado = estado;
                 ViewBag.Estado = estado;
