@@ -210,55 +210,62 @@ namespace HojeEuCaso.Controllers
         [HttpGet]
         public ActionResult EditarServico(int ID)
         {
-            TempData["SuccessMessage"] = null;
+            try
+            {
+                var pacotes = _pacoteService.GetAllPacotes();
+                ViewBag.Pacotes = pacotes;
 
-            var pacotes = _pacoteService.GetAllPacotes();
-            ViewBag.Pacotes = pacotes;
+                var categorias = _categoriaService.GetAllCategorias();
+                ViewBag.Categorias = categorias;
 
-            var categorias = _categoriaService.GetAllCategorias();
-            ViewBag.Categorias = categorias;
+                var cidades = _cidadeService.GetAllCidades();
+                ViewBag.Cidades = cidades;
 
-            var cidades = _cidadeService.GetAllCidades();
-            ViewBag.Cidades = cidades;
+                var estados = _estadoService.GetAllEstados();
+                ViewBag.Estados = estados;
 
-            var estados = _estadoService.GetAllEstados();
-            ViewBag.Estados = estados;
+                var paises = _paisService.GetAllPaises();
+                ViewBag.Paises = paises;
 
-            var paises = _paisService.GetAllPaises();
-            ViewBag.Paises = paises;
+                var pacoteAtual = _pacoteService.GetPacoteById(ID);
 
-            var pacoteAtual = _pacoteService.GetPacoteById(ID);
+                pacoteAtual.ReajusteAnualPorcentagem = RevertFormatPercentage(pacoteAtual.ReajusteAnualPorcentagem);
+                pacoteAtual.DescontoSegundaFeira = RevertFormatPercentage(pacoteAtual.DescontoSegundaFeira);
+                pacoteAtual.DescontoTercaFeira = RevertFormatPercentage(pacoteAtual.DescontoTercaFeira);
+                pacoteAtual.DescontoQuartaFeira = RevertFormatPercentage(pacoteAtual.DescontoQuartaFeira);
+                pacoteAtual.DescontoQuintaFeira = RevertFormatPercentage(pacoteAtual.DescontoQuintaFeira);
+                pacoteAtual.DescontoSextaFeira = RevertFormatPercentage(pacoteAtual.DescontoSextaFeira);
+                pacoteAtual.DescontoSabado = RevertFormatPercentage(pacoteAtual.DescontoSabado);
+                pacoteAtual.DescontoDomingo = RevertFormatPercentage(pacoteAtual.DescontoDomingo);
 
-            pacoteAtual.ReajusteAnualPorcentagem = RevertFormatPercentage(pacoteAtual.ReajusteAnualPorcentagem);
-            pacoteAtual.DescontoSegundaFeira = RevertFormatPercentage(pacoteAtual.DescontoSegundaFeira);
-            pacoteAtual.DescontoTercaFeira = RevertFormatPercentage(pacoteAtual.DescontoTercaFeira);
-            pacoteAtual.DescontoQuartaFeira = RevertFormatPercentage(pacoteAtual.DescontoQuartaFeira);
-            pacoteAtual.DescontoQuintaFeira = RevertFormatPercentage(pacoteAtual.DescontoQuintaFeira);
-            pacoteAtual.DescontoSextaFeira = RevertFormatPercentage(pacoteAtual.DescontoSextaFeira);
-            pacoteAtual.DescontoSabado = RevertFormatPercentage(pacoteAtual.DescontoSabado);
-            pacoteAtual.DescontoDomingo = RevertFormatPercentage(pacoteAtual.DescontoDomingo);
+                ViewBag.PacoteAtual = pacoteAtual;
+                ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacoteAtual.CategoriaID);
+                ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade?.CidadeID);
+                ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado?.EstadoID);
+                ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == pacoteAtual.Pais?.PaisID);
 
-            ViewBag.PacoteAtual = pacoteAtual;
-            ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacoteAtual.CategoriaID);
-            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade?.CidadeID);
-            ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado?.EstadoID);
-            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == pacoteAtual.Pais?.PaisID);
+                ViewBag.ItensDePacotes = _itensDePacotesService.GetItensDePacotesByPacoteId(ID);
 
-            ViewBag.ItensDePacotes = _itensDePacotesService.GetItensDePacotesByPacoteId(ID);
+                ViewBag.CaminhoImagem = pacoteAtual.CaminhoFoto;
+                ViewBag.CaminhoVideo = pacoteAtual.CaminhoVideo;
 
-            ViewBag.CaminhoImagem = pacoteAtual.CaminhoFoto;
-            ViewBag.CaminhoVideo = pacoteAtual.CaminhoVideo;
+                var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
-            var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
+                var caminhoImagem = pacoteAtual.CaminhoFoto?.Replace(diretorio, "~");
+                caminhoImagem = caminhoImagem?.Replace("\\", "/");
 
-            var caminhoImagem = pacoteAtual.CaminhoFoto?.Replace(diretorio, "~");
-            caminhoImagem = caminhoImagem?.Replace("\\", "/");
+                var caminhoVideo = pacoteAtual.CaminhoVideo?.Replace(diretorio, "~");
+                caminhoVideo = caminhoVideo?.Replace("\\", "/");
 
-            var caminhoVideo = pacoteAtual.CaminhoVideo?.Replace(diretorio, "~");
-            caminhoVideo = caminhoVideo?.Replace("\\", "/");
+                ViewBag.FotoExistente = caminhoImagem;
+                ViewBag.VideoExistente = caminhoVideo;
+                return View();
+            }
+            catch (Exception e)
+            {
 
-            ViewBag.FotoExistente = caminhoImagem;
-            ViewBag.VideoExistente = caminhoVideo;
+            }
+
             return View();
         }
 
