@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231130021027_RemovendoDependenciaPaisDoFornecedorParaReformulacao")]
+    partial class RemovendoDependenciaPaisDoFornecedorParaReformulacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,9 +220,6 @@ namespace HojeEuCaso.Migrations
                     b.Property<string>("NumeroConta")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PaisID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("PlanoID")
                         .HasColumnType("int");
 
@@ -270,8 +269,6 @@ namespace HojeEuCaso.Migrations
                     b.HasIndex("CidadeID");
 
                     b.HasIndex("EstadoID");
-
-                    b.HasIndex("PaisID");
 
                     b.HasIndex("PlanoID");
 
@@ -729,12 +726,6 @@ namespace HojeEuCaso.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HojeEuCaso.Models.Pais", "Pais")
-                        .WithMany()
-                        .HasForeignKey("PaisID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HojeEuCaso.Models.Plano", "Plano")
                         .WithMany()
                         .HasForeignKey("PlanoID");
@@ -744,8 +735,6 @@ namespace HojeEuCaso.Migrations
                     b.Navigation("Cidade");
 
                     b.Navigation("Estado");
-
-                    b.Navigation("Pais");
 
                     b.Navigation("Plano");
                 });

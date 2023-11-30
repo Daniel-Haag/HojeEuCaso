@@ -150,11 +150,11 @@
                                 <span asp-validation-for="CEP" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Pais.PaisID">País</label>
-                                <select asp-for="Pais.PaisID" class="form-control">
+                                <label asp-for="PaisID">País</label>
+                                <select asp-for="PaisID" class="form-control">
                                     @foreach (var pais in ViewBag.Paises)
                                     {
-                                        var isSelected = pais.PaisID == ViewBag.Pais?.PaisID ? "selected" : "";
+                                        var isSelected = pais.PaisID == ViewBag.PaisID ? "selected" : "";
 
                                         if (isSelected == "selected")
                                         {
@@ -170,7 +170,7 @@
                                         }
                                     }
                                 </select>
-                                <span asp-validation-for="Pais.PaisID" class="text-danger"></span>
+                                <span asp-validation-for="PaisID" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="EstadoID">Estado</label>

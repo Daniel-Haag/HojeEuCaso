@@ -75,7 +75,7 @@ namespace HojeEuCaso.Controllers
 
                 var paises = _paisService.GetAllPaises();
                 ViewBag.Paises = paises;
-                Fornecedor.Pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.Pais.PaisID);
+                Fornecedor.Pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.PaisID);
 
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
@@ -109,7 +109,7 @@ namespace HojeEuCaso.Controllers
 
             var paises = _paisService.GetAllPaises();
             ViewBag.Paises = paises;
-            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == fornecedor.Pais?.PaisID);
+            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == fornecedor.PaisID);
 
             var categorias = _categoriaService.GetAllCategorias();
             ViewBag.Categorias = categorias;
@@ -142,7 +142,7 @@ namespace HojeEuCaso.Controllers
 
                 var paises = _paisService.GetAllPaises();
                 ViewBag.Paises = paises;
-                var pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.Pais?.PaisID);
+                var pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.PaisID);
 
                 Fornecedor.Pais = pais;
                 ViewBag.Pais = pais;
