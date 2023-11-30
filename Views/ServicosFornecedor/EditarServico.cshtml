@@ -269,7 +269,7 @@
                                 <div class="form-group">
                                     <label for="Foto" class="btn btn-outline-danger mb-2">
                                         Alterar Foto
-                                        <input type="file" asp-for="Foto" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
                                     </label>
 
                                     <label for="Video" class="btn btn-outline-danger mb-2">
@@ -279,7 +279,7 @@
 
                                     <br />
                                     <span id="FotoSelected" style="display: none; font-size:10px">Foto: <span id="FotoFileName" style="font-size:10px"></span></span>
-                                    <span asp-validation-for="Foto" class="text-danger" style="font-size:10px"></span>
+                                    <span asp-validation-for="Fotos" class="text-danger" style="font-size:10px"></span>
                                     <br />
                                     <span id="VideoSelected" style="display: none; font-size:10px">Vídeo: <span id="VideoFileName" style="font-size:10px"></span></span>
                                     <span asp-validation-for="Video" class="text-danger" style="font-size:10px"></span>

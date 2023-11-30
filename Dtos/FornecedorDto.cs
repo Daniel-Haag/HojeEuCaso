@@ -53,5 +53,6 @@ namespace HojeEuCaso.Dtos
         public string CaminhoFoto { get; set; }
         public List<ClausulaContrato> ClausulasContrato { get; set; }
         public IFormFile Foto { get; set; }
+        public List<IFormFile> Fotos { get; set; }
     }
 }

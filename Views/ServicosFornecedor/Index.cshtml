@@ -21,8 +21,7 @@
             {
                 @foreach (var pacote in ViewBag.Pacotes)
                 {
-                    var caminhoImagem = pacote.CaminhoFoto?.Replace(ViewBag.Diretorio, "~");
-                    caminhoImagem = caminhoImagem?.Replace("\\", "/");
+                    
 
                     var caminhoVideo = pacote.CaminhoVideo?.Replace(ViewBag.Diretorio, "~");
                     caminhoVideo = caminhoVideo?.Replace("\\", "/");
@@ -33,17 +32,36 @@
                     <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0;">
 
                         <div id="@carouselId" class="carousel slide" data-ride="carousel" style="background-color:black">
+
+                            @{
+                                var pacoteID = pacote.PacoteID;
+                                var fotosPacote = ViewBag.FotosServicos as List<FotosServicos>;
+
+                                if (fotosPacote != null)
+                                {
+                                    fotosPacote = fotosPacote.Where(x => x.PacoteID == pacoteID).ToList();
+                                }
+                            }
+
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
-                                </div>
+
+                                @foreach (var item in fotosPacote)
+                                {
+                                    var caminhoImagem = item.CaminhoFoto?.Replace(ViewBag.Diretorio, "~");
+                                    caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+                                    <div class="carousel-item active">
+                                        <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
+                                    </div>
+                                }
+
                                 <div class="carousel-item">
-                                    
-                                        <video controls>
+
+                                    <video controls>
                                         <source src="@Url.Content(caminhoVideo)" type="video/mp4" class="d-block w-100">
-                                            Seu navegador não suporta o elemento de vídeo.
-                                        </video>
-                                    
+                                        Seu navegador não suporta o elemento de vídeo.
+                                    </video>
+
                                 </div>
 
                             </div>
@@ -100,20 +118,20 @@
 
     <style>
         .carousel {
-            max-height: 300px; 
+            max-height: 300px;
         }
 
         .carousel-item {
             width: 100%;
-            height: 300px; 
+            height: 300px;
         }
 
             .carousel-item img,
             .carousel-item video {
                 width: 100%;
                 height: 100%;
-                align-items: center; 
-                justify-content: center; 
+                align-items: center;
+                justify-content: center;
                 object-fit: contain;
             }
 

@@ -32,7 +32,7 @@ namespace HojeEuCaso.Dtos
         public Cidade Cidade { get; set; }
         public bool Ativo { get; set; }
         public List<ItensDePacotes> ItensDePacotes { get; set; }
-        public IFormFile Foto { get; set; }
+        public List<IFormFile> Fotos { get; set; }
         public IFormFile Video { get; set; }
         public string CaminhoFoto { get; set; }
         public string CaminhoVideo { get; set; }

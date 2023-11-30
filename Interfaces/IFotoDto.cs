@@ -7,6 +7,6 @@ namespace HojeEuCaso.Interfaces
     public interface IFotoDto
     {
         string CaminhoFoto { get; set; }
-        IFormFile Foto { get; set; }
+        List<IFormFile> Fotos { get; set; }
     }
 }

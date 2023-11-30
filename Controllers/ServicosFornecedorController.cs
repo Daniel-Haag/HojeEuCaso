@@ -17,6 +17,7 @@ using Org.BouncyCastle.Asn1.Cmp;
 using Org.BouncyCastle.Asn1.Crmf;
 using RestSharp;
 using System.Threading.Tasks;
+using HojeEuCaso.Services;
 
 namespace HojeEuCaso.Controllers
 {
@@ -34,6 +35,7 @@ namespace HojeEuCaso.Controllers
         private readonly IClausulaContratoService _clausulasDeContratoService;
         private readonly IPlanoService _planoService;
         private readonly IPaisService _paisService;
+        private readonly IFotoServicoService _fotoServicoService;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
@@ -46,7 +48,8 @@ namespace HojeEuCaso.Controllers
                                     IItensDePacotesService itensDePacotesService,
                                     IClausulaContratoService clausulasDeContratoService,
                                     IPlanoService planoService,
-                                    IPaisService paisService)
+                                    IPaisService paisService,
+                                    IFotoServicoService fotoServicoService)
         {
             _logger = logger;
             _pacoteService = pacoteService;
@@ -60,6 +63,7 @@ namespace HojeEuCaso.Controllers
             _clausulasDeContratoService = clausulasDeContratoService;
             _planoService = planoService;
             _paisService = paisService;
+            _fotoServicoService = fotoServicoService;
         }
 
         // GET: PacotesController
@@ -69,7 +73,24 @@ namespace HojeEuCaso.Controllers
             try
             {
                 int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
-                ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+                var pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+                ViewBag.Pacotes = pacotes;
+
+                List<FotosServicos> fotosServicos = new List<FotosServicos>();
+
+                foreach (var pacote in pacotes)
+                {
+                    var fotosServicosPacote = _fotoServicoService.GetFotosServicoByServiceId(pacote.PacoteID);
+
+                    foreach (var fotoServicoPacote in fotosServicosPacote)
+                    {
+                        fotosServicos.Add(fotoServicoPacote);
+                    }
+
+                }
+
+                ViewBag.FotosServicos = fotosServicos;
+
                 ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
             }
             catch (ArgumentNullException ex)
@@ -77,7 +98,7 @@ namespace HojeEuCaso.Controllers
                 if (ex.Message == "Value cannot be null. (Parameter 's')" || ex.Message == "Value cannot be null. Arg_ParamName_Name")
                 {
                     RedirectToAction("Logout", "Login");
-                } 
+                }
             }
 
             return View();
@@ -144,31 +165,6 @@ namespace HojeEuCaso.Controllers
                 SetData();
                 TransformAllPercentProps(pacoteDto);
 
-                if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
-                {
-                    long maxFileSize = 10 * 1024 * 1024; // 10MB
-
-                    if (pacoteDto.Foto.Length > maxFileSize)
-                    {
-                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
-                        return View();
-                    }
-
-                    CopyPhotoStream(pacoteDto);
-                }
-
-                if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
-                {
-                    long maxVideoSize = 10 * 1024 * 1024; // 10MB
-                    if (pacoteDto.Video.Length > maxVideoSize)
-                    {
-                        ModelState.AddModelError("Video", "O tamanho do vídeo excede o limite de 10MB.");
-                        return View();
-                    }
-
-                    CopyVideoStream(pacoteDto);
-                }
-
                 Pacote pacote;
                 List<ItensDePacotes> itensDePacotes;
                 MapPacoteDtoForPacoteObject(pacoteDto, out pacote, out itensDePacotes);
@@ -196,6 +192,48 @@ namespace HojeEuCaso.Controllers
                 }
 
                 ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(pacote.Fornecedor.CategoriaID);
+
+                //Resolvido se o usuário selecionar várias fotos ao mesmo tempo...
+                if (pacoteDto.Fotos != null && pacoteDto.Fotos.Count() > 1)
+                {
+                    foreach (var item in pacoteDto.Fotos)
+                    {
+                        var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + item.FileName);
+
+                        long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+                        if (item.Length > maxFileSize)
+                        {
+                            ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                            return View();
+                        }
+
+                        FotosServicos fotoServico = new FotosServicos()
+                        {
+                            PacoteID = pacoteID,
+                            Pacote = pacote,
+                            CaminhoFoto = caminhoFoto
+                        };
+
+                        if (!System.IO.File.Exists(caminhoFoto))
+                        {
+                            _fotoServicoService.CreateNewFotoServico(fotoServico);
+                            CopyPhotoStream(caminhoFoto, item);
+                        }
+                    }
+                }
+
+                if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
+                {
+                    long maxVideoSize = 10 * 1024 * 1024; // 10MB
+                    if (pacoteDto.Video.Length > maxVideoSize)
+                    {
+                        ModelState.AddModelError("Video", "O tamanho do vídeo excede o limite de 10MB.");
+                        return View();
+                    }
+
+                    CopyVideoStream(pacoteDto);
+                }
 
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
@@ -280,18 +318,18 @@ namespace HojeEuCaso.Controllers
                 SetData();
                 TransformAllPercentProps(pacoteDto);
 
-                if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
-                {
-                    long maxFileSize = 10 * 1024 * 1024; // 10MB
+                //if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
+                //{
+                //    long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-                    if (pacoteDto.Foto.Length > maxFileSize)
-                    {
-                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
-                        return View();
-                    }
+                //    if (pacoteDto.Foto.Length > maxFileSize)
+                //    {
+                //        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                //        return View();
+                //    }
 
-                    CopyPhotoStream(pacoteDto);
-                }
+                //    CopyPhotoStream(pacoteDto);
+                //}
 
                 if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
                 {
@@ -327,6 +365,14 @@ namespace HojeEuCaso.Controllers
 
                 UpdateOrDeleteItenDePacote(pacote, itensDePacotes);
                 CreateNewItensDePacote(itensDePacotes);
+
+                var fotosServicos = _fotoServicoService.GetFotosServicoByServiceId(pacote.PacoteID);
+
+                ///Melhorar estas diversas idas ao banco
+                foreach (var fotoServico in fotosServicos)
+                {
+                    _fotoServicoService.UpdateFotoServico(fotoServico);
+                }
 
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 //ViewBag.Pacote = pacote;
@@ -386,18 +432,18 @@ namespace HojeEuCaso.Controllers
             {
                 SetData();
 
-                if (fornecedorDto.Foto != null && fornecedorDto.Foto.Length > 0)
-                {
-                    long maxFileSize = 10 * 1024 * 1024; // 10MB
+                //if (fornecedorDto.Foto != null && fornecedorDto.Foto.Length > 0)
+                //{
+                //    long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-                    if (fornecedorDto.Foto.Length > maxFileSize)
-                    {
-                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
-                        return View();
-                    }
+                //    if (fornecedorDto.Foto.Length > maxFileSize)
+                //    {
+                //        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                //        return View();
+                //    }
 
-                    CopyPhotoStream(fornecedorDto);
-                }
+                //    CopyPhotoStream(fornecedorDto);
+                //}
 
                 Fornecedor fornecedor = _mapper.Map<Fornecedor>(fornecedorDto);
                 _fornecedorService.UpdateFornecedor(fornecedor);
@@ -545,7 +591,7 @@ namespace HojeEuCaso.Controllers
 
                 UpdateOrDeleteClausulasDeContrato(fornecedor, clausulasDeContrato);
                 CreateNewClausulasDeContrato(clausulasDeContrato);
-                
+
                 return View();
             }
             catch (ArgumentNullException ex)
@@ -637,16 +683,11 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        private void CopyPhotoStream<T>(T dto) where T : IFotoDto
+        private void CopyPhotoStream(string caminhoFoto, IFormFile foto)
         {
-            dto.CaminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + dto.Foto.FileName);
-
-            if (!System.IO.File.Exists(dto.CaminhoFoto))
+            using (var stream = new FileStream(caminhoFoto, FileMode.Create))
             {
-                using (var stream = new FileStream(dto.CaminhoFoto, FileMode.Create))
-                {
-                    dto.Foto.CopyTo(stream);
-                }
+                foto.CopyTo(stream);
             }
         }
 
