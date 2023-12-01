@@ -21,7 +21,7 @@ namespace HojeEuCaso.Services
         public List<Pais> GetAllPaises()
         {
             return _HojeEuCasoDbContext.Paises
-                .AsNoTracking()
+                //.AsNoTracking()
                 .ToList();
         }
 
@@ -29,7 +29,7 @@ namespace HojeEuCaso.Services
         {
             return _HojeEuCasoDbContext.Paises
                 .Where(x => x.PaisID == ID)
-                .AsNoTracking()
+                //.AsNoTracking()
                 .FirstOrDefault();
         }
 

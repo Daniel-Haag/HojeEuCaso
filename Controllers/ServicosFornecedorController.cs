@@ -171,7 +171,7 @@ namespace HojeEuCaso.Controllers
 
                 pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
-                pacote.Pais = _paisService.GetPaisById(pacoteDto.Pais.PaisID);
+                pacote.Pais = _paisService.GetPaisById(pacoteDto.PaisID);
 
                 pacote.Fornecedor = _fornecedorService
                     .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
@@ -193,8 +193,8 @@ namespace HojeEuCaso.Controllers
 
                 ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(pacote.Fornecedor.CategoriaID);
 
-                //Resolvido se o usuário selecionar várias fotos ao mesmo tempo...
-                if (pacoteDto.Fotos != null && pacoteDto.Fotos.Count() > 1)
+                //Tratando se o usuário selecionar várias fotos ao mesmo tempo...
+                if (pacoteDto.Fotos != null && pacoteDto.Fotos.Count() >= 1)
                 {
                     foreach (var item in pacoteDto.Fotos)
                     {

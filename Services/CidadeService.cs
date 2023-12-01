@@ -19,12 +19,15 @@ namespace HojeEuCaso.Services
 
         public List<Cidade> GetAllCidades()
         {
-            return _HojeEuCasoDbContext.Cidades.ToList();
+            return _HojeEuCasoDbContext.Cidades
+                .ToList();
         }
 
         public Cidade GetCidadeById(int ID)
         {
-            return _HojeEuCasoDbContext.Cidades.Where(x => x.CidadeID == ID).FirstOrDefault();
+            return _HojeEuCasoDbContext.Cidades
+                .Where(x => x.CidadeID == ID)
+                .FirstOrDefault();
         }
 
         public void CreateNewCidade(Cidade Cidade)

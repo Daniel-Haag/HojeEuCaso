@@ -121,8 +121,8 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label asp-for="Pais.PaisID">Pais</label>
-                                    <select asp-for="Pais.PaisID" class="form-control">
+                                    <label asp-for="PaisID">Pais</label>
+                                    <select asp-for="PaisID" class="form-control">
                                         @foreach (var pais in ViewBag.Paises)
                                         {
                                             <option value="@pais.PaisID">
@@ -130,7 +130,7 @@
                                             </option>
                                         }
                                     </select>
-                                    <span asp-validation-for="Pais.PaisID" class="text-danger"></span>
+                                    <span asp-validation-for="PaisID" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-4">
