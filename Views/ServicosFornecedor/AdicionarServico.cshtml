@@ -267,12 +267,6 @@
                                         <input type="file" asp-for="Fotos" style="display: none;" id="Foto20" onchange="fileSelected('Foto20', 'labelFoto20', '')" multiple />
                                     </label>
 
-
-                                    @*<label for="Foto" class="btn btn-outline-danger mb-2">
-                                    Adicionar Foto
-                                    <input type="file" asp-for="Fotos" style="display: none;" id="Foto2" onchange="fileSelected('Foto')" multiple />
-                                    </label>*@
-
                                     <label for="Video" class="btn btn-outline-danger mb-2">
                                         Adicionar Vídeo
                                         <input type="file" asp-for="Video" style="display: none;" id="Video" onchange="fileSelected('Video')">
@@ -284,9 +278,7 @@
                                     <br />
 
                                     <div id="preview-container">
-
-                                        <!-- O container para exibir as prévias dos arquivos -->
-
+                                        <!-- Container para exibir as prévias dos arquivos -->
                                     </div>
                                     <div id="botaoRemoverFoto" class="form-group" style="display:none">
                                         <a href="javascript:void(0)" style="color:red" onclick="removerFoto()"><i class="fa fa-minus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Remover</span></a>

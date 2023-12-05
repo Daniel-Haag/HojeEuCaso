@@ -289,19 +289,29 @@ namespace HojeEuCaso.Controllers
 
                 var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
-                var caminhoImagem = pacoteAtual.CaminhoFoto?.Replace(diretorio, "~");
-                caminhoImagem = caminhoImagem?.Replace("\\", "/");
+                var fotosDoServico = _fotoServicoService.GetFotosServicoByServiceId(ID);
+
+                foreach (var fotoServico in fotosDoServico.ToList())
+                {
+                    var caminhoFoto = fotoServico.CaminhoFoto?.Replace(diretorio, "~");
+                    fotoServico.CaminhoFoto = caminhoFoto?.Replace("\\", "/");
+                }
+
+                ViewBag.FotosDoServico = fotosDoServico;
+
+                //var caminhoImagem = pacoteAtual.CaminhoFoto?.Replace(diretorio, "~");
+                //caminhoImagem = caminhoImagem?.Replace("\\", "/");
 
                 var caminhoVideo = pacoteAtual.CaminhoVideo?.Replace(diretorio, "~");
                 caminhoVideo = caminhoVideo?.Replace("\\", "/");
 
-                ViewBag.FotoExistente = caminhoImagem;
+                //ViewBag.FotoExistente = caminhoImagem;
                 ViewBag.VideoExistente = caminhoVideo;
                 return View();
             }
             catch (Exception e)
             {
-
+                string erro = e.Message;
             }
 
             return View();
@@ -317,19 +327,6 @@ namespace HojeEuCaso.Controllers
                 //Melhorar estas buscas por todos os registros
                 SetData();
                 TransformAllPercentProps(pacoteDto);
-
-                //if (pacoteDto.Foto != null && pacoteDto.Foto.Length > 0)
-                //{
-                //    long maxFileSize = 10 * 1024 * 1024; // 10MB
-
-                //    if (pacoteDto.Foto.Length > maxFileSize)
-                //    {
-                //        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
-                //        return View();
-                //    }
-
-                //    CopyPhotoStream(pacoteDto);
-                //}
 
                 if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
                 {
@@ -349,7 +346,7 @@ namespace HojeEuCaso.Controllers
 
                 pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
-                pacote.Pais = _paisService.GetPaisById(pacoteDto.Pais.PaisID);
+                pacote.Pais = _paisService.GetPaisById(pacoteDto.PaisID);
 
                 pacote.Fornecedor = _fornecedorService
                     .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
@@ -361,18 +358,47 @@ namespace HojeEuCaso.Controllers
                 pacote.Categoria = categoria;
                 ViewBag.Categoria = pacote.Categoria;
 
+                //Tratando se o usuário selecionar várias fotos ao mesmo tempo...
+                if (pacoteDto.Fotos != null && pacoteDto.Fotos.Count() >= 1)
+                {
+                    foreach (var item in pacoteDto.Fotos)
+                    {
+                        var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + DateTime.Now.ToString() + item.FileName);
+
+                        long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+                        if (item.Length > maxFileSize)
+                        {
+                            ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                            return View();
+                        }
+
+                        FotosServicos fotoServico = new FotosServicos()
+                        {
+                            PacoteID = pacoteDto.PacoteID,
+                            CaminhoFoto = caminhoFoto
+                        };
+
+                        if (!System.IO.File.Exists(caminhoFoto))
+                        {
+                            _fotoServicoService.CreateNewFotoServico(fotoServico);
+                            CopyPhotoStream(caminhoFoto, item);
+                        }
+                    }
+                }
+
                 _pacoteService.UpdatePacote(pacote);
 
                 UpdateOrDeleteItenDePacote(pacote, itensDePacotes);
                 CreateNewItensDePacote(itensDePacotes);
 
-                var fotosServicos = _fotoServicoService.GetFotosServicoByServiceId(pacote.PacoteID);
+                //var fotosServicos = _fotoServicoService.GetFotosServicoByServiceId(pacote.PacoteID);
 
-                ///Melhorar estas diversas idas ao banco
-                foreach (var fotoServico in fotosServicos)
-                {
-                    _fotoServicoService.UpdateFotoServico(fotoServico);
-                }
+                /////Melhorar estas diversas idas ao banco
+                //foreach (var fotoServico in fotosServicos)
+                //{
+                //    _fotoServicoService.UpdateFotoServico(fotoServico);
+                //}
 
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 //ViewBag.Pacote = pacote;
@@ -774,6 +800,30 @@ namespace HojeEuCaso.Controllers
                         _clausulasDeContratoService.DeleteClausulaContrato(item.ClausulaContratoID);
                     }
                 }
+            }
+        }
+
+        [HttpPost]
+        public JsonResult RemoverFotoExistente(int fotoExistenteID)
+        {
+            try
+            {
+                var fotoExistente = _fotoServicoService.GetFotoServicoById(fotoExistenteID);
+
+                if (fotoExistente != null)
+                {
+                    _fotoServicoService.DeleteFotoServico(fotoExistenteID);
+
+                    return Json(new { success = true, message = "Foto removida com sucesso." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Foto não encontrada." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Erro ao remover a foto." });
             }
         }
     }
