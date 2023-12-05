@@ -12,7 +12,8 @@ namespace HojeEuCaso.Controllers
     public class FornecedoresController : Controller
     {
         private readonly ILogger<UsuariosController> _logger;
-        private readonly IFornecedorService _FornecedorService;
+        private readonly IFornecedorService _fornecedorService;
+        private readonly IFornecedorIndicadoService _fornecedorIndicadoService;
         private readonly ICidadeService _cidadeService;
         private readonly IEstadoService _estadoService;
         private readonly ICategoriaService _categoriaService;
@@ -23,20 +24,22 @@ namespace HojeEuCaso.Controllers
                                     ICidadeService cidadeService,
                                     IEstadoService estadoService,
                                     ICategoriaService categoriaService,
-                                    IPaisService paisService)
+                                    IPaisService paisService,
+                                    IFornecedorIndicadoService fornecedorIndicadoService)
         {
             _logger = logger;
-            _FornecedorService = FornecedorService;
+            _fornecedorService = FornecedorService;
             _cidadeService = cidadeService;
             _estadoService = estadoService;
             _categoriaService = categoriaService;
             _paisService = paisService;
+            _fornecedorIndicadoService = fornecedorIndicadoService;
         }
 
         // GET: UsuariosController
         public ActionResult Index()
         {
-            ViewBag.Fornecedores = _FornecedorService.GetAllFornecedor();
+            ViewBag.Fornecedores = _fornecedorService.GetAllFornecedor();
 
             return View();
         }
@@ -61,27 +64,42 @@ namespace HojeEuCaso.Controllers
         // POST: UsuariosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Fornecedor Fornecedor)
+        public ActionResult Create(Fornecedor fornecedor)
         {
             try
             {
                 var cidades = _cidadeService.GetAllCidades();
                 ViewBag.Cidades = cidades;
-                Fornecedor.Cidade = cidades.FirstOrDefault(x => x.CidadeID == Fornecedor.CidadeID);
+                fornecedor.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.CidadeID);
 
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
-                Fornecedor.Estado = estados.FirstOrDefault(x => x.EstadoID == Fornecedor.EstadoID);
+                fornecedor.Estado = estados.FirstOrDefault(x => x.EstadoID == fornecedor.EstadoID);
 
                 var paises = _paisService.GetAllPaises();
                 ViewBag.Paises = paises;
-                Fornecedor.Pais = paises.FirstOrDefault(x => x.PaisID == Fornecedor.PaisID);
+                fornecedor.Pais = paises.FirstOrDefault(x => x.PaisID == fornecedor.PaisID);
 
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
-                Fornecedor.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == Fornecedor.CategoriaID);
+                fornecedor.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == fornecedor.CategoriaID);
 
-                _FornecedorService.CreateNewFornecedor(Fornecedor);
+                _fornecedorService.CreateNewFornecedor(fornecedor);
+
+                if (fornecedor.IDIdentificacao > 0)
+                {
+                    var fornecedorPai = _fornecedorService.GetFornecedorById(fornecedor.IDIdentificacao);
+
+                    var fornecedorIndicado = new FornecedorIndicado()
+                    {
+                        FornecedorID = fornecedorPai.FornecedorID, 
+                        FornecedorPai = fornecedorPai,
+                        NomeFornecedor = fornecedor.Nome,
+                        TotalAReceber = 0
+                    };
+
+                    _fornecedorIndicadoService.CreateNewFornecedorIndicado(fornecedorIndicado);
+                }
 
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
                 return View();
@@ -96,7 +114,7 @@ namespace HojeEuCaso.Controllers
         // GET: UsuariosController/Edit/5
         public ActionResult Edit(int ID)
         {
-            var fornecedor = _FornecedorService.GetFornecedorById(ID);
+            var fornecedor = _fornecedorService.GetFornecedorById(ID);
             ViewBag.Fornecedor = fornecedor;
 
             var cidades = _cidadeService.GetAllCidades();
@@ -154,7 +172,7 @@ namespace HojeEuCaso.Controllers
                 Fornecedor.Categoria = categoria;
                 ViewBag.Categoria = categoria;
 
-                _FornecedorService.UpdateFornecedor(Fornecedor);
+                _fornecedorService.UpdateFornecedor(Fornecedor);
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 ViewBag.Fornecedor = Fornecedor;
                 return View();
@@ -172,7 +190,7 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                _FornecedorService.DeleteFornecedor(id);
+                _fornecedorService.DeleteFornecedor(id);
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 return RedirectToAction("Index");
             }

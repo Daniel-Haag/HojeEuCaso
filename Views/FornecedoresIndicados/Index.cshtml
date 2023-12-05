@@ -14,14 +14,13 @@
         <div class="card shadow">
             <div class="card-body">
                 <div class="table-responsive">
-                    <a href="/FornecedoresIndicados/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
+                    @*<a href="/FornecedoresIndicados/Create" class="btn btn-primary btn-sm float-right" style="margin-left: 5%;">
                         <i class="fas fa-plus"></i> Novo
-                    </a>
+                    </a>*@
                     <table id="listagem" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Seleção</th>
-                                <th>ID</th>
                                 <th>Fornecedor Pai</th>
                                 <th>Fornecedor</th>
                                 <th>Total a Receber</th>
@@ -36,7 +35,6 @@
                                         <td>
                                             <input type="checkbox" name="selecao[]" value="@fornecedor.FornecedorIndicadoID">
                                         </td>
-                                        <td>@fornecedor.FornecedorIndicadoID</td>
                                         <td>@fornecedor.FornecedorPai.Nome</td>
                                         <td>@fornecedor.NomeFornecedor</td>
                                         <td>@string.Format("R$ {0:N2}", fornecedor.TotalAReceber)</td>
