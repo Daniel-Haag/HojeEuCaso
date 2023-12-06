@@ -20,9 +20,9 @@ namespace HojeEuCaso.Dtos
         {
             get
             {                
-                string[] valorNumerico = PrecoString.Split('$');
+                string[] valorNumerico = PrecoString?.Split('$');
 
-                if (valorNumerico.Length == 2)
+                if (valorNumerico?.Length == 2)
                 {
                     if (decimal.TryParse(valorNumerico[1], out decimal precoDecimal))
                     {

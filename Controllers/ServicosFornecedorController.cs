@@ -664,6 +664,12 @@ namespace HojeEuCaso.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult SolicitaDadosPagamentoPlano()
+        {
+            return View();
+        }
+
         private void SetData()
         {
             ViewBag.Pacotes = _pacoteService.GetAllPacotes();
