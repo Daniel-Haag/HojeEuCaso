@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using HojeEuCaso.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Globalization;
 
 namespace HojeEuCaso.Dtos
 {
@@ -10,7 +13,26 @@ namespace HojeEuCaso.Dtos
         public int PacoteID { get; set; }
         public string Titulo { get; set; }
         public string Subtitulo { get; set; }
-        public decimal Preco { get; set; }
+
+        [Required(ErrorMessage = "O campo Preço é obrigatório.")]
+        public string PrecoString { get; set; }
+        public decimal? Preco
+        {
+            get
+            {                
+                string[] valorNumerico = PrecoString.Split('$');
+
+                if (valorNumerico.Length == 2)
+                {
+                    if (decimal.TryParse(valorNumerico[1], out decimal precoDecimal))
+                    {
+                        return precoDecimal;
+                    }
+                }
+
+                return 0; 
+            }
+        }
         public decimal ReajusteAnualPorcentagem { get; set; }
         public decimal DescontoSegundaFeira { get; set; }
         public decimal DescontoTercaFeira { get; set; }

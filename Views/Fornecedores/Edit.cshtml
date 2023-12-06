@@ -322,15 +322,15 @@
                             </div>
 
                             <label asp-for="DisponivelParaRecebimento">Disponível para recebimento</label>
-                            <input type="text" asp-for="DisponivelParaRecebimento" class="form-control" id="disponivelRecebimento" oninput="RetiraPonto('disponivelRecebimento')" value="@string.Format("{0:N2}", @ViewBag.Fornecedor.DisponivelParaRecebimento)" />
+                            <input type="text" asp-for="DisponivelParaRecebimento" class="form-control" id="disponivelRecebimento" oninput="formatarMoeda(this)" value="@string.Format("{0:N2}", @ViewBag.Fornecedor.DisponivelParaRecebimento)" />
                             <span asp-validation-for="DisponivelParaRecebimento" class="text-danger"></span>
 
                             <label asp-for="TotalRecebido">Total Recebido</label>
-                            <input type="text" asp-for="TotalRecebido" class="form-control" id="totalRecebido" oninput="RetiraPonto('totalRecebido')" value="@string.Format("{0:N2}", @ViewBag.Fornecedor.TotalRecebido)" />
+                            <input type="text" asp-for="TotalRecebido" class="form-control" id="totalRecebido" oninput="formatarMoeda(this)" value="@string.Format("{0:N2}", @ViewBag.Fornecedor.TotalRecebido)" />
                             <span asp-validation-for="TotalRecebido" class="text-danger"></span>
 
                             <label asp-for="TotalAReceber">Total à Receber</label>
-                            <input type="text" asp-for="TotalAReceber" class="form-control" id="totalAReceber" oninput="RetiraPonto('totalAReceber')" value="@string.Format("{0:N2}", @ViewBag.Fornecedor.TotalAReceber)" />
+                            <input type="text" asp-for="TotalAReceber" class="form-control" id="totalAReceber" oninput="formatarMoeda(this)" value="@string.Format("{0:N2}", @ViewBag.Fornecedor.TotalAReceber)" />
                             <span asp-validation-for="TotalAReceber" class="text-danger"></span>
 
                         </div>

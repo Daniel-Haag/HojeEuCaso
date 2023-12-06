@@ -73,7 +73,7 @@
                             <span asp-validation-for="Titulo" class="text-danger"></span>
 
                             <label asp-for="Preco">Preço</label>
-                            <input type="text" asp-for="Preco" class="form-control" id="precoInput" oninput="RetiraPonto('precoInput')" />
+                            <input type="text" asp-for="Preco" class="form-control" id="precoInput" oninput="formatarMoeda(this)" />
                             <span asp-validation-for="Preco" class="text-danger"></span>
 
                             <label asp-for="PeriodoRenovacao">Periodo de Renovação</label>

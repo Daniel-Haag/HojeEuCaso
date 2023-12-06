@@ -251,15 +251,15 @@
                             <span asp-validation-for="CidadeID" class="text-danger"></span>
 
                             <label asp-for="DisponivelParaRecebimento">Disponível para recebimento</label>
-                            <input type="text" asp-for="DisponivelParaRecebimento" class="form-control" id="disponivelRecebimento" oninput="RetiraPonto('disponivelRecebimento')" />
+                            <input type="text" asp-for="DisponivelParaRecebimento" class="form-control" id="disponivelRecebimento" oninput="formatarMoeda(this)" />
                             <span asp-validation-for="DisponivelParaRecebimento" class="text-danger"></span>
 
                             <label asp-for="TotalRecebido">Total Recebido</label>
-                            <input type="text" asp-for="TotalRecebido" class="form-control" id="totalRecebido" oninput="RetiraPonto('totalRecebido')" />
+                            <input type="text" asp-for="TotalRecebido" class="form-control" id="totalRecebido" oninput="formatarMoeda(this)" />
                             <span asp-validation-for="TotalRecebido" class="text-danger"></span>
 
                             <label asp-for="TotalAReceber">Total à Receber</label>
-                            <input type="text" asp-for="TotalAReceber" class="form-control" id="totalAReceber" oninput="RetiraPonto('totalAReceber')" />
+                            <input type="text" asp-for="TotalAReceber" class="form-control" id="totalAReceber" oninput="formatarMoeda(this)" />
                             <span asp-validation-for="TotalAReceber" class="text-danger"></span>
 
                         </div>

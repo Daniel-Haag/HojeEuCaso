@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Adicionar Serviço";
 }
+
 <style>
 
     input[type=checkbox] {
@@ -296,10 +297,10 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label asp-for="Preco">Preço</label>
+                                            <label asp-for="PrecoString">Preço</label>
                                             <span class="greyFontStyle">(Não visível para o usuário)</span>
-                                            <input asp-for="Preco" class="form-control" id="inputPrecoServico" oninput="RetiraPonto('inputPrecoServico')" />
-                                            <span asp-validation-for="Preco" class="text-danger"></span>
+                                            <input asp-for="PrecoString" class="form-control" id="inputPrecoServico" oninput="formatarMoeda(this)" />
+                                            <span asp-validation-for="PrecoString" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
@@ -581,6 +582,4 @@
         var numeroAnterior = numeroAtual - 1;
         return "Foto" + numeroAnterior;
     }
-
-
 </script>

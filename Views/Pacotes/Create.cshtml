@@ -1,6 +1,6 @@
 ﻿@model Pacote
 @{
-    ViewData["Title"] = "Cadastrar Pacote";
+    ViewData["Title"] = "Cadastrar Serviço";
 }
 <style>
     fade-in-out {
@@ -73,7 +73,7 @@
                             <span asp-validation-for="Titulo" class="text-danger"></span>
 
                             <label asp-for="Preco">Preço</label>
-                            <input type="text" asp-for="Preco" class="form-control" id="inputPrecoPacote" oninput="RetiraPonto('inputPrecoPacote')" />
+                            <input type="text" asp-for="Preco" class="form-control" id="inputPrecoPacote" oninput="formatarMoeda(this)" />
                             <span asp-validation-for="Preco" class="text-danger"></span>
 
                             <label asp-for="QtdMaximaEventosDia">Quantidade Máxima de Eventos por Dia</label>
