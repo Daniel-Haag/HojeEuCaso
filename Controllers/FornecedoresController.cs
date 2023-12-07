@@ -6,6 +6,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Globalization;
 using System.Linq;
+using RestSharp;
+using HojeEuCaso.Dtos;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace HojeEuCaso.Controllers
 {
@@ -84,6 +88,8 @@ namespace HojeEuCaso.Controllers
                 ViewBag.Categorias = categorias;
                 fornecedor.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == fornecedor.CategoriaID);
 
+                fornecedor.AsaasCustomerID = CriaClienteAsaas(fornecedor).Result;
+
                 _fornecedorService.CreateNewFornecedor(fornecedor);
 
                 if (fornecedor.IDIdentificacao > 0)
@@ -92,7 +98,7 @@ namespace HojeEuCaso.Controllers
 
                     var fornecedorIndicado = new FornecedorIndicado()
                     {
-                        FornecedorID = fornecedorPai.FornecedorID, 
+                        FornecedorID = fornecedorPai.FornecedorID,
                         FornecedorPai = fornecedorPai,
                         NomeFornecedor = fornecedor.Nome,
                         TotalAReceber = 0
@@ -199,6 +205,34 @@ namespace HojeEuCaso.Controllers
                 TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return RedirectToAction("Index");
             }
+        }
+
+        private async static Task<string> CriaClienteAsaas(Fornecedor fornecedor)
+        {
+            try
+            {
+                var options = new RestClientOptions("https://sandbox.asaas.com/api/v3/customers");
+                var client = new RestClient(options);
+                var request = new RestRequest("");
+                request.AddHeader("accept", "application/json");
+                request.AddHeader("access_token", "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYyNDY6OiRhYWNoX2ZkNjdjZWY0LTViMmYtNDU2NS1iMTk2LWYyZWEzOGIyMGRjNw==");
+                request.AddJsonBody("{\"name\":\"" + fornecedor.Nome + "\",\"cpfCnpj\":\"" + fornecedor.CPFCNPJResponsavelConta + "\"}", false);
+                var response = await client.PostAsync(request);
+
+                var teste = response.Content;
+
+                string jsonResponse = response.Content;
+                CreateCustomerAsaasResponseDto createCustomerAsaasResponseDto = JsonConvert.DeserializeObject<CreateCustomerAsaasResponseDto>(jsonResponse);
+                string customerID = createCustomerAsaasResponseDto.id;
+
+                return customerID;
+            }
+            catch (Exception e)
+            {
+                string erro = e.Message;
+            }
+
+            return null;
         }
     }
 }

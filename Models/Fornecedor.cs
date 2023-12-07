@@ -53,5 +53,6 @@ namespace HojeEuCaso.Models
         public string CaminhoFoto { get; set; }
         public List<ClausulaContrato> ClausulasContrato { get; set; } 
         public Plano Plano { get; set; }
+        public string AsaasCustomerID { get; set; }
     }
 }
