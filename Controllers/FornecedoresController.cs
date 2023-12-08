@@ -72,6 +72,14 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
+                var fornecedorExistente = _fornecedorService.GetFornecedorByEmail(fornecedor.Email);
+
+                if (fornecedorExistente != null)
+                {
+                    TempData["ErrorMessage"] = "Email já cadastrado!";
+                    return RedirectToAction("Create");
+                }
+
                 var cidades = _cidadeService.GetAllCidades();
                 ViewBag.Cidades = cidades;
                 fornecedor.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.CidadeID);

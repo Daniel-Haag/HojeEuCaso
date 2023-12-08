@@ -41,6 +41,18 @@ namespace HojeEuCaso.Services
                 .FirstOrDefault();
         }
 
+        public Fornecedor GetFornecedorByEmail(string email)
+        {
+            return _HojeEuCasoDbContext.Fornecedores
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
+                .Include(x => x.Pais)
+                .Include(x => x.Categoria)
+                .Include(x => x.Plano)
+                .Where(x => x.Email == email)
+                .FirstOrDefault();
+        }
+
         public Fornecedor GetFornecedorLogin(UsuarioSistema usuarioSistema)
         {
             return _HojeEuCasoDbContext.Fornecedores
