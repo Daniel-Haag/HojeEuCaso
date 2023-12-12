@@ -18,6 +18,9 @@ using Org.BouncyCastle.Asn1.Crmf;
 using RestSharp;
 using System.Threading.Tasks;
 using HojeEuCaso.Services;
+using Newtonsoft.Json;
+using RestSharp;
+using System.Net.Http;
 
 namespace HojeEuCaso.Controllers
 {
@@ -36,6 +39,7 @@ namespace HojeEuCaso.Controllers
         private readonly IPlanoService _planoService;
         private readonly IPaisService _paisService;
         private readonly IFotoServicoService _fotoServicoService;
+        private readonly HttpClient _httpClient;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
                                     IPacoteService pacoteService,
@@ -49,7 +53,8 @@ namespace HojeEuCaso.Controllers
                                     IClausulaContratoService clausulasDeContratoService,
                                     IPlanoService planoService,
                                     IPaisService paisService,
-                                    IFotoServicoService fotoServicoService)
+                                    IFotoServicoService fotoServicoService,
+                                    HttpClient httpClient)
         {
             _logger = logger;
             _pacoteService = pacoteService;
@@ -64,6 +69,7 @@ namespace HojeEuCaso.Controllers
             _planoService = planoService;
             _paisService = paisService;
             _fotoServicoService = fotoServicoService;
+            _httpClient = httpClient;
         }
 
         // GET: PacotesController
@@ -830,6 +836,55 @@ namespace HojeEuCaso.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Erro ao remover a foto." });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CriaBoletoAsaas(int planoID)
+        {
+            try
+            {
+                Plano plano = _planoService.GetPlanoById(planoID);
+                plano.Preco = Math.Round(plano.Preco, 2);
+
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
+                var dataVencimento = DateTime.Now.AddDays(1);
+                string dataFormatada = dataVencimento.ToString("yyyy-MM-dd");
+
+                var options = new RestClientOptions("https://sandbox.asaas.com/api/v3/payments");
+                var client = new RestClient(options);
+                var request = new RestRequest("");
+                request.AddHeader("accept", "application/json");
+                request.AddHeader("access_token", "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYyNDY6OiRhYWNoX2ZkNjdjZWY0LTViMmYtNDU2NS1iMTk2LWYyZWEzOGIyMGRjNw==");
+                request.AddJsonBody(new
+                {
+                    billingType = "BOLETO",
+                    customer = fornecedor.AsaasCustomerID,
+                    dueDate = dataFormatada,
+                    value = plano.Preco
+                });
+
+                var response = await client.PostAsync(request);
+
+                if (response.IsSuccessful)
+                {
+                    string jsonResponse = response.Content;
+                    CreateBoletoAsaasResponseDto createBoletoAsaasResponseDto = JsonConvert.DeserializeObject<CreateBoletoAsaasResponseDto>(jsonResponse);
+
+                    var teste = await _httpClient.GetAsync(createBoletoAsaasResponseDto.BankSlipUrl);
+
+                    return Ok(response.Content);
+                }
+                else
+                {
+                    return BadRequest(response.ErrorMessage);
+                }
+            }
+            catch (Exception e)
+            {
+                string erro = e.Message;
+                return BadRequest(erro);
             }
         }
     }

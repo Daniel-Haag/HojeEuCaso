@@ -10,6 +10,7 @@ using RestSharp;
 using HojeEuCaso.Dtos;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace HojeEuCaso.Controllers
 {
@@ -224,10 +225,15 @@ namespace HojeEuCaso.Controllers
                 var request = new RestRequest("");
                 request.AddHeader("accept", "application/json");
                 request.AddHeader("access_token", "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYyNDY6OiRhYWNoX2ZkNjdjZWY0LTViMmYtNDU2NS1iMTk2LWYyZWEzOGIyMGRjNw==");
-                request.AddJsonBody("{\"name\":\"" + fornecedor.Nome + "\",\"cpfCnpj\":\"" + fornecedor.CPFCNPJResponsavelConta + "\"}", false);
+                request.AddJsonBody(new
+                {
+                    name = fornecedor.Nome,
+                    cpfCnpj = fornecedor.CPFCNPJResponsavelConta,
+                    email = fornecedor.Email,
+                    phone = fornecedor.Telefone,
+                    mobilePhone = fornecedor.Telefone
+                });
                 var response = await client.PostAsync(request);
-
-                var teste = response.Content;
 
                 string jsonResponse = response.Content;
                 CreateCustomerAsaasResponseDto createCustomerAsaasResponseDto = JsonConvert.DeserializeObject<CreateCustomerAsaasResponseDto>(jsonResponse);

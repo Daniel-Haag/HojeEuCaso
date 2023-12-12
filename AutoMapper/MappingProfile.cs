@@ -11,6 +11,7 @@ namespace HojeEuCaso.AutoMapper
             CreateMap<PacoteComItensDoPacoteDto, Pacote>();
             CreateMap<PacoteComItensDoPacoteDto, ItensDePacotes>();
             CreateMap<FornecedorDto, Fornecedor>();
+            CreateMap<PlanoDto, Plano>();
         }
     }
 }

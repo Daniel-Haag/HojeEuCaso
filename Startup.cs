@@ -39,6 +39,8 @@ namespace HojeEuCaso
                 options.IdleTimeout = TimeSpan.FromMinutes(20);
             });
 
+            services.AddHttpClient();
+
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAuthorization(options =>
             {

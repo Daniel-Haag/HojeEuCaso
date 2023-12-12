@@ -30,3 +30,10 @@ function formatarMoeda(input) {
     input.value = formatoMoeda;
 }
 
+function exibirNotificacao(titulo, mensagem) {
+    $("#notificationModalLabel").text(titulo);
+    $("#notificationMessage").text(mensagem);
+
+    $("#notificationModal").modal("show");
+}
+

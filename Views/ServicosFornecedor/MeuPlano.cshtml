@@ -1,4 +1,5 @@
-﻿@model Fornecedor
+﻿@using HojeEuCaso.Dtos;
+@model PlanoDto
 
 @{
     ViewData["Title"] = "Meu Plano";
@@ -98,81 +99,67 @@
             <div class="card shadow" style="margin-top:20px">
                 <div class="card-body">
                     <h5>Plano</h5>
-                    <form asp-action="EditarServico" enctype="multipart/form-data">
-                        <label asp-for="Plano.PlanoID">Escolha seu Plano</label>
+                    <form asp-action="" enctype="multipart/form-data">
+                        <label asp-for="PlanoID">Escolha seu Plano</label>
                         <div class="row">
                             <div class="col-8">
                                 <div class="form-group">
-                                    <select asp-for="Plano.PlanoID" class="form-control">
+                                    <select id="selectPlano" asp-for="PlanoID" class="form-control">
                                         @foreach (var plano in ViewBag.Planos)
                                         {
                                             var isSelected = plano.Titulo == (ViewBag.PlanoAtual?.Titulo ?? "") ? "selected" : "";
-
-                                            if (isSelected == "selected")
-                                            {
-                                                <option value="@plano.Titulo" selected>
-                                                    @plano.Titulo
-                                                </option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@plano.Titulo">
-                                                    @plano.Titulo
-                                                </option>
-                                            }
+                                            <option value="@plano.PlanoID" data-valor="@plano.Preco" isSelected>
+                                                @plano.Titulo
+                                            </option>
                                         }
                                     </select>
-                                    <span asp-validation-for="Plano.PlanoID" class="text-danger"></span>
+                                    <span asp-validation-for="PlanoID" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-1">
-                                <button style="font-size:8px" class="btn btn-danger">Definir<br /> novo plano</button>
+                                <button type="button" id="definirNovoPlano" style="font-size:8px" class="btn btn-danger btn-sm">Definir<br /> novo plano</button>
                             </div>
                         </div>
                         <hr />
                         <div class="row">
                             <div class="col">
-                                <label asp-for="Plano.PlanoID">Plano Selecionado:</label>
-                                <span class="greyFontStyle">teste</span>
-                                <br/>
-                                <label asp-for="Plano.PlanoID">Valor Plano Selecionado:</label>
-                                <span class="greyFontStyle">0000</span>
+                                <label asp-for="PlanoID">Plano Selecionado:</label>
+                                <span id="planoSelecionado" class="greyFontStyle"></span>
+                                <br />
+                                <label asp-for="PlanoID">Valor Plano Selecionado:</label>
+                                <span id="valorSelecionado" class="greyFontStyle"></span>
                             </div>
                         </div>
                         <hr />
-                         <div class="row">
-                           <div class="col">
-                                <label asp-for="Plano.PlanoID">Plano Ativo Vigente:</label>
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="PlanoID">Plano Ativo Vigente:</label>
                                 <span class="greyFontStyle">@((ViewBag.PacoteAtual?.Titulo ?? ""))</span>
-                                <br/>
-                                <label asp-for= "Plano.PlanoID">Valor Plano Vigente:</label>
+                                <br />
+                                <label asp-for="PlanoID">Valor Plano Vigente:</label>
                                 <span class="greyFontStyle">@((double)(ViewBag.PacoteAtual?.Preco ?? 0.0))</span>
                             </div>
                         </div>
                         <div class="card shadow" style="margin-top:10px">
-                            <div class="card-body">
+                            <div class="card-body text-center d-flex flex-column align-items-center">
                                 <h5 style="margin-bottom:-4px">Pagamento</h5>
                                 <span style="margin-bottom:8px" class="greyFontStyle">Selecione um método de pagamento</span>
                                 <hr />
-
                                 <div class="row">
                                     <div class="col-4">
-                                        <a asp-action="SolicitaDadosPagamentoPlano" class="btn btn-secondary">Cartão</a>
+                                        <button id="btnCartao" asp-action="SolicitaDadosPagamentoPlano" class="btn btn-secondary" disabled>Cartão</button>
                                     </div>
-                                     <div class="col-4">
-                                        <a asp-action="Index" class="btn btn-secondary">Boleto</a>
+                                    <div class="col-4">
+                                        <button type="button" id="btnBoleto" class="btn btn-secondary" disabled>Boleto</button>
                                     </div>
-                                     <div class="col-4">
-                                        <a asp-action="Index" style="font-size:8px" class="btn btn-secondary">Cancelar<br/>Assinatura</a>
+                                    <div class="col-4">
+                                        <button asp-action="Index" style="font-size:8px" class="btn btn-secondary">Cancelar<br />Assinatura</button>
                                     </div>
                                 </div>
                                 <hr />
+                                <a id="pdfBoleto" style="display:none" class="btn btn-success btn-sm">Imprimir/ Visualizar PDF</a>
                             </div>
                         </div>
-                        @*<div style="margin-top:10px">
-                            <button type="submit" class="btn btn-danger">Salvar</button>
-                            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-                        </div>*@
                     </form>
                 </div>
             </div>
@@ -180,8 +167,54 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    var planoSelecionado;
+    var valorSelecionado;
+    var planoID;
 
+    $(document).ready(function () {
+        $("#btnBoleto").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/ServicosFornecedor/CriaBoletoAsaas",
+                data: { planoID: planoID },
+                success: function (data) {
+                    var responseData = JSON.parse(data);
+
+                    var pfdBoleto = document.getElementById('pdfBoleto');
+                    pdfBoleto.style.display = 'block';
+
+                    pdfBoleto.href = responseData.bankSlipUrl;
+
+                    exibirNotificacao("Sucesso", "Boleto gerado com sucesso!");
+                },
+                error: function (error) {
+                    exibirNotificacao("Falha", "Erro na geração do boleto!");
+                }
+            });
+        });
+
+        function formatarDinheiro(valor) {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Evento de clique no botão "Definir novo plano"
+        $("#definirNovoPlano").click(function () {
+
+            // Obtendo o planoID do item selecionado no dropdown
+            planoID = $("#selectPlano option:selected").val();
+
+            // Executando outras operações conforme necessário
+            planoSelecionado = $("#selectPlano option:selected").text();
+            valorSelecionado = formatarDinheiro($("#selectPlano option:selected").data("valor"));
+
+            // Atualizando os valores exibidos
+            $("#planoSelecionado").text(planoSelecionado);
+            $("#valorSelecionado").text(valorSelecionado);
+
+            // Habilitando os botões
+            $("#btnCartao").prop("disabled", false);
+            $("#btnBoleto").prop("disabled", false);
+        });
 
         // Verifica se há uma mensagem de sucesso
         var successMessage = $(".alert.alert-success");
