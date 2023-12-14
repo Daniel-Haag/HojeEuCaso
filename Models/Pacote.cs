@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HojeEuCaso.Models
 {
@@ -7,6 +9,7 @@ namespace HojeEuCaso.Models
         public int PacoteID { get; set; }
         public string Titulo { get; set; }
         public string SubTitulo { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }
         public decimal ReajusteAnualPorcentagem { get; set; }
         public decimal DescontoSegundaFeira { get; set; }

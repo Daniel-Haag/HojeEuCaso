@@ -185,10 +185,16 @@
 
                     pdfBoleto.href = responseData.bankSlipUrl;
 
-                    exibirNotificacao("Sucesso", "Boleto gerado com sucesso!");
+                    exibirNotificacao("Contratação via boleto", "Boleto gerado com sucesso!");
+
+                    setTimeout(function () {
+                        exibirNotificacao("Plano", "Novo plano contratado! (Aguardando pagamento do boleto para ativação)");
+                    }, 5000); 
+
+                    exibirNotificacao("Plano", "Novo plano contratado! (Aguardando pagamento do boleto para ativação)");
                 },
                 error: function (error) {
-                    exibirNotificacao("Falha", "Erro na geração do boleto!");
+                    exibirNotificacao("Falha", error.responseText);
                 }
             });
         });

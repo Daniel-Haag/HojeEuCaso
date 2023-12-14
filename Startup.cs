@@ -68,6 +68,7 @@ namespace HojeEuCaso
             services.AddScoped<IPacotesDeUsuariosService, PacotesDeUsuariosService>();
             services.AddScoped<IPaisService, PaisService>();
             services.AddScoped<IFotoServicoService, FotoServicoService>();
+            services.AddScoped<IPlanoFornecedorService, PlanoFornecedorService>();
 
             services.AddScoped<ISessionUsuarioService, SessionUsuarioService>();
 

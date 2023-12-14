@@ -39,6 +39,7 @@ namespace HojeEuCaso.Controllers
         private readonly IPlanoService _planoService;
         private readonly IPaisService _paisService;
         private readonly IFotoServicoService _fotoServicoService;
+        private readonly IPlanoFornecedorService _planoFornecedorService;
         private readonly HttpClient _httpClient;
 
         public ServicosFornecedorController(ILogger<PacotesController> logger,
@@ -54,6 +55,7 @@ namespace HojeEuCaso.Controllers
                                     IPlanoService planoService,
                                     IPaisService paisService,
                                     IFotoServicoService fotoServicoService,
+                                    IPlanoFornecedorService planoFornecedorService,
                                     HttpClient httpClient)
         {
             _logger = logger;
@@ -69,6 +71,7 @@ namespace HojeEuCaso.Controllers
             _planoService = planoService;
             _paisService = paisService;
             _fotoServicoService = fotoServicoService;
+            _planoFornecedorService = planoFornecedorService;
             _httpClient = httpClient;
         }
 
@@ -802,9 +805,6 @@ namespace HojeEuCaso.Controllers
 
                     if (testeClausulaDeContrato != null)
                     {
-                        //testeClausulaDeContrato.PacoteID = pacote.PacoteID;
-                        //testeClausulaDeContrato.Pacote = pacote;
-
                         _clausulasDeContratoService.UpdateClausulaContrato(testeClausulaDeContrato);
                     }
                     else if (testeClausulaDeContrato == null)
@@ -852,11 +852,13 @@ namespace HojeEuCaso.Controllers
                 var dataVencimento = DateTime.Now.AddDays(1);
                 string dataFormatada = dataVencimento.ToString("yyyy-MM-dd");
 
+                //Não esquecer de usar estas configurações no appSettings
                 var options = new RestClientOptions("https://sandbox.asaas.com/api/v3/payments");
                 var client = new RestClient(options);
                 var request = new RestRequest("");
                 request.AddHeader("accept", "application/json");
                 request.AddHeader("access_token", "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYyNDY6OiRhYWNoX2ZkNjdjZWY0LTViMmYtNDU2NS1iMTk2LWYyZWEzOGIyMGRjNw==");
+
                 request.AddJsonBody(new
                 {
                     billingType = "BOLETO",
@@ -872,7 +874,7 @@ namespace HojeEuCaso.Controllers
                     string jsonResponse = response.Content;
                     CreateBoletoAsaasResponseDto createBoletoAsaasResponseDto = JsonConvert.DeserializeObject<CreateBoletoAsaasResponseDto>(jsonResponse);
 
-                    var teste = await _httpClient.GetAsync(createBoletoAsaasResponseDto.BankSlipUrl);
+                    DefineNovoPlanoParaFornecedor(fornecedor.FornecedorID, plano.PlanoID);
 
                     return Ok(response.Content);
                 }
@@ -886,6 +888,63 @@ namespace HojeEuCaso.Controllers
                 string erro = e.Message;
                 return BadRequest(erro);
             }
+        }
+
+        public void DefineNovoPlanoParaFornecedor(int fornecedorID, int planoID)
+        {
+            var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
+            var plano = _planoService.GetPlanoById(planoID);
+
+            var planoFornecedor = _planoFornecedorService.GetAllPlanosFornecedores()
+                .FirstOrDefault(x => x.FornecedorID == fornecedor.FornecedorID);
+
+            if (planoFornecedor != null)
+            {
+                if (!planoFornecedor.Pago)
+                {
+                    throw new Exception("Não é possível atualizar para um novo plano, o atual encontra-se em inadimplência");
+                }
+
+                _planoFornecedorService.DeletePlanoFornecedor(planoFornecedor.PlanoFornecedorID);
+            }
+            else
+            {
+                DateTime dataProximaRenovacao = DateTime.Now;
+
+                var novoPlanoFornecedor = new PlanoFornecedor()
+                {
+                    FornecedorID = fornecedorID,
+                    PlanoID = planoID,
+                    Pago = false
+                };
+
+                if (plano.PeriodoRenovacao == "Mensal")
+                {
+                    novoPlanoFornecedor.DataProximaRenovacao = dataProximaRenovacao.AddMonths(1);
+                }
+                else if (plano.PeriodoRenovacao == "Trienal")
+                {
+                    novoPlanoFornecedor.DataProximaRenovacao = dataProximaRenovacao.AddMonths(3);
+                }
+                else if (plano.PeriodoRenovacao == "Semestral")
+                {
+                    novoPlanoFornecedor.DataProximaRenovacao = dataProximaRenovacao.AddMonths(6);
+                }
+                else if (plano.PeriodoRenovacao == "Anual")
+                {
+                    novoPlanoFornecedor.DataProximaRenovacao = dataProximaRenovacao.AddYears(1);
+                }
+                else if (plano.PeriodoRenovacao == "Licensiamento")
+                {
+                    novoPlanoFornecedor.DataProximaRenovacao = null;
+                }
+                else
+                {
+                    throw new Exception("Não foi selecionado um período de renovação válido!");
+                }
+
+                _planoFornecedorService.CreateNewPlanoFornecedor(novoPlanoFornecedor);
+            }            
         }
     }
 }

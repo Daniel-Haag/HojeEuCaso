@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214014529_createTablePlanoFornecedor")]
+    partial class createTablePlanoFornecedor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -418,7 +420,7 @@ namespace HojeEuCaso.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("QtdMaximaEventosDia")
                         .HasColumnType("int");

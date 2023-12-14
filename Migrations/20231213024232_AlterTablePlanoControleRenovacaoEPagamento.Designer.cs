@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231213024232_AlterTablePlanoControleRenovacaoEPagamento")]
+    partial class AlterTablePlanoControleRenovacaoEPagamento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -418,7 +420,7 @@ namespace HojeEuCaso.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Preco")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("QtdMaximaEventosDia")
                         .HasColumnType("int");
@@ -498,6 +500,12 @@ namespace HojeEuCaso.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DataProximaRenovacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("Pago")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("PeriodoRenovacao")
                         .HasColumnType("longtext");
 
@@ -510,33 +518,6 @@ namespace HojeEuCaso.Migrations
                     b.HasKey("PlanoID");
 
                     b.ToTable("Planos");
-                });
-
-            modelBuilder.Entity("HojeEuCaso.Models.PlanoFornecedor", b =>
-                {
-                    b.Property<int>("PlanoFornecedorID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DataProximaRenovacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("FornecedorID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Pago")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("PlanoID")
-                        .HasColumnType("int");
-
-                    b.HasKey("PlanoFornecedorID");
-
-                    b.HasIndex("FornecedorID");
-
-                    b.HasIndex("PlanoID");
-
-                    b.ToTable("PlanosFornecedores");
                 });
 
             modelBuilder.Entity("HojeEuCaso.Models.Role", b =>
@@ -866,25 +847,6 @@ namespace HojeEuCaso.Migrations
                         .IsRequired();
 
                     b.Navigation("Fornecedor");
-                });
-
-            modelBuilder.Entity("HojeEuCaso.Models.PlanoFornecedor", b =>
-                {
-                    b.HasOne("HojeEuCaso.Models.Fornecedor", "Fornecedor")
-                        .WithMany()
-                        .HasForeignKey("FornecedorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HojeEuCaso.Models.Plano", "Plano")
-                        .WithMany()
-                        .HasForeignKey("PlanoID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Fornecedor");
-
-                    b.Navigation("Plano");
                 });
 
             modelBuilder.Entity("HojeEuCaso.Models.Usuario", b =>
