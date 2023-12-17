@@ -18,6 +18,7 @@ using HojeEuCaso.Models;
 using HojeEuCaso.Interfaces;
 using HojeEuCaso.Services;
 using AutoMapper;
+using HojeEuCaso.BackgroundServices;
 
 namespace HojeEuCaso
 {
@@ -42,6 +43,7 @@ namespace HojeEuCaso
             services.AddHttpClient();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAuthenticatedUser", policy =>
@@ -71,6 +73,8 @@ namespace HojeEuCaso
             services.AddScoped<IPlanoFornecedorService, PlanoFornecedorService>();
 
             services.AddScoped<ISessionUsuarioService, SessionUsuarioService>();
+
+            services.AddHostedService<AsaasBackgroundService>();
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<HojeEuCasoDbContext>(options =>

@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace HojeEuCaso.Services
 {
     public class FornecedorService : IFornecedorService
     {
         private readonly HojeEuCasoDbContext _HojeEuCasoDbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FornecedorService(HojeEuCasoDbContext HojeEuCasoDbContext)
+        public FornecedorService(HojeEuCasoDbContext HojeEuCasoDbContext,
+            IHttpContextAccessor httpContextAccessor)
         {
             _HojeEuCasoDbContext = HojeEuCasoDbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public List<Fornecedor> GetAllFornecedor()
@@ -82,6 +85,7 @@ namespace HojeEuCaso.Services
             }
             catch (Exception e)
             {
+
                 throw new Exception("Erro na atualização deste registro");
             }
         }
@@ -98,6 +102,11 @@ namespace HojeEuCaso.Services
             {
                 throw new Exception("Erro na exclusão deste registro");
             }
+        }
+
+        public int GetLoggedFornecedorID()
+        {
+            return int.Parse(_httpContextAccessor.HttpContext.Session.GetString("FornecedorID"));
         }
     }
 }

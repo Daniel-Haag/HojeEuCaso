@@ -12,10 +12,13 @@ namespace HojeEuCaso.Services
     public class PlanoFornecedorService : IPlanoFornecedorService
     {
         private readonly HojeEuCasoDbContext _HojeEuCasoDbContext;
+        private readonly IFornecedorService _fornecedorService;
 
-        public PlanoFornecedorService(HojeEuCasoDbContext HojeEuCasoDbContext)
+        public PlanoFornecedorService(HojeEuCasoDbContext HojeEuCasoDbContext,
+            IFornecedorService fornecedorService)
         {
             _HojeEuCasoDbContext = HojeEuCasoDbContext;
+            _fornecedorService = fornecedorService;
         }
 
         public List<PlanoFornecedor> GetAllPlanosFornecedores()
@@ -73,6 +76,16 @@ namespace HojeEuCaso.Services
             {
                 throw new Exception("Erro na exclusão deste registro");
             }
+        }
+
+        public void Teste()
+        {
+            var ID = _fornecedorService.GetLoggedFornecedorID();
+            var fornecedor = _fornecedorService.GetFornecedorById(ID);
+            var planoFornecedor = GetAllPlanosFornecedores()
+                .Where(x => x.FornecedorID == ID);
+
+            //Agora com o planoFOrnecedor posso obter a chave da cobrança e solicitar o Status
         }
     }
 }

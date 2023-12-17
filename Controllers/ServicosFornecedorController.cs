@@ -117,7 +117,7 @@ namespace HojeEuCaso.Controllers
         public ActionResult Profile()
         {
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
-            int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+            int fornecedorID = _fornecedorService.GetLoggedFornecedorID();
 
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);

@@ -11,5 +11,6 @@ namespace HojeEuCaso.Interfaces
         public void CreateNewPlanoFornecedor(PlanoFornecedor PlanoFornecedor);
         public void UpdatePlanoFornecedor(PlanoFornecedor PlanoFornecedor);
         public void DeletePlanoFornecedor(int ID);
+        public void Teste();
     }
 }

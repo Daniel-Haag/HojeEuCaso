@@ -11,6 +11,7 @@ using HojeEuCaso.Dtos;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.Threading;
 
 namespace HojeEuCaso.Controllers
 {
@@ -247,6 +248,19 @@ namespace HojeEuCaso.Controllers
             }
 
             return null;
+        }
+
+        public void IniciarAgendamento()
+        {
+            Timer timer = new Timer(ExecutarTarefa, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        }
+
+        private void ExecutarTarefa(object state)
+        {
+            // Lógica a ser executada no agendamento
+            int fornecedorID = _fornecedorService.GetLoggedFornecedorID();
+
+            // ... sua lógica adicional ...
         }
     }
 }
