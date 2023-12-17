@@ -874,7 +874,7 @@ namespace HojeEuCaso.Controllers
                     string jsonResponse = response.Content;
                     CreateBoletoAsaasResponseDto createBoletoAsaasResponseDto = JsonConvert.DeserializeObject<CreateBoletoAsaasResponseDto>(jsonResponse);
 
-                    DefineNovoPlanoParaFornecedor(fornecedor.FornecedorID, plano.PlanoID);
+                    DefineNovoPlanoParaFornecedor(fornecedor.FornecedorID, plano.PlanoID, createBoletoAsaasResponseDto.Id);
 
                     return Ok(response.Content);
                 }
@@ -890,7 +890,7 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        public void DefineNovoPlanoParaFornecedor(int fornecedorID, int planoID)
+        public void DefineNovoPlanoParaFornecedor(int fornecedorID, int planoID, string asaasPaymentID)
         {
             var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
             var plano = _planoService.GetPlanoById(planoID);
@@ -915,9 +915,11 @@ namespace HojeEuCaso.Controllers
                 {
                     FornecedorID = fornecedorID,
                     PlanoID = planoID,
-                    Pago = false
+                    Pago = false,
+                    AsaasPaymentID = asaasPaymentID
                 };
 
+                //Criar enumerador para os periodos de renovação
                 if (plano.PeriodoRenovacao == "Mensal")
                 {
                     novoPlanoFornecedor.DataProximaRenovacao = dataProximaRenovacao.AddMonths(1);

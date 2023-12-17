@@ -12,5 +12,6 @@ namespace HojeEuCaso.Models
         public Plano Plano { get; set; }
         public DateTime? DataProximaRenovacao { get; set; }
         public bool Pago { get; set; }
+        public string AsaasPaymentID { get; set; }
     }
 }
