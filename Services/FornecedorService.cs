@@ -103,10 +103,5 @@ namespace HojeEuCaso.Services
                 throw new Exception("Erro na exclusão deste registro");
             }
         }
-
-        public int GetLoggedFornecedorID()
-        {
-            return int.Parse(_httpContextAccessor.HttpContext.Session.GetString("FornecedorID"));
-        }
     }
 }

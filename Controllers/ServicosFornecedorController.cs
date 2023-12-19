@@ -117,12 +117,12 @@ namespace HojeEuCaso.Controllers
         public ActionResult Profile()
         {
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
-            int fornecedorID = _fornecedorService.GetLoggedFornecedorID();
+            int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
 
-            ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
+            ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor((int)fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
-            var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
+            var fornecedor = _fornecedorService.GetFornecedorById((int)fornecedorID);
 
             var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
@@ -867,6 +867,7 @@ namespace HojeEuCaso.Controllers
                     value = plano.Preco
                 });
 
+                //Está criando o boleto mas caso esteja inadimplente não cria um novo PlanoForncedor, preciso ver isso
                 var response = await client.PostAsync(request);
 
                 if (response.IsSuccessful)
@@ -946,7 +947,7 @@ namespace HojeEuCaso.Controllers
                 }
 
                 _planoFornecedorService.CreateNewPlanoFornecedor(novoPlanoFornecedor);
-            }            
+            }
         }
     }
 }

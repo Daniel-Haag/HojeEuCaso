@@ -6,6 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using RestSharp;
+using HojeEuCaso.Dtos;
+using Newtonsoft.Json;
+using System.Numerics;
 
 namespace HojeEuCaso.Services
 {
@@ -78,14 +82,46 @@ namespace HojeEuCaso.Services
             }
         }
 
-        public void Teste()
+        public async void AtualizaStatusPlanoFornecedorConformeAsaas()
         {
-            var ID = _fornecedorService.GetLoggedFornecedorID();
-            var fornecedor = _fornecedorService.GetFornecedorById(ID);
-            var planoFornecedor = GetAllPlanosFornecedores()
-                .Where(x => x.FornecedorID == ID);
+            try
+            {
+                var options = new RestClientOptions("https://sandbox.asaas.com/api/v3/payments");
+                var client = new RestClient(options);
+                var request = new RestRequest("");
+                request.AddHeader("accept", "application/json");
+                request.AddHeader("access_token", "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjYyNDY6OiRhYWNoX2ZkNjdjZWY0LTViMmYtNDU2NS1iMTk2LWYyZWEzOGIyMGRjNw==");
+                var response = await client.GetAsync(request);
 
-            //Agora com o planoFOrnecedor posso obter a chave da cobrança e solicitar o Status
+                if (response.IsSuccessful)
+                {
+                    string jsonResponse = response.Content;
+                    var responseObject = JsonConvert.DeserializeObject<PagamentoListDto>(jsonResponse);
+                    List<PagamentoAsaasResponseDto> pagamentos = responseObject?.Data ?? new List<PagamentoAsaasResponseDto>();
+
+                    foreach (var pagamento in pagamentos)
+                    {
+                        if (pagamento.Status == "Paid")
+                        {
+                            var planoFornecedor = GetAllPlanosFornecedores().FirstOrDefault(x => x.AsaasPaymentID == pagamento.Id);
+
+                            if (planoFornecedor != null)
+                            {
+                                planoFornecedor.Pago = true;
+                                UpdatePlanoFornecedor(planoFornecedor);
+                            }
+                        }
+                    }
+                }
+
+                Console.WriteLine("{0}", response.Content);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro na rotina de atualização de status dos planos dos fornecedores!");
+            }
+            
+
         }
     }
 }

@@ -24,12 +24,11 @@ namespace HojeEuCaso.BackgroundServices
                 {
                     var serviceProvider = scope.ServiceProvider;
 
-                    // Injete os serviços necessários e execute o método desejado
                     var myService = serviceProvider.GetRequiredService<IPlanoFornecedorService>();
-                    myService.Teste();
+                    myService.AtualizaStatusPlanoFornecedorConformeAsaas();
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(12), stoppingToken);
             }
         }
     }

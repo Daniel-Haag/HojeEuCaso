@@ -13,6 +13,5 @@ namespace HojeEuCaso.Interfaces
         public void CreateNewFornecedor(Fornecedor Fornecedor);
         public void UpdateFornecedor(Fornecedor Fornecedor);
         public void DeleteFornecedor(int ID);
-        public int GetLoggedFornecedorID();
     }
 }
