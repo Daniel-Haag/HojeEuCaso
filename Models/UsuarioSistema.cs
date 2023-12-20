@@ -27,5 +27,6 @@ namespace HojeEuCaso.Models
         public string Bairro { get; set; }
         public string Endereco { get; set; }
         public int Numero { get; set; }
+        public string Role { get; set; }
     }
 }

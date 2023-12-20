@@ -78,6 +78,14 @@
                             <span asp-validation-for="Nome" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Role">Role</label>
+                            <select asp-for="Role" class="form-control" id="selectRole">
+                                <option value="Wed Manager">Wed Manager</option>
+                                <option value="Noivo">Noivo</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Email">Email</label>
                             <input asp-for="Email" class="form-control" value="@ViewBag.Usuario.Email" />
                             <span asp-validation-for="Email" class="text-danger"></span>
@@ -274,6 +282,7 @@
     var valorSelecionadoStatus = '@(ViewBag.Usuario.Status ? "true" : "false")';
     var valorSelecionadoTipo = '@ViewBag.Usuario.Tipo';
     var valorSelecionadoExclusao = '@(ViewBag.Usuario.SolicitouExclusao ? "true" : "false")';
+    var valorSelecionadoRole = '@ViewBag.Usuario.Role';
 
     console.log(valorSelecionadoStatus);
     console.log(valorSelecionadoTipo);
@@ -281,6 +290,10 @@
 
     if (valorSelecionadoStatus) {
         document.getElementById('selectStatus').value = valorSelecionadoStatus;
+    }
+
+    if (valorSelecionadoRole) {
+        document.getElementById('selectRole').value = valorSelecionadoRole;
     }
 
     if (valorSelecionadoTipo) {

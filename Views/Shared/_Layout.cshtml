@@ -346,30 +346,44 @@
                                 <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-home" aria-hidden="true"></i><span style="margin-left:10px;">Início</span></a>
                                 <hr />
                             </li>
-                            <li>
-                                <a asp-area="" asp-controller="ServicosFornecedor" asp-action="Index"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span style="margin-left:10px;">Serviços</span></a>
-                                <hr />
-                            </li>
-                            <li>
-                                <a asp-area="" asp-controller="Agenda" asp-action="Index"><i class="fa fa-calendar-days" aria-hidden="true"></i><span style="margin-left:10px;">Minha Agenda</span></a>
-                                <hr />
-                            </li>
-                            <li>
-                                <a asp-area="" asp-controller="ServicosFornecedor" asp-action="Contrato"><i class="fa fa-handshake" aria-hidden="true"></i><span style="margin-left:10px;">Meu Contrato</span></a>
-                                <hr />
-                            </li>
-                            <li>
-                                <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-dollar" aria-hidden="true"></i><span style="margin-left:10px;">Financeiro</span></a>
-                                <hr />
-                            </li>
-                            <li>
-                                <a asp-area="" asp-controller="ServicosFornecedor" asp-action="MeuPlano"><i class="fa fa-id-card" aria-hidden="true"></i><span style="margin-left:10px;">Meu Plano</span></a>
-                                <hr />
-                            </li>
-                            <li>
-                                <a asp-area="" asp-controller="ServicosFornecedor" asp-action="Profile"><i class="fa fa-user" aria-hidden="true"></i><span style="margin-left:10px;">Perfil</span></a>
-                                <hr />
-                            </li>
+
+                            @{
+                                var role = HttpContextAccessor?.HttpContext?.Session.GetString("Role");
+
+                                if (role == "Fornecedor")
+                                {
+                                    <li>
+                                        <a asp-area="" asp-controller="ServicosFornecedor" asp-action="Index"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span style="margin-left:10px;">Serviços</span></a>
+                                        <hr />
+                                    </li>
+
+                                    <li>
+                                        <a asp-area="" asp-controller="Agenda" asp-action="Index"><i class="fa fa-calendar-days" aria-hidden="true"></i><span style="margin-left:10px;">Minha Agenda</span></a>
+                                        <hr />
+                                    </li>
+
+                                    <li>
+                                        <a asp-area="" asp-controller="ServicosFornecedor" asp-action="Contrato"><i class="fa fa-handshake" aria-hidden="true"></i><span style="margin-left:10px;">Meu Contrato</span></a>
+                                        <hr />
+                                    </li>
+
+                                    <li>
+                                        <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-dollar" aria-hidden="true"></i><span style="margin-left:10px;">Financeiro</span></a>
+                                        <hr />
+                                    </li>
+
+                                    <li>
+                                        <a asp-area="" asp-controller="ServicosFornecedor" asp-action="MeuPlano"><i class="fa fa-id-card" aria-hidden="true"></i><span style="margin-left:10px;">Meu Plano</span></a>
+                                        <hr />
+                                    </li>
+
+                                    <li>
+                                        <a asp-area="" asp-controller="ServicosFornecedor" asp-action="Profile"><i class="fa fa-user" aria-hidden="true"></i><span style="margin-left:10px;">Perfil</span></a>
+                                        <hr />
+                                    </li>
+                                }
+                            }
+
                             <li>
                                 <a href="#" id="nova-site-toggle">
                                     <i class="fa fa-keyboard" aria-hidden="true"></i>

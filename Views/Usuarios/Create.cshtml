@@ -72,6 +72,13 @@
                             <input asp-for="Nome" class="form-control" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
 
+                            <label asp-for="Role">Role</label>
+                            <select asp-for="Role" class="form-control">
+                                <option value="Wed Manager">Wed Manager</option>
+                                <option value="Noivo">Noivo</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+
                             <label asp-for="Email">Email</label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
