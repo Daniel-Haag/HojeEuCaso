@@ -1,0 +1,801 @@
+﻿@using HojeEuCaso.Dtos
+@model PacoteComItensDoPacoteDto
+
+@{
+    ViewData["Title"] = "Editar Serviço";
+}
+<style>
+
+    input[type=checkbox] {
+        accent-color: red;
+    }
+
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    #preview-container {
+        border: 0.5px solid #ff0000; /* Cor vermelha (#ff0000) para a borda */
+        border-radius: 10px; /* Borda levemente arredondada com raio de 10px */
+        padding: 20px; /* Espaçamento interno para conteúdo dentro do contêiner */
+        margin-top: -10px;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <h5>Editar Serviço</h5>
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <form asp-action="EditarServico" enctype="multipart/form-data">
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="PacoteID">ID</label>
+                                    <input asp-for="PacoteID" class="form-control" value="@ViewBag.PacoteAtual.PacoteID" />
+                                    <span asp-validation-for="PacoteID" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="CaminhoFoto">CaminhoFoto</label>
+                                    <input asp-for="CaminhoFoto" class="form-control" value="@ViewBag.CaminhoImagem" />
+                                    <span asp-validation-for="CaminhoFoto" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="CaminhoVideo">CaminhoVideo</label>
+                                    <input asp-for="CaminhoVideo" class="form-control" value="@ViewBag.CaminhoVideo" />
+                                    <span asp-validation-for="CaminhoVideo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="display:none">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="CategoriaID">CategoriaID</label>
+                                    <input asp-for="CategoriaID" class="form-control" value="@ViewBag.PacoteAtual.CategoriaID" />
+                                    <span asp-validation-for="CategoriaID" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Titulo">Titulo</label>
+                                    <select asp-for="Titulo" class="form-control">
+                                        @foreach (var pacote in ViewBag.Pacotes)
+                                        {
+                                            var isSelected = pacote.Titulo == ViewBag.PacoteAtual.Titulo ? "selected" : "";
+
+                                            if (isSelected == "selected")
+                                            {
+                                                <option value="@pacote.Titulo" selected>
+                                                    @pacote.Titulo
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@pacote.Titulo">
+                                                    @pacote.Titulo
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Subtitulo">Subtítulo</label>
+                                    <input asp-for="Subtitulo" class="form-control" value="@ViewBag.PacoteAtual.SubTitulo" />
+                                    <span asp-validation-for="Subtitulo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="QtdMaximaEventosDia">Quantidade máxima deste evento por dia</label>
+                                    <input asp-for="QtdMaximaEventosDia" class="form-control" value="@ViewBag.PacoteAtual.QtdMaximaEventosDia" />
+                                    <span asp-validation-for="QtdMaximaEventosDia" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="QtdMaximaPessoas">Número de convidados</label>
+                                    <input asp-for="QtdMaximaPessoas" class="form-control" value="@ViewBag.PacoteAtual.QtdMaximaPessoas" />
+                                    <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="PaisID">Pais</label>
+                                    <select asp-for="PaisID" class="form-control">
+                                        @foreach (var pais in ViewBag.Paises)
+                                        {
+                                            var isSelected = pais.PaisID == ViewBag.Pais?.PaisID ? "selected" : "";
+
+                                            if (isSelected == "selected")
+                                            {
+                                                <option value="@pais.PaisID" selected>
+                                                    @pais.Nome
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@pais.PaisID">
+                                                    @pais.Nome
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="PaisID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="EstadoID">Estado</label>
+                                    <select asp-for="EstadoID" class="form-control">
+                                        @foreach (var estado in ViewBag.Estados)
+                                        {
+                                            var isSelected = estado.EstadoID == ViewBag.Estado.EstadoID ? "selected" : "";
+
+                                            if (isSelected == "selected")
+                                            {
+                                                <option value="@estado.EstadoID" selected>
+                                                    @estado.Nome
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@estado.EstadoID">
+                                                    @estado.Nome
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="EstadoID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="CidadeID">Cidade</label>
+                                    <select asp-for="CidadeID" class="form-control">
+                                        @foreach (var cidade in ViewBag.Cidades)
+                                        {
+                                            var isSelected = cidade.CidadeID == ViewBag.Cidade.CidadeID ? "selected" : "";
+
+                                            if (isSelected == "selected")
+                                            {
+                                                <option value="@cidade.CidadeID" selected>
+                                                    @cidade.Nome
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@cidade.CidadeID">
+                                                    @cidade.Nome
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CidadeID" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Ativo">Ativo</label>
+                            <div>
+                                <input type="checkbox" asp-for="Ativo" checked="ViewBag.PacoteAtual.Ativo" />
+                                <span asp-validation-for="Ativo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="greyFontStyle">Itens</span>
+                        </div>
+
+                        <div class="itens-container">
+                            <!-- Conteúdo dos pares de inputs será adicionado aqui -->
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <a href="javascript:void(0)" style="color:red" onclick="adicionarItem()"><i class="fa fa-plus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar</span></a>
+                        </div>
+
+                        <div class="card shadow" style="margin-top:10px">
+                            <div class="card-body">
+                                <h5>Fotos e Vídeos</h5>
+
+                                <div class="form-group">
+                                    @*<label for="Foto" class="btn btn-outline-danger mb-2">
+                                    Alterar Foto
+                                    <input type="file" asp-for="Fotos" style="display: none;" id="Foto" onchange="fileSelected('Foto')">
+                                    </label>*@
+
+                                    <label for="Foto1" id="labelFoto1" class="btn btn-outline-danger mb-2">
+                                        Adicionar Foto 1
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto1" onchange="fileSelected('Foto1', 'labelFoto1', 'labelFoto2')" multiple />
+                                    </label>
+                                    <label for="Foto2" id="labelFoto2" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 2
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto2" onchange="fileSelected('Foto2', 'labelFoto2', 'labelFoto3')" multiple />
+                                    </label>
+                                    <label for="Foto3" id="labelFoto3" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 3
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto3" onchange="fileSelected('Foto3', 'labelFoto3', 'labelFoto4')" multiple />
+                                    </label>
+                                    <label for="Foto4" id="labelFoto4" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 4
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto4" onchange="fileSelected('Foto4', 'labelFoto4', 'labelFoto5')" multiple />
+                                    </label>
+                                    <label for="Foto5" id="labelFoto5" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 5
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto5" onchange="fileSelected('Foto5', 'labelFoto5', 'labelFoto6')" multiple />
+                                    </label>
+                                    <label for="Foto6" id="labelFoto6" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 6
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto6" onchange="fileSelected('Foto6', 'labelFoto6', 'labelFoto7')" multiple />
+                                    </label>
+                                    <label for="Foto7" id="labelFoto7" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 7
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto7" onchange="fileSelected('Foto7', 'labelFoto7', 'labelFoto8')" multiple />
+                                    </label>
+                                    <label for="Foto8" id="labelFoto8" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 8
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto8" onchange="fileSelected('Foto8', 'labelFoto8', 'labelFoto9')" multiple />
+                                    </label>
+                                    <label for="Foto9" id="labelFoto9" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 9
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto9" onchange="fileSelected('Foto9', 'labelFoto9', 'labelFoto10')" multiple />
+                                    </label>
+                                    <label for="Foto10" id="labelFoto10" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 10
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto10" onchange="fileSelected('Foto10', 'labelFoto10', 'labelFoto11')" multiple />
+                                    </label>
+                                    <label for="Foto11" id="labelFoto11" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 11
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto11" onchange="fileSelected('Foto11', 'labelFoto11', 'labelFoto12')" multiple />
+                                    </label>
+                                    <label for="Foto12" id="labelFoto12" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 12
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto12" onchange="fileSelected('Foto12, 'labelFoto12', 'labelFoto13')" multiple />
+                                    </label>
+                                    <label for="Foto13" id="labelFoto13" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 13
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto13" onchange="fileSelected('Foto13', 'labelFoto13', 'labelFoto14')" multiple />
+                                    </label>
+                                    <label for="Foto14" id="labelFoto14" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 14
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto14" onchange="fileSelected('Foto14', 'labelFoto14', 'labelFoto15')" multiple />
+                                    </label>
+                                    <label for="Foto15" id="labelFoto15" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 15
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto15" onchange="fileSelected('Foto15', 'labelFoto15', 'labelFoto16')" multiple />
+                                    </label>
+                                    <label for="Foto16" id="labelFoto16" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 16
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto16" onchange="fileSelected('Foto16', 'labelFoto16', 'labelFoto17')" multiple />
+                                    </label>
+                                    <label for="Foto17" id="labelFoto17" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 17
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto17" onchange="fileSelected('Foto17', 'labelFoto17', 'labelFoto18')" multiple />
+                                    </label>
+                                    <label for="Foto18" id="labelFoto18" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 18
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto18" onchange="fileSelected('Foto18', 'labelFoto18', 'labelFoto19')" multiple />
+                                    </label>
+                                    <label for="Foto19" id="labelFoto19" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 19
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto19" onchange="fileSelected('Foto19', 'labelFoto19', 'labelFoto20')" multiple />
+                                    </label>
+                                    <label for="Foto20" id="labelFoto20" class="btn btn-outline-danger mb-2" style="display:none">
+                                        Adicionar Foto 20
+                                        <input type="file" asp-for="Fotos" style="display: none;" id="Foto20" onchange="fileSelected('Foto20', 'labelFoto20', '')" multiple />
+                                    </label>
+
+                                    <label for="Video" class="btn btn-outline-danger mb-2">
+                                        Alterar Vídeo
+                                        <input type="file" asp-for="Video" style="display: none;" id="Video" onchange="fileSelected('Video')">
+                                    </label>
+
+                                    @if (ViewBag.FotosDoServico != null)
+                                    {
+                                        int indice = 0;
+                                        foreach (var fotoServico in ViewBag.FotosDoServico)
+                                        {
+                                            <div>
+                                                <img id="fotoExistente_@indice" src="@Url.Content(fotoServico.CaminhoFoto)" alt="Foto" class="d-block w-100" />
+                                                <div id="botaoRemoverFoto" class="form-group" style="display:block">
+                                                    <a href="javascript:void(0)" style="color:red" onclick="removerFotoExistente(@fotoServico.FotosServicosID, 'fotoExistente_@indice', 'botaoRemoverFoto_@indice')"><i class="fa fa-minus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Remover</span></a>
+                                                </div>
+                                            </div>
+
+                                            indice++;
+                                        }
+                                    }
+
+
+                                    <br />
+                                    <span id="VideoSelected" style="display: none; font-size:10px">Vídeo: <span id="VideoFileName" style="font-size:10px"></span></span>
+                                    <span asp-validation-for="Video" class="text-danger" style="font-size:10px"></span>
+                                </div>
+
+                                <div id="preview-container" style="display:none">
+                                    <span class="greyFontStyle">Novas fotos</span>
+                                    <!-- Container para exibir as prévias dos arquivos -->
+                                    <div id="botaoRemoverFoto" class="form-group" style="display:block">
+                                        <a href="javascript:void(0)" style="color:red" onclick="removerFoto()"><i class="fa fa-minus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Remover</span></a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="visualizacaoVideo">
+                                    <label for="existingVideo">Vídeo:</label>
+                                    @if (!string.IsNullOrEmpty(ViewBag.VideoExistente))
+                                    {
+                                        <div class="d-flex justify-content-center">
+                                            <video class="d-block w-100" controls>
+                                                <source src="@Url.Content(ViewBag.VideoExistente)" type="video/mp4">
+                                                Seu navegador não suporta o elemento de vídeo.
+                                            </video>
+                                        </div>
+                                    }
+                                </div>
+
+                                <span class="greyFontStyle">Vídeo de no máximo 10MB</span>
+                            </div>
+                        </div>
+
+                        <div class="card shadow" style="margin-top:10px">
+                            <div class="card-body">
+                                <h5>Informações sobre valores</h5>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="Preco">Preço</label>
+                                            <span class="greyFontStyle">(Não visível para o usuário)</span>
+                                            <input asp-for="Preco" class="form-control" id="inputPrecoServico" oninput="formatarMoeda(this)" value="@string.Format("{0:F2}",ViewBag.PacoteAtual.Preco)" />
+                                            <span asp-validation-for="Preco" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="ReajusteAnualPorcentagem">Reajuste anual (Em %)</label>
+                                            <input asp-for="ReajusteAnualPorcentagem" class="form-control" value="@((int)ViewBag.PacoteAtual.ReajusteAnualPorcentagem)" />
+                                            <span asp-validation-for="ReajusteAnualPorcentagem" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="greyFontStyle">Descontos por dia (Em %)</span>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoSegundaFeira">Segunda Feira</label>
+                                            <input asp-for="DescontoSegundaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoSegundaFeira)" />
+                                            <span asp-validation-for="DescontoSegundaFeira" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoTercaFeira">Terça Feira</label>
+                                            <input asp-for="DescontoTercaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoTercaFeira)" />
+                                            <span asp-validation-for="DescontoTercaFeira" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoQuartaFeira">Quarta Feira</label>
+                                            <input asp-for="DescontoQuartaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoQuartaFeira)" />
+                                            <span asp-validation-for="DescontoQuartaFeira" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoQuintaFeira">Quinta Feira</label>
+                                            <input asp-for="DescontoQuintaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoQuintaFeira)" />
+                                            <span asp-validation-for="DescontoQuintaFeira" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoSextaFeira">Sexta Feira</label>
+                                            <input asp-for="DescontoSextaFeira" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoSextaFeira)" />
+                                            <span asp-validation-for="DescontoSextaFeira" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoSabado">Sábado</label>
+                                            <input asp-for="DescontoSabado" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoSabado)" />
+                                            <span asp-validation-for="DescontoSabado" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label asp-for="DescontoDomingo">Domingo</label>
+                                            <input asp-for="DescontoDomingo" class="form-control" value="@((int)ViewBag.PacoteAtual.DescontoDomingo)" />
+                                            <span asp-validation-for="DescontoDomingo" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+                        <div style="margin-top:10px">
+                            <button type="submit" class="btn btn-danger">Salvar</button>
+                            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var previewContainer = document.getElementById('preview-container');
+    var fileList = [];
+
+    $(document).ready(function () {
+
+    @if (ViewBag.ItensDePacotes != null)
+    {
+        for (var i = 0; i < ViewBag.ItensDePacotes.Count; i++)
+        {
+            var itemID = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].ItensDePacotesID));
+            var descricao = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].Descricao));
+            var quantidade = @Html.Raw(Json.Serialize(ViewBag.ItensDePacotes[i].Quantidade));
+            <text>
+                    adicionarItem('@itemID', '@descricao', @quantidade);
+            </text>
+        }
+    }
+                // Verifica se há uma mensagem de sucesso
+                var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+
+    //function fileSelected(inputId) {
+    //    const fileInput = document.getElementById(inputId);
+    //    const fileNameSpan = document.getElementById(inputId + 'FileName');
+    //    const selectedSpan = document.getElementById(inputId + 'Selected');
+
+    //    console.log(typeof (inputId));
+
+    //    if (inputId == 'Foto') {
+
+    //        var visualizacaoFoto = document.getElementById('visualizacaoFoto');
+    //        visualizacaoFoto.style.display = 'none';
+    //    }
+
+    //    if (inputId == 'Video') {
+    //        var visualizacaoVideo = document.getElementById('visualizacaoVideo');
+    //        visualizacaoVideo.style.display = 'none';
+    //    }
+
+    //    if (fileInput.files.length > 0) {
+    //        fileNameSpan.innerText = fileInput.files[0].name;
+    //        selectedSpan.style.display = 'inline';
+    //    } else {
+    //        fileNameSpan.innerText = '';
+    //        selectedSpan.style.display = 'none';
+    //    }
+    //}
+
+    function fileSelected(inputId, labelId, sequenceLabelId) {
+
+        console.log('entrou?');
+
+        var fileInput = document.getElementById(inputId);
+        var files = fileInput.files;
+
+        var label = document.getElementById(labelId);
+        var sequenceLabel = document.getElementById(sequenceLabelId);
+
+        var buttonRemovePhoto = document.getElementById('botaoRemoverFoto');
+
+        console.log(buttonRemovePhoto);
+
+        if (inputId != 'Foto20') {
+
+            if (inputId == 'Foto1') {
+                label.classList.remove('d-inline-block');
+                label.style.display = 'none';
+            }
+            else {
+                label.classList.remove('d-inline-block');
+            }
+
+            fileInput.style.display = 'none';
+        }
+
+        if (sequenceLabel != '' && sequenceLabel != null && sequenceLabel != undefined) {
+            sequenceLabel.classList.add('d-inline-block');
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            fileList.push(file); // Adiciona o arquivo à lista
+
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = 'd-block w-100';
+            img.style.marginBottom = '10px';
+
+            // Adicionar a prévia ao container
+            previewContainer.style.display = 'block';
+            previewContainer.appendChild(img);
+        }
+
+        if (fileList.length > 0) {
+            buttonRemovePhoto.style.display = 'block';
+        }
+
+    }
+
+    function removerFoto() {
+        if (fileList.length > 0) {
+
+            var ultimoBotaoVisivel = obterUltimoBotaoVisivel();
+
+            var ultimoLabel = document.getElementById(ultimoBotaoVisivel.label.id);
+            var ultimoInput = document.getElementById(ultimoBotaoVisivel.input.id);
+
+            ultimoInput.value = "";
+
+            var idLabelAnterior = obterLabelIdAnterior(ultimoBotaoVisivel.label.id);
+            var labelAnterior = document.getElementById(idLabelAnterior);
+
+            var idInputAnterior = obterInputIdAnterior(ultimoBotaoVisivel.input.id);
+            var inputAnterior = document.getElementById(idInputAnterior);
+
+            if (inputAnterior != 'Foto1') {
+                labelAnterior.classList.add('d-inline-block');
+
+                ultimoLabel.classList.remove('d-inline-block');
+            }
+
+            fileList.pop();
+            // Removendo a prévia do container
+            var previewContainer = document.getElementById('preview-container');
+            previewContainer.removeChild(previewContainer.lastChild);
+        }
+
+        // Verifica se a lista de arquivos está vazia
+        if (fileList.length === 0) {
+            var buttonRemovePhoto = document.getElementById('botaoRemoverFoto');
+            buttonRemovePhoto.style.display = 'none';
+
+            //Garante que o input inicial esteja vazio
+            var primeiroInput = document.getElementById('Foto1');
+            primeiroInput.value = "";
+
+            // Oculta os demais labels
+            for (var i = 1; i <= 20; i++) {
+                var currentLabel = document.getElementById('labelFoto' + i);
+                var currentInput = document.getElementById('Foto' + i);
+
+                if (currentInput != 'Foto1') {
+                    currentLabel.classList.remove('d-inline-block');
+                    currentInput.style.display = 'none';
+                }
+            }
+
+            // Mostra apenas o primeiro label
+            var labelFoto1 = document.getElementById('labelFoto1');
+            labelFoto1.classList.add('d-inline-block');
+        }
+    }
+
+    function obterUltimoBotaoVisivel() {
+        // Itera de trás para frente através dos botões, começando do último
+        for (var i = 20; i > 0; i--) {
+            var labelId = 'labelFoto' + i;
+            var inputId = 'Foto' + i;
+
+            var label = document.getElementById(labelId);
+            var input = document.getElementById(inputId);
+
+            if (label.classList.contains('d-inline-block')) {
+                return { label: label, input: input };
+            }
+        }
+
+        // Retorna null se nenhum botão visível for encontrado
+        return null;
+    }
+
+    function obterLabelIdAnterior(idAtual) {
+        var numeroAtual = parseInt(idAtual.replace("labelFoto", ""));
+        var numeroAnterior = numeroAtual - 1;
+        return "labelFoto" + numeroAnterior;
+    }
+
+    function obterInputIdAnterior(idAtual) {
+        var numeroAtual = parseInt(idAtual.replace("Foto", ""));
+        var numeroAnterior = numeroAtual - 1;
+        return "Foto" + numeroAnterior;
+    }
+
+
+    var itemCount = @(ViewBag.ItensDePacotes.Count - 1);
+
+    function adicionarItem(ID, descricao, quantidade) {
+        var itensContainer = document.querySelector('.itens-container');
+
+        var itemRows = document.querySelectorAll('.item-row');
+        itemCount = itemRows.length; // Atualiza o contador de itens
+
+        var div = document.createElement("div");
+        div.classList.add("item-row");
+
+        var descricaoLabel = document.createElement("label");
+        descricaoLabel.innerText = "Descrição do Item:";
+        div.appendChild(descricaoLabel);
+
+        var IDInput = document.createElement("input");
+        IDInput.type = "text";
+        IDInput.name = `ItensDePacotes[${itemCount}].ItensDePacotesID`;
+        IDInput.classList.add("form-control");
+        IDInput.value = ID === undefined ? "" : ID.replace(/"/g, "");
+        div.appendChild(IDInput);
+        IDInput.style.display = 'none';
+
+        var descricaoInput = document.createElement("input");
+        descricaoInput.type = "text";
+        descricaoInput.name = `ItensDePacotes[${itemCount}].Descricao`;
+        descricaoInput.classList.add("form-control");
+        descricaoInput.value = descricao === undefined ? "" : descricao.replace(/"/g, "");
+        div.appendChild(descricaoInput);
+
+        var quantidadeLabel = document.createElement("label");
+        quantidadeLabel.innerText = "Quantidade do Item:";
+        div.appendChild(quantidadeLabel);
+
+        var quantidadeInput = document.createElement("input");
+        quantidadeInput.type = "number";
+        quantidadeInput.name = `ItensDePacotes[${itemCount}].Quantidade`;
+        quantidadeInput.classList.add("form-control");
+        quantidadeInput.value = quantidade;
+        div.appendChild(quantidadeInput);
+
+        var removerBotao = document.createElement("a");
+        removerBotao.href = "javascript:void(0)";
+        removerBotao.style.color = "red";
+        removerBotao.innerHTML = "<i class='fa fa-minus-circle' style='margin-right:5px' aria-hidden='true'></i><span class='greyFontStyle'>Remover</span>";
+        removerBotao.onclick = function () {
+            removerItem(div);
+        };
+        div.appendChild(removerBotao);
+
+        itensContainer.appendChild(div);
+    }
+
+    function removerItem(item) {
+        var itensContainer = document.querySelector('.itens-container');
+        itensContainer.removeChild(item);
+    }
+
+    function removerFotoExistente(fotoExistenteID, fotoExistenteElementoID, botaoRemoverFotoID) {
+
+        console.log(fotoExistenteID);
+        console.log(fotoExistenteElementoID);
+
+        var fotoAmostragem = document.getElementById(fotoExistenteElementoID);
+        var botaoRemoverFoto = document.getElementById(botaoRemoverFotoID);
+
+        console.log(fotoAmostragem);
+
+        $.ajax({
+            type: "POST",
+            url: "/ServicosFornecedor/RemoverFotoExistente", // Remova o ID da foto da URL
+            data: { fotoExistenteID: fotoExistenteID }, // Envie o ID da foto como dados na requisição
+            success: function (result) {
+                if (result.success) {
+                    // Atualize a página ou remova a imagem da exibição
+
+                    fotoAmostragem.classList.remove('d-block');
+                    fotoAmostragem.classList.add('d-none');
+                    botaoRemoverFoto.style.display = 'none';
+
+                } else {
+                    alert("Erro ao remover a foto: " + result.message);
+                }
+            },
+            error: function () {
+                alert("Erro ao remover a foto.");
+            }
+        });
+    }
+</script>

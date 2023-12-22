@@ -1,0 +1,132 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+@model Fornecedor;
+
+@{
+    ViewBag.Title = "Perfil";
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pt-BR");
+    System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+    System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <style>
+        @@media (max-width: 767px) {
+            .center-image {
+                display: flex;
+                align-items: center; 
+                justify-content: center; 
+            }
+        }
+
+        .center-image {
+            display: block;
+            margin: 0 auto; 
+        }
+    </style>
+
+</head>
+<body>
+    <div style="display: flex; flex-wrap: wrap">
+
+        <div class="card p-4 shadow mobileCard desktopCard full-width-card" style="margin-top: 20px; flex-grow: 1;">
+            <h2 style="font-weight: 600; font-size: 24px;">Conta</h2>
+            <div class="row">
+
+                <div class="col d-flex flex-column">
+                    @if (!string.IsNullOrEmpty(ViewBag.FotoExistente))
+                    {
+                        <img src="@Url.Content(ViewBag.FotoExistente)" alt="Foto Fornecedor" class="d-block w-50 center-image" />
+                    }
+                    <label style="margin-bottom:-5px">Nome</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Nome</span>
+                    <label style="margin-bottom:-5px">E-mail</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Email</span>
+                    <label style="margin-bottom:-5px">CPF</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.CPF</span>
+                    <label style="margin-bottom:-5px">RG</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.RG</span>
+                    <label style="margin-bottom:-5px">Status</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Status</span>
+                    <label style="margin-bottom:-5px">Tipo</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Tipo</span>
+                    <label style="margin-bottom:-5px">Múltiplos Eventos</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.AceitaMultiplosEventos</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
+            <h2 style="font-weight: 600; font-size: 24px;">Informações Financeiras</h2>
+            <div class="row">
+                <div class="col-5 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Banco</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Banco</span>
+                    <label style="margin-bottom:-5px">Agência</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Agencia</span>
+                    <label style="margin-bottom:-5px">Conta</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">Conta do banco</span>
+                    <label style="margin-bottom:-5px">Tipo de Conta</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.NumeroConta</span>
+                    <label style="margin-bottom:-5px">Titular da Conta</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.ResponsavelConta</span>
+                    <label style="margin-bottom:-5px">CPF / CNPJ do Titular</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.CPFCNPJResponsavelConta</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:1">
+            <h2 style="font-weight: 600; font-size: 24px;">Informações</h2>
+
+            <div class="row">
+                <div class="col-5 d-flex flex-column">
+                    <label style="margin-bottom:-5px">Nome Fantasia</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.NomeFantasia</span>
+                    <label style="margin-bottom:-5px">Endereço</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Endereco</span>
+                    <label style="margin-bottom:-5px">Telefone</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Telefone</span>
+                    <label style="margin-bottom:-5px">Nome Responsável</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.NomeResponsavel</span>
+                    <label style="margin-bottom:-5px">Telefone Responsável</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.TelefoneResponsavel</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 shadow mobileCard desktopCard full-width-card" style="margin-top: 20px; flex-grow:1; width:100%">
+            <h2 style="font-weight: 600; font-size: 24px;">Redes Sociais</h2>
+            <div class="row">
+                <div class="col d-flex flex-column">
+                    <label style="margin-bottom:-5px">Facebook</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Facebook</span>
+                    <label style="margin-bottom:-5px">Instagram</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Instagram</span>
+                    <label style="margin-bottom:-5px">Site</label>
+                    <span style="margin-bottom:8px" class="greyFontStyle">@ViewBag.Fornecedor.Site</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="text-right mt-3 ml-auto">
+            <a href="/ServicosFornecedor/EditarPerfil/@ViewBag.Fornecedor.FornecedorID" class="btn btn-outline-danger">Editar</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<script>
+
+</script>
+

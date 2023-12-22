@@ -1,0 +1,376 @@
+﻿@using HojeEuCaso.Dtos
+@model PacoteComItensDoPacoteDto
+
+@{
+    ViewData["Title"] = "Monte seu Casamento";
+}
+
+<style>
+
+    input[type=checkbox] {
+        accent-color: red;
+    }
+
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5>Geral</h5>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <form id="FormAdicionarServico" asp-action="AdicionarServico" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="Estado">Selecionar Data</label>
+                                <input type="date" asp-for="Estado" class="form-control" />
+                                <span asp-validation-for="Estado" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="PaisID">Pais</label>
+                                    <select asp-for="PaisID" class="form-control">
+                                        @foreach (var pais in ViewBag.Paises)
+                                        {
+                                            <option value="@pais.PaisID">
+                                                @pais.Nome
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="PaisID" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Titulo">Estado</label>
+                                    <div class="input-group" style="display: flex;">
+                                        <select asp-for="Titulo" class="form-control">
+                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
+                                            {
+                                                <option value="@pacote.Titulo">
+                                                    @pacote.Titulo
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Titulo">Cidade</label>
+                                    <div class="input-group" style="display: flex;">
+                                        <select asp-for="Titulo" class="form-control">
+                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
+                                            {
+                                                <option value="@pacote.Titulo">
+                                                    @pacote.Titulo
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="QtdMaximaPessoas">Número de convidados</label>
+                                    <input asp-for="QtdMaximaPessoas" class="form-control" />
+                                    <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label asp-for="Titulo">Escolha seus Fornecedores</label>
+                                    <div class="input-group" style="display: flex;">
+                                        <select asp-for="Titulo" class="form-control">
+                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
+                                            {
+                                                <option value="@pacote.Titulo">
+                                                    @pacote.Titulo
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px">
+                            <button class="btn btn-danger">Montar Casamento</button>
+                            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var previewContainer = document.getElementById('preview-container');
+    var fileList = [];
+
+    $(document).ready(function () {
+        // Verifica se há uma mensagem de sucesso
+        var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+
+    function fileSelected(inputId, labelId, sequenceLabelId) {
+
+        var fileInput = document.getElementById(inputId);
+        var files = fileInput.files;
+
+        var label = document.getElementById(labelId);
+        var sequenceLabel = document.getElementById(sequenceLabelId);
+
+        var buttonRemovePhoto = document.getElementById('botaoRemoverFoto');
+
+        if (inputId != 'Foto20') {
+
+            if (inputId == 'Foto1') {
+                label.classList.remove('d-inline-block');
+                label.style.display = 'none';
+            }
+            else {
+                label.classList.remove('d-inline-block');
+            }
+
+            fileInput.style.display = 'none';
+        }
+
+        if (sequenceLabel != '' && sequenceLabel != null && sequenceLabel != undefined) {
+            sequenceLabel.classList.add('d-inline-block');
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            fileList.push(file); // Adiciona o arquivo à lista
+
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = 'd-block w-100';
+            img.style.marginBottom = '10px';
+
+            // Adicionar a prévia ao container
+            previewContainer.appendChild(img);
+        }
+
+        if (fileList.length > 0) {
+            buttonRemovePhoto.style.display = 'block';
+        }
+
+    }
+
+    var itemCount = -1;
+
+    function adicionarItem() {
+        itemCount++;
+
+        var itensContainer = document.querySelector('.itens-container');
+        var div = document.createElement("div");
+        div.classList.add("item-row");
+
+        var descricaoLabel = document.createElement("label");
+        descricaoLabel.innerText = "Descrição do Item:";
+        div.appendChild(descricaoLabel);
+
+        var descricaoInput = document.createElement("input");
+        descricaoInput.type = "text";
+        descricaoInput.name = "ItensDePacotes[" + itemCount + "].Descricao";
+        descricaoInput.classList.add("form-control");
+        div.appendChild(descricaoInput);
+
+        var quantidadeLabel = document.createElement("label");
+        quantidadeLabel.innerText = "Quantidade do Item:";
+        div.appendChild(quantidadeLabel);
+
+        var quantidadeInput = document.createElement("input");
+        quantidadeInput.type = "number";
+        quantidadeInput.name = "ItensDePacotes[" + itemCount + "].Quantidade";
+        quantidadeInput.classList.add("form-control");
+        div.appendChild(quantidadeInput);
+
+        var removerBotao = document.createElement("a");
+        removerBotao.href = "javascript:void(0)";
+        removerBotao.style.color = "red";
+        removerBotao.innerHTML = "<i class='fa fa-minus-circle' style='margin-right:5px' aria-hidden='true'></i><span class='greyFontStyle'>Remover</span>";
+        removerBotao.onclick = function () {
+            removerItem(div);
+        };
+        div.appendChild(removerBotao);
+
+        itensContainer.appendChild(div);
+    }
+
+    function removerFoto() {
+        if (fileList.length > 0) {
+
+            var ultimoBotaoVisivel = obterUltimoBotaoVisivel();
+
+            var ultimoLabel = document.getElementById(ultimoBotaoVisivel.label.id);
+            var ultimoInput = document.getElementById(ultimoBotaoVisivel.input.id);
+
+            ultimoInput.value = "";
+
+            var idLabelAnterior = obterLabelIdAnterior(ultimoBotaoVisivel.label.id);
+            var labelAnterior = document.getElementById(idLabelAnterior);
+
+            var idInputAnterior = obterInputIdAnterior(ultimoBotaoVisivel.input.id);
+            var inputAnterior = document.getElementById(idInputAnterior);
+
+            if (inputAnterior != 'Foto1') {
+                labelAnterior.classList.add('d-inline-block');
+
+                ultimoLabel.classList.remove('d-inline-block');
+            }
+
+            fileList.pop();
+            // Removendo a prévia do container
+            var previewContainer = document.getElementById('preview-container');
+            previewContainer.removeChild(previewContainer.lastChild);
+        }
+
+        // Verifica se a lista de arquivos está vazia
+        if (fileList.length === 0) {
+            var buttonRemovePhoto = document.getElementById('botaoRemoverFoto');
+            buttonRemovePhoto.style.display = 'none';
+
+            //Garante que o input inicial esteja vazio
+            var primeiroInput = document.getElementById('Foto1');
+            primeiroInput.value = "";
+
+            // Oculta os demais labels
+            for (var i = 1; i <= 20; i++) {
+                var currentLabel = document.getElementById('labelFoto' + i);
+                var currentInput = document.getElementById('Foto' + i);
+
+                if (currentInput != 'Foto1') {
+                    currentLabel.classList.remove('d-inline-block');
+                    currentInput.style.display = 'none';
+                }
+            }
+
+            // Mostra apenas o primeiro label
+            var labelFoto1 = document.getElementById('labelFoto1');
+            labelFoto1.classList.add('d-inline-block');
+        }
+    }
+
+    function obterUltimoBotaoVisivel() {
+        // Itera de trás para frente através dos botões, começando do último
+        for (var i = 20; i > 0; i--) {
+            var labelId = 'labelFoto' + i;
+            var inputId = 'Foto' + i;
+
+            var label = document.getElementById(labelId);
+            var input = document.getElementById(inputId);
+
+            if (label.classList.contains('d-inline-block')) {
+                return { label: label, input: input };
+            }
+        }
+
+        // Retorna null se nenhum botão visível for encontrado
+        return null;
+    }
+
+    function obterLabelIdAnterior(idAtual) {
+        var numeroAtual = parseInt(idAtual.replace("labelFoto", ""));
+        var numeroAnterior = numeroAtual - 1;
+        return "labelFoto" + numeroAnterior;
+    }
+
+    function obterInputIdAnterior(idAtual) {
+        var numeroAtual = parseInt(idAtual.replace("Foto", ""));
+        var numeroAnterior = numeroAtual - 1;
+        return "Foto" + numeroAnterior;
+    }
+</script>

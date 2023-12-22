@@ -1,0 +1,198 @@
+﻿@model ClausulaContrato
+
+@{
+    ViewData["Title"] = "Contrato";
+}
+<style>
+
+    input[type=checkbox] {
+        accent-color: red;
+    }
+
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5>Meu Contrato</h5>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <div>
+                        <span class="greyFontStyle">
+                            Neste espaço você pode incluir cláusulas gerais da sua empresa que se aplicam a todos os seus produtos/serviços.
+                            Estas cláusulas aparecerão no pedido de venda dos noivos.
+                            Utilize este espaço para dar o máximo de informações, obrigações e deveres, tanto da sua empresa, quanto dos contratantes, afim de fechar uma venda com a maior transparência e detalhes possíveis.
+                            Abaixo, pré-cadastramos algumas cláusulas como exemplo. Fique à vontade para alterá-las, excluí-las ou adicionar mais cláusulas conforme o sua preferência.
+                        </span>
+                    </div>
+                    
+
+                    <form asp-action="Contrato" enctype="multipart/form-data">
+
+                        <div style="margin-top:20px">
+                            <span class="greyFontStyle">Cláusulas</span>
+                        </div>
+                        
+                        <div class="itens-container">
+                            <!-- Conteúdo dos pares de inputs será adicionado aqui -->
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <a href="javascript:void(0)" style="color:red" onclick="adicionarItem()"><i class="fa fa-plus-circle" style="margin-right:5px" aria-hidden="true"></i><span class="greyFontStyle">Adicionar Cláusula</span></a>
+                        </div>
+
+                        <div style="margin-top:10px">
+                            <button type="submit" class="btn btn-danger">Salvar</button>
+                            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+    @if (ViewBag.ClausulasDeContrato != null)
+    {
+        for (var i = 0; i < ViewBag.ClausulasDeContrato.Count; i++)
+        {
+            var itemID = @Html.Raw(Json.Serialize(ViewBag.ClausulasDeContrato[i].ClausulaContratoID));
+            var descricao = @Html.Raw(Json.Serialize(ViewBag.ClausulasDeContrato[i].Descricao));
+            <text>
+                    adicionarItem('@itemID', '@descricao');
+            </text>
+        }
+    }
+            // Verifica se há uma mensagem de sucesso
+            var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+
+    var itemCount = @(ViewBag.ClausulasDeContrato.Count - 1);
+
+    function adicionarItem(ID, descricao) {
+        var itensContainer = document.querySelector('.itens-container');
+
+        var itemRows = document.querySelectorAll('.item-row');
+        itemCount = itemRows.length; // Atualiza o contador de itens
+
+        var div = document.createElement("div");
+        div.classList.add("item-row");
+
+        var hr = document.createElement("hr");
+        div.appendChild(hr);
+
+        var descricaoLabel = document.createElement("label");
+        descricaoLabel.innerText = "Descreva a Cláusula:";
+        descricaoLabel.classList.add("greyFontStyle");
+        div.appendChild(descricaoLabel);
+
+        var IDInput = document.createElement("input");
+        IDInput.type = "text";
+        IDInput.name = `ClausulasDeContrato[${itemCount}].ClausulaContratoID`;
+        IDInput.classList.add("form-control");
+        IDInput.value = ID === undefined ? "" : ID.replace(/"/g, "");
+        div.appendChild(IDInput);
+        IDInput.style.display = 'none';
+
+        var descricaoInput = document.createElement("input");
+        descricaoInput.type = "text";
+        descricaoInput.name = `ClausulasDeContrato[${itemCount}].Descricao`;
+        descricaoInput.classList.add("form-control");
+        descricaoInput.value = descricao === undefined ? "" : descricao.replace(/"/g, "");
+        div.appendChild(descricaoInput);
+
+        var removerBotao = document.createElement("a");
+        removerBotao.href = "javascript:void(0)";
+        removerBotao.style.color = "red";
+        removerBotao.innerHTML = "<i class='fa fa-minus-circle' style='margin-right:5px' aria-hidden='true'></i><span class='greyFontStyle'>Remover</span>";
+        removerBotao.onclick = function () {
+            removerItem(div);
+        };
+        div.appendChild(removerBotao);
+
+        itensContainer.appendChild(div);
+    }
+
+    function removerItem(item) {
+        var itensContainer = document.querySelector('.itens-container');
+        itensContainer.removeChild(item);
+    }
+
+</script>

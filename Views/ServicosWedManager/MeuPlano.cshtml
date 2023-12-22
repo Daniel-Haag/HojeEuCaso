@@ -1,0 +1,248 @@
+﻿@using HojeEuCaso.Dtos;
+@model PlanoDto
+
+@{
+    ViewData["Title"] = "Meu Plano";
+}
+<style>
+
+    input[type=checkbox] {
+        accent-color: red;
+    }
+
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h6 style="margin-bottom:20px">Como funcionam os planos?</h6>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <div style="margin-bottom:20px">
+                        <h4 style="margin-bottom: -5px">PLANO SEMESTRAL:</h4>
+                        <span class="greyFontStyle" style="margin-bottom:20px">
+                            Nesta modalidade você paga o valor referente a 6 mensalidades, mas com um desconto de 10%, e seus produtos ficam ativos para venda por 180 dias!
+                        </span>
+                    </div>
+
+                    <div style="margin-bottom:20px">
+                        <h4 style="margin-bottom: -5px">PLANO ANUAL:</h4>
+                        <span class="greyFontStyle" style="margin-bottom:20px">
+                            Nesta modalidade você paga o valor referente a 12 mensalidades, mas com um desconto de 20%, e seus produtos ficam ativos para venda por 365 dias!
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="greyFontStyle" style="margin-bottom:20px">
+                            A renovação de todos os planos é automática, mas você pode cancelar sua assinatura a qualquer momento (extorno do valor do plano já utilizado não disponível).
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow" style="margin-top:20px">
+                <div class="card-body">
+                    <h5>Plano</h5>
+                    <form asp-action="" enctype="multipart/form-data">
+                        <label asp-for="PlanoID">Escolha seu Plano</label>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="form-group">
+                                    <select id="selectPlano" asp-for="PlanoID" class="form-control">
+                                        @foreach (var plano in ViewBag.Planos)
+                                        {
+                                            var isSelected = plano.Titulo == (ViewBag.PlanoAtual?.Titulo ?? "") ? "selected" : "";
+                                            <option value="@plano.PlanoID" data-valor="@plano.Preco" isSelected>
+                                                @plano.Titulo
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="PlanoID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <button type="button" id="definirNovoPlano" style="font-size:8px" class="btn btn-danger btn-sm">Definir<br /> novo plano</button>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="PlanoID">Plano Selecionado:</label>
+                                <span id="planoSelecionado" class="greyFontStyle"></span>
+                                <br />
+                                <label asp-for="PlanoID">Valor Plano Selecionado:</label>
+                                <span id="valorSelecionado" class="greyFontStyle"></span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col">
+                                <label asp-for="PlanoID">Plano Ativo Vigente:</label>
+                                <span class="greyFontStyle">@((ViewBag.PacoteAtual?.Titulo ?? ""))</span>
+                                <br />
+                                <label asp-for="PlanoID">Valor Plano Vigente:</label>
+                                <span class="greyFontStyle">@((double)(ViewBag.PacoteAtual?.Preco ?? 0.0))</span>
+                            </div>
+                        </div>
+                        <div class="card shadow" style="margin-top:10px">
+                            <div class="card-body text-center d-flex flex-column align-items-center">
+                                <h5 style="margin-bottom:-4px">Pagamento</h5>
+                                <span style="margin-bottom:8px" class="greyFontStyle">Selecione um método de pagamento</span>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-4">
+                                        <button id="btnCartao" asp-action="SolicitaDadosPagamentoPlano" class="btn btn-secondary" disabled>Cartão</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" id="btnBoleto" class="btn btn-secondary" disabled>Boleto</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button asp-action="Index" style="font-size:8px" class="btn btn-secondary">Cancelar<br />Assinatura</button>
+                                    </div>
+                                </div>
+                                <hr />
+                                <a id="pdfBoleto" style="display:none" class="btn btn-success btn-sm">Imprimir/ Visualizar PDF</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var planoSelecionado;
+    var valorSelecionado;
+    var planoID;
+
+    $(document).ready(function () {
+        $("#btnBoleto").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/ServicosFornecedor/CriaBoletoAsaas",
+                data: { planoID: planoID },
+                success: function (data) {
+                    var responseData = JSON.parse(data);
+
+                    var pfdBoleto = document.getElementById('pdfBoleto');
+                    pdfBoleto.style.display = 'block';
+
+                    pdfBoleto.href = responseData.bankSlipUrl;
+
+                    exibirNotificacao("Contratação via boleto", "Boleto gerado com sucesso!");
+
+                    setTimeout(function () {
+                        exibirNotificacao("Plano", "Novo plano contratado! (Aguardando pagamento do boleto para ativação)");
+                    }, 5000); 
+
+                    exibirNotificacao("Plano", "Novo plano contratado! (Aguardando pagamento do boleto para ativação)");
+                },
+                error: function (error) {
+                    exibirNotificacao("Falha", error.responseText);
+                }
+            });
+        });
+
+        function formatarDinheiro(valor) {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        // Evento de clique no botão "Definir novo plano"
+        $("#definirNovoPlano").click(function () {
+
+            // Obtendo o planoID do item selecionado no dropdown
+            planoID = $("#selectPlano option:selected").val();
+
+            // Executando outras operações conforme necessário
+            planoSelecionado = $("#selectPlano option:selected").text();
+            valorSelecionado = formatarDinheiro($("#selectPlano option:selected").data("valor"));
+
+            // Atualizando os valores exibidos
+            $("#planoSelecionado").text(planoSelecionado);
+            $("#valorSelecionado").text(valorSelecionado);
+
+            // Habilitando os botões
+            $("#btnCartao").prop("disabled", false);
+            $("#btnBoleto").prop("disabled", false);
+        });
+
+        // Verifica se há uma mensagem de sucesso
+        var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+
+</script>
