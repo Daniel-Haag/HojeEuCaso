@@ -521,6 +521,21 @@
             });
         });
 
+        document.addEventListener("DOMContentLoaded", function () {
+                // Verificando se há uma mensagem de sucesso ou erro no TempData
+                var successMessage = "@TempData["SuccessMessage"]";
+                var errorMessage = "@TempData["ErrorMessage"]";
+
+                // Exibindo a mensagem, se houver
+                if (successMessage) {
+                    exibirNotificacao("Concluído com sucesso!", successMessage );
+                }
+
+                if (errorMessage) {
+                    exibirNotificacao("Erro!", errorMessage);
+                }
+            });
+
         $("#menu-toggle").click(function (e) {
             //$('#logo').toggle();
             e.preventDefault();

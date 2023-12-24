@@ -51,13 +51,23 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                var categorias = _categoriaService.GetAllCategorias();
-                ViewBag.Categorias = categorias;
-                pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
+                string valorNumerico = pacote.PrecoTexto.Replace("R$", "");
+                decimal precoDecimal;
 
-                _pacoteService.CreateNewPacote(pacote);
+                if (decimal.TryParse(valorNumerico, out precoDecimal))
+                {
+                    pacote.Preco = precoDecimal;
+                    var categorias = _categoriaService.GetAllCategorias();
+                    ViewBag.Categorias = categorias;
+                    pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
 
-                TempData["SuccessMessage"] = "Salvo com sucesso!";
+                    _pacoteService.CreateNewPacote(pacote);
+
+                    TempData["SuccessMessage"] = "Salvo com sucesso!";
+                    return View();
+                }
+
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
                 return View();
             }
             catch

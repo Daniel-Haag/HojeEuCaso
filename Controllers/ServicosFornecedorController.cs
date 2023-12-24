@@ -136,13 +136,11 @@ namespace HojeEuCaso.Controllers
             return View();
         }
 
-        // GET: PacotesController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: PacotesController/Create
         public ActionResult Create()
         {
             //Talvez esse método entre em desuso
@@ -162,7 +160,6 @@ namespace HojeEuCaso.Controllers
             return View();
         }
 
-        // POST: PacotesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AdicionarServico(PacoteComItensDoPacoteDto pacoteDto)
@@ -187,9 +184,11 @@ namespace HojeEuCaso.Controllers
 
                 //Como fica a definição de categoria???
                 //Por enquanto vou definir de forma paleativa
+
+                //Definir o serviço pela categoria do fornecedor!
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
-                pacote.Categoria = categorias.FirstOrDefault(/*x => x.CategoriaID == pacote.CategoriaID*/);
+                pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.Fornecedor.CategoriaID);
 
                 //Primeiro criar o pacote para preencher o PacoteID do itensDePacote
                 var pacoteID = _pacoteService.CreateNewPacote(pacote);
@@ -326,7 +325,6 @@ namespace HojeEuCaso.Controllers
             return View();
         }
 
-        // POST: PacotesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditarServico(PacoteComItensDoPacoteDto pacoteDto)
@@ -495,7 +493,6 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        // POST: PacotesController/Delete/5
         public ActionResult Delete(int id)
         {
             try
@@ -674,6 +671,41 @@ namespace HojeEuCaso.Controllers
         }
 
         [HttpGet]
+        public ActionResult DuplicarServico(int ID)
+        {
+            try
+            {
+                var servicoExistente = _pacoteService.GetPacoteById(ID);
+
+                if (servicoExistente != null)
+                {
+                    servicoExistente.PacoteID = 0;
+                    servicoExistente.Categoria = null;
+                    servicoExistente.Fornecedor = null;
+                    servicoExistente.Pais = null;
+                    servicoExistente.Estado = null;
+                    servicoExistente.Cidade = null;
+
+                    _pacoteService.CreateNewPacote(servicoExistente);
+
+                    TempData["SuccessMessage"] = "Salvo com sucesso!";
+
+                    return RedirectToAction("Index", "ServicosFornecedor");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ocorreu um erro!";
+                    return RedirectToAction("Index","ServicosFornecedor");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return RedirectToAction("Index", "ServicosFornecedor");
+            }
+        }
+
+        [HttpGet]
         public ActionResult SolicitaDadosPagamentoPlano()
         {
             return View();
@@ -792,29 +824,6 @@ namespace HojeEuCaso.Controllers
             }
         }
 
-        private void UpdateOrDeleteClausulasDeContrato(Fornecedor fornecedor, List<ClausulaContrato> clausulasDeContrato)
-        {
-            var ClausulasContratoAntesDaEdicao = _clausulasDeContratoService.GetClausulasDeContratosByFornecedorID(fornecedor.FornecedorID);
-
-            if (ClausulasContratoAntesDaEdicao != null)
-            {
-                foreach (var item in ClausulasContratoAntesDaEdicao)
-                {
-                    var testeClausulaDeContrato = clausulasDeContrato
-                        .FirstOrDefault(x => x.ClausulaContratoID == item.ClausulaContratoID);
-
-                    if (testeClausulaDeContrato != null)
-                    {
-                        _clausulasDeContratoService.UpdateClausulaContrato(testeClausulaDeContrato);
-                    }
-                    else if (testeClausulaDeContrato == null)
-                    {
-                        _clausulasDeContratoService.DeleteClausulaContrato(item.ClausulaContratoID);
-                    }
-                }
-            }
-        }
-
         [HttpPost]
         public JsonResult RemoverFotoExistente(int fotoExistenteID)
         {
@@ -888,6 +897,29 @@ namespace HojeEuCaso.Controllers
             {
                 string erro = e.Message;
                 return BadRequest(erro);
+            }
+        }
+
+        private void UpdateOrDeleteClausulasDeContrato(Fornecedor fornecedor, List<ClausulaContrato> clausulasDeContrato)
+        {
+            var ClausulasContratoAntesDaEdicao = _clausulasDeContratoService.GetClausulasDeContratosByFornecedorID(fornecedor.FornecedorID);
+
+            if (ClausulasContratoAntesDaEdicao != null)
+            {
+                foreach (var item in ClausulasContratoAntesDaEdicao)
+                {
+                    var testeClausulaDeContrato = clausulasDeContrato
+                        .FirstOrDefault(x => x.ClausulaContratoID == item.ClausulaContratoID);
+
+                    if (testeClausulaDeContrato != null)
+                    {
+                        _clausulasDeContratoService.UpdateClausulaContrato(testeClausulaDeContrato);
+                    }
+                    else if (testeClausulaDeContrato == null)
+                    {
+                        _clausulasDeContratoService.DeleteClausulaContrato(item.ClausulaContratoID);
+                    }
+                }
             }
         }
 

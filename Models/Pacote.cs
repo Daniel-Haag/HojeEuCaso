@@ -11,6 +11,8 @@ namespace HojeEuCaso.Models
         public string SubTitulo { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }
+        [NotMapped]
+        public string PrecoTexto { get; set; }
         public decimal ReajusteAnualPorcentagem { get; set; }
         public decimal DescontoSegundaFeira { get; set; }
         public decimal DescontoTercaFeira { get; set; }
