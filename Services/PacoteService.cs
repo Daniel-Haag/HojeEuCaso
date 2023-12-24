@@ -27,6 +27,7 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
                 .AsNoTracking()
+                .Where(x => x.Ativo == true)
                 .ToList();
         }
 
@@ -39,7 +40,8 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
                 .AsNoTracking()
-                .Where(x => x.Categoria.CategoriaID == categoriaID)
+                .Where(x => x.Categoria.CategoriaID == categoriaID
+                && x.Ativo == true)
                 .ToList();
         }
 
@@ -51,7 +53,8 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .Where(x => x.PacoteID == ID)
+                .Where(x => x.PacoteID == ID
+                && x.Ativo == true)
                 .AsNoTracking()
                 .FirstOrDefault();
         }
@@ -64,7 +67,8 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .Where(x => x.FornecedorID == fornecedorID && x.Ativo == true)
+                .Where(x => x.FornecedorID == fornecedorID 
+                && x.Ativo == true)
                 .AsNoTracking()
                 .ToList();
         }
