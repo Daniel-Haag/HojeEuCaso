@@ -60,7 +60,7 @@ namespace HojeEuCaso.Controllers
                     var categorias = _categoriaService.GetAllCategorias();
                     ViewBag.Categorias = categorias;
                     pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
-
+                    pacote.Ativo = true;
                     _pacoteService.CreateNewPacote(pacote);
 
                     TempData["SuccessMessage"] = "Salvo com sucesso!";

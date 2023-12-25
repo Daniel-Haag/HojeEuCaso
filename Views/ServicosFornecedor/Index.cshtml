@@ -21,8 +21,6 @@
             {
                 @foreach (var pacote in ViewBag.Pacotes)
                 {
-                    
-
                     var caminhoVideo = pacote.CaminhoVideo?.Replace(ViewBag.Diretorio, "~");
                     caminhoVideo = caminhoVideo?.Replace("\\", "/");
 
@@ -45,25 +43,40 @@
 
                             <div class="carousel-inner">
 
-                                @foreach (var item in fotosPacote)
-                                {
-                                    var caminhoImagem = item.CaminhoFoto?.Replace(ViewBag.Diretorio, "~");
-                                    caminhoImagem = caminhoImagem?.Replace("\\", "/");
+                                @{
+                                    var count = 0;
 
-                                    <div class="carousel-item active">
-                                        <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
-                                    </div>
+                                    @foreach (var item in fotosPacote)
+                                    {
+                                        count++;
+
+                                        var caminhoImagem = item.CaminhoFoto?.Replace(ViewBag.Diretorio, "~");
+                                        caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+                                        if (count == 1 && !string.IsNullOrEmpty(caminhoImagem))
+                                        {
+                                            <div class="carousel-item active">
+                                                <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
+                                            </div>
+                                        }
+                                        else if (!string.IsNullOrEmpty(caminhoImagem))
+                                        {
+                                            <div class="carousel-item">
+                                                <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
+                                            </div>
+                                        }
+                                    }
+
+                                    @if (!string.IsNullOrEmpty(caminhoVideo))
+                                    {
+                                        <div class="carousel-item">
+                                            <video controls>
+                                                <source src="@Url.Content(caminhoVideo)" type="video/mp4" class="d-block w-100">
+                                                Seu navegador não suporta o elemento de vídeo.
+                                            </video>
+                                        </div>
+                                    }
                                 }
-
-                                <div class="carousel-item">
-
-                                    <video controls>
-                                        <source src="@Url.Content(caminhoVideo)" type="video/mp4" class="d-block w-100">
-                                        Seu navegador não suporta o elemento de vídeo.
-                                    </video>
-
-                                </div>
-
                             </div>
 
                             <a class="carousel-control-prev" href="#@carouselId" role="button" data-slide="prev">
