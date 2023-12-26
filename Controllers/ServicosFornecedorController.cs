@@ -182,13 +182,63 @@ namespace HojeEuCaso.Controllers
                 pacote.Fornecedor = _fornecedorService
                     .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
 
-                //Como fica a definição de categoria???
-                //Por enquanto vou definir de forma paleativa
-
                 //Definir o serviço pela categoria do fornecedor!
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
                 pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.Fornecedor.CategoriaID);
+
+                if (pacoteDto.Fotos != null && pacoteDto.Fotos.Count() >= 1)
+                {
+                    foreach (var item in pacoteDto.Fotos)
+                    {
+                        // Verificação de extensão
+                        string[] allowedImageExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                        string fileExtension = Path.GetExtension(item.FileName).ToLower();
+
+                        if (!allowedImageExtensions.Contains(fileExtension))
+                        {
+                            TempData["ErrorMessage"] = "Um dos arquivos não é um arquivo de imagem válido.";
+                            ModelState.AddModelError("Foto", "Um dos arquivos não é um arquivo de imagem válido.");
+                            return RedirectToAction("AdicionarServico");
+                        }
+
+                        long maxFileSize = 10 * 1024 * 1024; // 10MB
+
+                        if (item.Length > maxFileSize)
+                        {
+                            TempData["ErrorMessage"] = "O tamanho da foto excede o limite de 10MB.";
+
+                            ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                            return RedirectToAction("AdicionarServico");
+                        }
+                    }
+                }
+
+                if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
+                {
+                    // Verificação de extensão
+                    string[] allowedVideoExtensions = { ".mp4", ".avi", ".mkv", ".mov" };
+                    string videoExtension = Path.GetExtension(pacoteDto.Video.FileName).ToLower();
+
+                    if (!allowedVideoExtensions.Contains(videoExtension))
+                    {
+                        TempData["ErrorMessage"] = "O arquivo de vídeo não é um arquivo válido.";
+
+                        ModelState.AddModelError("Video", "O arquivo de vídeo não é um arquivo válido.");
+                        return RedirectToAction("AdicionarServico");
+                    }
+
+                    long maxVideoSize = 10 * 1024 * 1024; // 10MB
+                    if (pacoteDto.Video.Length > maxVideoSize)
+                    {
+                        TempData["ErrorMessage"] = "O tamanho do vídeo excede o limite de 10MB.";
+
+                        ModelState.AddModelError("Video", "O tamanho do vídeo excede o limite de 10MB.");
+                        return RedirectToAction("AdicionarServico");
+                    }
+
+                    CopyVideoStream(pacoteDto);
+                }
 
                 //Primeiro criar o pacote para preencher o PacoteID do itensDePacote
                 var pacoteID = _pacoteService.CreateNewPacote(pacote);
@@ -208,14 +258,6 @@ namespace HojeEuCaso.Controllers
                     {
                         var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + item.FileName);
 
-                        long maxFileSize = 10 * 1024 * 1024; // 10MB
-
-                        if (item.Length > maxFileSize)
-                        {
-                            ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
-                            return View();
-                        }
-
                         FotosServicos fotoServico = new FotosServicos()
                         {
                             PacoteID = pacoteID,
@@ -229,18 +271,6 @@ namespace HojeEuCaso.Controllers
                             CopyPhotoStream(caminhoFoto, item);
                         }
                     }
-                }
-
-                if (pacoteDto.Video != null && pacoteDto.Video.Length > 0)
-                {
-                    long maxVideoSize = 10 * 1024 * 1024; // 10MB
-                    if (pacoteDto.Video.Length > maxVideoSize)
-                    {
-                        ModelState.AddModelError("Video", "O tamanho do vídeo excede o limite de 10MB.");
-                        return View();
-                    }
-
-                    CopyVideoStream(pacoteDto);
                 }
 
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
@@ -695,7 +725,7 @@ namespace HojeEuCaso.Controllers
                 else
                 {
                     TempData["ErrorMessage"] = "Ocorreu um erro!";
-                    return RedirectToAction("Index","ServicosFornecedor");
+                    return RedirectToAction("Index", "ServicosFornecedor");
                 }
             }
             catch (Exception ex)
@@ -980,6 +1010,17 @@ namespace HojeEuCaso.Controllers
 
                 _planoFornecedorService.CreateNewPlanoFornecedor(novoPlanoFornecedor);
             }
+        }
+
+        private void DesfazerItensDoPacoteEPacote(Pacote pacote, List<ItensDePacotes> itensDePacotes, int pacoteID)
+        {
+            foreach (var itemDePacote in itensDePacotes)
+            {
+                itemDePacote.PacoteID = pacoteID;
+                _itensDePacotesService.DeleteItensDePacotes(itemDePacote.ItensDePacotesID);
+            }
+
+            _pacoteService.DeletePacote(pacote.PacoteID);
         }
     }
 }

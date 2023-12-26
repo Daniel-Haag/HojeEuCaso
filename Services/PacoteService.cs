@@ -53,10 +53,9 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .Where(x => x.PacoteID == ID
-                && x.Ativo == true)
                 .AsNoTracking()
-                .FirstOrDefault();
+                .FirstOrDefault(x => x.PacoteID == ID
+                && x.Ativo == true);
         }
 
         public List<Pacote> GetPacoteByFornecedor(int fornecedorID)
@@ -107,6 +106,9 @@ namespace HojeEuCaso.Services
             try
             {
                 var pacote = GetPacoteById(ID);
+
+                _HojeEuCasoDbContext.Entry(pacote).State = EntityState.Detached;
+
                 pacote.Ativo = false;
                 _HojeEuCasoDbContext.Pacotes.Update(pacote);
                 _HojeEuCasoDbContext.SaveChanges();
