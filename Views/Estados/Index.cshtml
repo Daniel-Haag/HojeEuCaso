@@ -23,6 +23,7 @@
                                 <th>ID</th>
                                 <th>UF</th>
                                 <th>Nome</th>
+                                <th>País</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -37,6 +38,7 @@
                                         <td>@estado.EstadoID</td>
                                         <td>@estado.UF</td>
                                         <td>@estado.Nome</td>
+                                        <td>@estado.Pais?.Nome</td>
                                         <td>
                                             <a href="/Estados/Edit/@estado.EstadoID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar

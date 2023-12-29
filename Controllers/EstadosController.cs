@@ -1,5 +1,6 @@
 ﻿using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
+using HojeEuCaso.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,11 +12,16 @@ namespace HojeEuCaso.Controllers
     {
         private readonly ILogger<EstadosController> _logger;
         private readonly IEstadoService _EstadoService;
+        private readonly IPaisService _paisService;
 
-        public EstadosController(ILogger<EstadosController> logger, IEstadoService EstadoService)
+        public EstadosController(
+            ILogger<EstadosController> logger,
+            IEstadoService EstadoService,
+            IPaisService paisService)
         {
             _logger = logger;
             _EstadoService = EstadoService;
+            _paisService = paisService;
         }
 
         // GET: EstadosController
@@ -34,6 +40,8 @@ namespace HojeEuCaso.Controllers
         // GET: EstadosController/Create
         public ActionResult Create()
         {
+            ViewBag.Paises = _paisService.GetAllPaises();
+
             TempData["SuccessMessage"] = null;
             return View();
         }
@@ -46,9 +54,12 @@ namespace HojeEuCaso.Controllers
             try
             {
                 _EstadoService.CreateNewEstado(Estado);
+
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
+
+                ViewBag.Paises = _paisService.GetAllPaises();
+
                 return View();
-                //return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -60,7 +71,14 @@ namespace HojeEuCaso.Controllers
         // GET: EstadosController/Edit/5
         public ActionResult Edit(int ID)
         {
-            ViewBag.Estado = _EstadoService.GetEstadoById(ID);
+            var estado = _EstadoService.GetEstadoById(ID);
+            ViewBag.Estado = estado;
+
+            var paises = _paisService.GetAllPaises();
+            ViewBag.Paises = paises;
+
+            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == estado.PaisID);
+
             return View();
         }
 
@@ -74,6 +92,11 @@ namespace HojeEuCaso.Controllers
                 _EstadoService.UpdateEstado(Estado);
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 ViewBag.Estado = Estado;
+
+                var paises = _paisService.GetAllPaises();
+                ViewBag.Paises = paises;
+
+                ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == Estado.PaisID);
                 return View();
             }
             catch

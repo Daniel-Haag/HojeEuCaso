@@ -81,6 +81,28 @@
                             <label asp-for="Nome">Nome</label>
                             <input asp-for="Nome" class="form-control" value="@ViewBag.Estado.Nome" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
+
+                            <label asp-for="PaisID">País</label>
+                            <select asp-for="PaisID" class="form-control">
+                                @foreach (var pais in ViewBag.Paises)
+                                {
+                                    var isSelected = pais.PaisID == ViewBag.Pais?.PaisID ? "selected" : "";
+
+                                    if (isSelected == "selected")
+                                    {
+                                        <option value="@pais.PaisID" selected>
+                                            @pais.Nome
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@pais.PaisID">
+                                            @pais.Nome
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="PaisID" class="text-danger"></span>
                         </div>
                         <hr />
                         <!-- Adicione outros campos relevantes aqui, se necessário -->
