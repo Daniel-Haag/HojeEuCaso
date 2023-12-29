@@ -5,6 +5,7 @@ using HojeEuCaso.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace HojeEuCaso.Services
 {
@@ -20,12 +21,14 @@ namespace HojeEuCaso.Services
         public List<Cidade> GetAllCidades()
         {
             return _HojeEuCasoDbContext.Cidades
+                .Include(x => x.Estado)
                 .ToList();
         }
 
         public Cidade GetCidadeById(int ID)
         {
             return _HojeEuCasoDbContext.Cidades
+                .Include(x => x.Estado)
                 .Where(x => x.CidadeID == ID)
                 .FirstOrDefault();
         }

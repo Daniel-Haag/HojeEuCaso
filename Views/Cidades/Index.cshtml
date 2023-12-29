@@ -23,6 +23,7 @@
                                 <th>Seleção</th>
                                 <th>ID</th>
                                 <th>Nome</th>
+                                <th>Estado</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -36,6 +37,7 @@
                                         </td>
                                         <td>@cidade.CidadeID</td>
                                         <td>@cidade.Nome</td>
+                                        <td>@cidade.Estado?.Nome</td>
                                         <td>
                                             <a href="/Cidades/Edit/@cidade.CidadeID" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-edit"></i> Editar

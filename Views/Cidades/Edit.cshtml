@@ -72,11 +72,34 @@
                             <label asp-for="CidadeID">Nome da Cidade</label>
                             <input asp-for="CidadeID" class="form-control" value="@ViewBag.Cidade.CidadeID" />
                             <span asp-validation-for="CidadeID" class="text-danger"></span>
-                         </div>
+                        </div>
                         <div class="form-group">
                             <label asp-for="Nome">Nome da Cidade</label>
-                            <input asp-for="Nome" class="form-control" value="@ViewBag.Cidade.Nome"/>
+                            <input asp-for="Nome" class="form-control" value="@ViewBag.Cidade.Nome" />
                             <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="EstadoID">Estado</label>
+                            <select asp-for="EstadoID" class="form-control">
+                                @foreach (var estado in ViewBag.Estados)
+                                {
+                                    var isSelected = estado.EstadoID == ViewBag.Estado?.EstadoID ? "selected" : "";
+
+                                    if (isSelected == "selected")
+                                    {
+                                        <option value="@estado.EstadoID" selected>
+                                            @estado.Nome
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@estado.EstadoID">
+                                            @estado.Nome
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="EstadoID" class="text-danger"></span>
                         </div>
                         <hr />
                         <!-- Adicione outros campos relevantes aqui, se necessário -->

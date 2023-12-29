@@ -3,14 +3,16 @@ using System;
 using HojeEuCaso.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HojeEuCaso.Migrations
 {
     [DbContext(typeof(HojeEuCasoDbContext))]
-    partial class HojeEuCasoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231229005812_AlterTableCidadeAddEstado")]
+    partial class AlterTableCidadeAddEstado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,15 +133,10 @@ namespace HojeEuCaso.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("PaisID")
-                        .HasColumnType("int");
-
                     b.Property<string>("UF")
                         .HasColumnType("longtext");
 
                     b.HasKey("EstadoID");
-
-                    b.HasIndex("PaisID");
 
                     b.ToTable("Estados");
                 });
@@ -762,15 +759,6 @@ namespace HojeEuCaso.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Fornecedor");
-                });
-
-            modelBuilder.Entity("HojeEuCaso.Models.Estado", b =>
-                {
-                    b.HasOne("HojeEuCaso.Models.Pais", "Pais")
-                        .WithMany()
-                        .HasForeignKey("PaisID");
-
-                    b.Navigation("Pais");
                 });
 
             modelBuilder.Entity("HojeEuCaso.Models.Fornecedor", b =>

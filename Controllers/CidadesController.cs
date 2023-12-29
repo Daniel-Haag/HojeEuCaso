@@ -11,17 +11,24 @@ namespace HojeEuCaso.Controllers
     {
         private readonly ILogger<CidadesController> _logger;
         private readonly ICidadeService _cidadeService;
+        private readonly IEstadoService _estadoService;
 
-        public CidadesController(ILogger<CidadesController> logger, ICidadeService cidadeService)
+        public CidadesController(
+            ILogger<CidadesController> logger,
+            ICidadeService cidadeService,
+            IEstadoService estadoService)
         {
             _logger = logger;
             _cidadeService = cidadeService;
+            _estadoService = estadoService;
         }
 
         // GET: CidadesController
         public ActionResult Index()
         {
-            ViewBag.Cidades = _cidadeService.GetAllCidades().ToList();
+            var teste = _cidadeService.GetAllCidades();
+
+            ViewBag.Cidades = _cidadeService.GetAllCidades();
             return View();
         }
 
@@ -34,6 +41,8 @@ namespace HojeEuCaso.Controllers
         // GET: CidadesController/Create
         public ActionResult Create()
         {
+            ViewBag.Estados = _estadoService.GetAllEstados();
+
             TempData["SuccessMessage"] = null;
             return View();
         }
@@ -46,9 +55,12 @@ namespace HojeEuCaso.Controllers
             try
             {
                 _cidadeService.CreateNewCidade(cidade);
+
                 TempData["SuccessMessage"] = "Salvo com sucesso!";
-                return View();
-                //return RedirectToAction(nameof(Index));
+
+                ViewBag.Estados = _estadoService.GetAllEstados();
+
+                return View();            
             }
             catch
             {
@@ -60,7 +72,14 @@ namespace HojeEuCaso.Controllers
         // GET: CidadesController/Edit/5
         public ActionResult Edit(int ID)
         {
-            ViewBag.Cidade = _cidadeService.GetCidadeById(ID);
+            var cidade = _cidadeService.GetCidadeById(ID);
+            ViewBag.Cidade = cidade;
+
+            var estados = _estadoService.GetAllEstados();
+            ViewBag.Estados = estados;
+
+            ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == cidade.EstadoID);
+
             return View();
         }
 
@@ -74,6 +93,12 @@ namespace HojeEuCaso.Controllers
                 _cidadeService.UpdateCidade(cidade);
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
                 ViewBag.Cidade = cidade;
+
+                var estados = _estadoService.GetAllEstados();
+                ViewBag.Estados = estados;
+
+                ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == cidade.EstadoID);
+
                 return View();
             }
             catch
