@@ -417,7 +417,7 @@
                                             @*<li><a asp-area="" asp-controller="Tendencias" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Tendências</a></li>*@
                                             <li><a asp-area="" asp-controller="Usuarios" asp-action="Index" style="margin-left: 25px" class="sub-menu-option">Usuários</a></li>
                                             @*<li><a asp-area="" asp-controller="Feedbacks" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Feedbacks</a></li>
-                                            <li><a asp-area="" asp-controller="Sugestões" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Sugestões</a></li>*@
+                                <li><a asp-area="" asp-controller="Sugestões" asp-action="Index" style="margin-left: 20px" class="sub-menu-option">Sugestões</a></li>*@
                                             <!-- Adicionar mais subseleções conforme necessário -->
                                         </ul>
                                         <hr />
@@ -519,45 +519,44 @@
                 // Mostra o loading durante o envio de formulários
                 $('#loading').show();
             });
+
+            // Seletor do elemento de alternância do menu "Nova Site"
+            var novaSiteToggle = document.getElementById("nova-site-toggle");
+
+            // Evento de clique no elemento de alternância do menu "Nova Site"
+            novaSiteToggle.addEventListener("click", function () {
+                // Selecionando as subseleções
+                var subMenu = novaSiteToggle.nextElementSibling;
+
+                // Alternando a classe "expanded" nas subseleções para expandir ou recolher
+                if (subMenu.classList.contains("expanded")) {
+                    subMenu.classList.remove("expanded");
+                } else {
+                    subMenu.classList.add("expanded");
+                }
+            });
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-                // Verificando se há uma mensagem de sucesso ou erro no TempData
-                var successMessage = "@TempData["SuccessMessage"]";
-                var errorMessage = "@TempData["ErrorMessage"]";
+            // Verificando se há uma mensagem de sucesso ou erro no TempData
+            var successMessage = "@TempData["SuccessMessage"]";
+            var errorMessage = "@TempData["ErrorMessage"]";
 
-                // Exibindo a mensagem, se houver
-                if (successMessage) {
-                    exibirNotificacao("Notificação", successMessage );
-                }
+            // Exibindo a mensagem, se houver
+            if (successMessage) {
+                exibirNotificacao("Notificação", successMessage);
+            }
 
-                if (errorMessage) {
-                    exibirNotificacao("Notificação de erro", errorMessage);
-                }
-            });
+            if (errorMessage) {
+                exibirNotificacao("Notificação de erro", errorMessage);
+            }
+        });
 
         $("#menu-toggle").click(function (e) {
             //$('#logo').toggle();
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
-
-        // Seletor do elemento de alternância do menu "Nova Site"
-        var novaSiteToggle = document.getElementById("nova-site-toggle");
-
-        // Evento de clique no elemento de alternância do menu "Nova Site"
-        novaSiteToggle.addEventListener("click", function () {
-            // Selecionando as subseleções
-            var subMenu = novaSiteToggle.nextElementSibling;
-
-            // Alternando a classe "expanded" nas subseleções para expandir ou recolher
-            if (subMenu.classList.contains("expanded")) {
-                subMenu.classList.remove("expanded");
-            } else {
-                subMenu.classList.add("expanded");
-            }
-        });
-
 
         function hiddenLogo() {
             var logo = document.getElementById("logo");
