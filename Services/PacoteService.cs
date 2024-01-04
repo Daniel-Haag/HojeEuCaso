@@ -58,6 +58,19 @@ namespace HojeEuCaso.Services
                 && x.Ativo == true);
         }
 
+        public Pacote GetPacoteByTitulo(string titulo)
+        {
+            return _HojeEuCasoDbContext.Pacotes
+                .Include(x => x.Fornecedor)
+                .Include(x => x.Categoria)
+                .Include(x => x.Cidade)
+                .Include(x => x.Estado)
+                .Include(x => x.Pais)
+                .AsNoTracking()
+                .FirstOrDefault(x => x.Titulo == titulo
+                && x.Ativo == true);
+        }
+
         public List<Pacote> GetPacoteByFornecedor(int fornecedorID)
         {
             return _HojeEuCasoDbContext.Pacotes
@@ -66,7 +79,7 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .Where(x => x.FornecedorID == fornecedorID 
+                .Where(x => x.FornecedorID == fornecedorID
                 && x.Ativo == true)
                 .AsNoTracking()
                 .ToList();
@@ -106,12 +119,14 @@ namespace HojeEuCaso.Services
             try
             {
                 var pacote = GetPacoteById(ID);
+                if (pacote != null)
+                {
+                    _HojeEuCasoDbContext.Entry(pacote).State = EntityState.Detached;
 
-                _HojeEuCasoDbContext.Entry(pacote).State = EntityState.Detached;
-
-                pacote.Ativo = false;
-                _HojeEuCasoDbContext.Pacotes.Update(pacote);
-                _HojeEuCasoDbContext.SaveChanges();
+                    pacote.Ativo = false;
+                    _HojeEuCasoDbContext.Pacotes.Update(pacote);
+                    _HojeEuCasoDbContext.SaveChanges();
+                }
             }
             catch (Exception e)
             {
