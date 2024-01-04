@@ -61,6 +61,14 @@ namespace HojeEuCaso.Controllers
                     ViewBag.Categorias = categorias;
                     pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
                     pacote.Ativo = true;
+
+                    var titulo = _pacoteService.GetPacoteByTitulo(pacote.Titulo).Titulo;
+                    if (!string.IsNullOrEmpty(titulo))
+                    {
+                        TempData["ErrorMessage"] = "Título já existente para outro serviço!";
+                        return View();
+                    }
+                        
                     _pacoteService.CreateNewPacote(pacote);
 
                     TempData["SuccessMessage"] = "Salvo com sucesso!";
@@ -102,6 +110,8 @@ namespace HojeEuCaso.Controllers
 
                 pacote.Categoria = categoria;
                 ViewBag.Categoria = categoria;
+
+                pacote.Ativo = true;
 
                 _pacoteService.UpdatePacote(pacote);
                 TempData["SuccessMessage"] = "Atualizado com sucesso!";
