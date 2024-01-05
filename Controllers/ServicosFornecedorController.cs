@@ -879,6 +879,36 @@ namespace HojeEuCaso.Controllers
         }
 
         [HttpPost]
+        public JsonResult DefineCamposServico(string titulo)
+        {
+            try
+            {
+                var servico = _pacoteService.GetPacoteByTitulo(titulo);
+
+                if (servico != null)
+                {
+                    return Json(new { success = true,
+                                      preco = servico.Preco.ToString("F2"),
+                                      qtdMaximaEventosDia = servico.QtdMaximaEventosDia,
+                                      numeroConvidados = servico.QtdMaximaPessoas
+                    });
+                }
+                else if (titulo == "---")
+                {
+                    return Json(new { success = false, message = "Nenhum título selecionado!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Erro ao autocompletar alguns campos do serviço." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Erro ao autocompletar alguns campos do serviço." });
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> CriaBoletoAsaas(int planoID)
         {
             try

@@ -81,7 +81,10 @@
                                 <div class="form-group">
                                     <label asp-for="Titulo">Título</label>
                                     <div class="input-group" style="display: flex;">
-                                        <select asp-for="Titulo" class="form-control">
+                                        <select id="campoTituloServico" onchange="atualizaCamposServico()" asp-for="Titulo" class="form-control">
+                                            <option selected value="---">
+                                                ---
+                                            </option>
                                             @foreach (var pacote in ViewBag.PacotesPorCategoria)
                                             {
                                                 <option value="@pacote.Titulo">
@@ -98,7 +101,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label asp-for="Subtitulo">Subtítulo</label>
-                                    <input asp-for="Subtitulo" class="form-control" />
+                                    <input id="campoSubtituloServico" asp-for="Subtitulo" class="form-control" />
                                     <span asp-validation-for="Subtitulo" class="text-danger"></span>
                                 </div>
                             </div>
@@ -107,14 +110,14 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label style="font-size:12px" asp-for="QtdMaximaEventosDia">Quantidade máxima deste evento por dia</label>
-                                    <input asp-for="QtdMaximaEventosDia" class="form-control" />
+                                    <input id="campoQtdMaximaEventosDia" asp-for="QtdMaximaEventosDia" class="form-control" />
                                     <span asp-validation-for="QtdMaximaEventosDia" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label style="font-size:12px" asp-for="QtdMaximaPessoas">Número de convidados</label>
-                                    <input asp-for="QtdMaximaPessoas" class="form-control" />
+                                    <input id="campoNumeroConvidados" asp-for="QtdMaximaPessoas" class="form-control" />
                                     <span asp-validation-for="QtdMaximaPessoas" class="text-danger"></span>
                                 </div>
                             </div>
@@ -124,6 +127,9 @@
                                 <div class="form-group">
                                     <label asp-for="PaisID">Pais</label>
                                     <select asp-for="PaisID" class="form-control">
+                                        <option selected value="---">
+                                            ---
+                                        </option>
                                         @foreach (var pais in ViewBag.Paises)
                                         {
                                             <option value="@pais.PaisID">
@@ -138,6 +144,9 @@
                                 <div class="form-group">
                                     <label asp-for="EstadoID">Estado</label>
                                     <select asp-for="EstadoID" class="form-control">
+                                        <option selected value="---">
+                                            ---
+                                        </option>
                                         @foreach (var estado in ViewBag.Estados)
                                         {
                                             <option value="@estado.EstadoID">
@@ -152,6 +161,9 @@
                                 <div class="form-group">
                                     <label asp-for="CidadeID">Cidade</label>
                                     <select asp-for="CidadeID" class="form-control">
+                                        <option selected value="---">
+                                            ---
+                                        </option>
                                         @foreach (var cidade in ViewBag.Cidades)
                                         {
                                             <option value="@cidade.CidadeID">
@@ -581,5 +593,36 @@
         var numeroAtual = parseInt(idAtual.replace("Foto", ""));
         var numeroAnterior = numeroAtual - 1;
         return "Foto" + numeroAnterior;
+    }
+
+    function atualizaCamposServico() {
+
+        var tituloSelect = document.getElementById('campoTituloServico');
+        var titulo = tituloSelect.options[tituloSelect.selectedIndex].value;
+
+        $.ajax({
+            type: "POST",
+            url: "/ServicosFornecedor/DefineCamposServico",
+            data: { titulo: titulo },
+            success: function (result) {
+                if (result.success) {
+                    var precoServico = document.getElementById('inputPrecoServico'); 
+                    precoServico.value = result.preco
+
+                    var qtdMaximaEventosDia = document.getElementById('campoQtdMaximaEventosDia'); 
+                    qtdMaximaEventosDia.value = result.qtdMaximaEventosDia;
+
+                    var numeroConvidados = document.getElementById('campoNumeroConvidados'); 
+                    numeroConvidados.value = result.numeroConvidados;
+
+                    formatarMoeda(precoServico);
+                } else {
+                    exibirNotificacao("Atenção: ", result.message);
+                }
+            },
+            error: function () {
+                exibirNotificacao("Atenção: ", "Erro ao autocompletar alguns campos do serviço!");
+            }
+        });
     }
 </script>

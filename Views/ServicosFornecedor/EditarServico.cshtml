@@ -779,12 +779,10 @@
 
         $.ajax({
             type: "POST",
-            url: "/ServicosFornecedor/RemoverFotoExistente", // Remova o ID da foto da URL
-            data: { fotoExistenteID: fotoExistenteID }, // Envie o ID da foto como dados na requisição
+            url: "/ServicosFornecedor/RemoverFotoExistente", 
+            data: { fotoExistenteID: fotoExistenteID }, 
             success: function (result) {
                 if (result.success) {
-                    // Atualize a página ou remova a imagem da exibição
-
                     fotoAmostragem.classList.remove('d-block');
                     fotoAmostragem.classList.add('d-none');
                     botaoRemoverFoto.style.display = 'none';
