@@ -240,7 +240,13 @@ namespace HojeEuCaso.Controllers
                     CopyVideoStream(pacoteDto);
                 }
 
-                //Primeiro criar o pacote para preencher o PacoteID do itensDePacote
+                var pacotePiloto = _pacoteService.GetPacoteByTitulo(pacote.Titulo);
+
+                if (pacotePiloto != null)
+                {
+                    _pacoteService.DeletePacote(pacotePiloto.PacoteID);
+                }
+
                 var pacoteID = _pacoteService.CreateNewPacote(pacote);
 
                 foreach (var itemDePacote in itensDePacotes)
@@ -887,10 +893,12 @@ namespace HojeEuCaso.Controllers
 
                 if (servico != null)
                 {
-                    return Json(new { success = true,
-                                      preco = servico.Preco.ToString("F2"),
-                                      qtdMaximaEventosDia = servico.QtdMaximaEventosDia,
-                                      numeroConvidados = servico.QtdMaximaPessoas
+                    return Json(new
+                    {
+                        success = true,
+                        preco = servico.Preco.ToString("F2"),
+                        qtdMaximaEventosDia = servico.QtdMaximaEventosDia,
+                        numeroConvidados = servico.QtdMaximaPessoas
                     });
                 }
                 else if (titulo == "---")
