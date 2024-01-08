@@ -1,5 +1,5 @@
 ﻿@using HojeEuCaso.Dtos
-@model PacoteComItensDoPacoteDto
+@model OrcamentoDto
 
 @{
     ViewData["Title"] = "Monte seu Casamento";
@@ -54,6 +54,36 @@
             opacity: 0;
         }
     }
+
+        .row::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .row::-webkit-scrollbar-thumb {
+            background-color: #ff9999; /* Cor da alça da barra de rolagem */
+            border-radius: 6px; /* Borda arredondada da alça */
+        }
+
+        .row::-webkit-scrollbar-track {
+            background-color: #f0f0f0; /* Cor da trilha da barra de rolagem */
+            border-radius: 6px; /* Borda arredondada da trilha */
+        }
+
+    .form-control:focus {
+        border-color: #FF5733;
+        box-shadow: 0 0 10px rgba(255, 87, 51, 0.8);
+    }
+
+
+    .btn:hover {
+        border-color: #FF5733;
+        box-shadow: 0 0 10px rgba(255, 87, 51, 0.8);
+    }
+
+    a[data-toggle="modal"] {
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
 </style>
 <h5 style="margin-left: 11%">@ViewData["Title"]</h5>
 <hr />
@@ -62,7 +92,6 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-body">
-                    <h5>Geral</h5>
                     @if (TempData["SuccessMessage"] != null)
                     {
                         <div class="alert alert-success">
@@ -75,19 +104,23 @@
                             @TempData["ErrorMessage"]
                         </div>
                     }
-                    <form id="FormAdicionarServico" asp-action="AdicionarServico" enctype="multipart/form-data">
+                    <form id="" asp-controller="ServicosWedManager" asp-action="FazerOrcamentoFornecedores" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col">
-                                <label asp-for="Estado">Selecionar Data</label>
-                                <input type="date" asp-for="Estado" class="form-control" />
-                                <span asp-validation-for="Estado" class="text-danger"></span>
+                                <label style="font-size:12px" asp-for="DataCasamento">Selecionar Data</label>
+                                <input type="date" asp-for="DataCasamento" class="form-control" />
+                                <span asp-validation-for="DataCasamento" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="PaisID">Pais</label>
-                                    <select asp-for="PaisID" class="form-control">
+                                    <label style="font-size:12px" asp-for="PaisID">País</label>
+                                    <select onchange="defineEstados()" asp-for="PaisID" class="form-control">
+
+                                        <option selected value="0">
+                                        </option>
+
                                         @foreach (var pais in ViewBag.Paises)
                                         {
                                             <option value="@pais.PaisID">
@@ -102,36 +135,44 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="Titulo">Estado</label>
+                                    <label style="font-size:12px" asp-for="EstadoID">Estado</label>
                                     <div class="input-group" style="display: flex;">
-                                        <select asp-for="Titulo" class="form-control">
-                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
+                                        <select asp-for="EstadoID" class="form-control">
+
+                                            <option selected value="0">
+                                            </option>
+
+                                            @foreach (var estado in ViewBag.Estados)
                                             {
-                                                <option value="@pacote.Titulo">
-                                                    @pacote.Titulo
+                                                <option value="@estado.EstadoID">
+                                                    @estado.Nome
                                                 </option>
                                             }
                                         </select>
                                     </div>
-                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                    <span asp-validation-for="EstadoID" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="Titulo">Cidade</label>
+                                    <label style="font-size:12px" asp-for="CidadeID">Cidade</label>
                                     <div class="input-group" style="display: flex;">
-                                        <select asp-for="Titulo" class="form-control">
-                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
+                                        <select asp-for="CidadeID" class="form-control">
+
+                                            <option selected value="0">
+                                            </option>
+
+                                            @foreach (var cidade in ViewBag.Cidades)
                                             {
-                                                <option value="@pacote.Titulo">
-                                                    @pacote.Titulo
+                                                <option value="@cidade.CidadeID">
+                                                    @cidade.Nome
                                                 </option>
                                             }
                                         </select>
                                     </div>
-                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                    <span asp-validation-for="CidadeID" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -147,24 +188,37 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="Titulo">Escolha seus Fornecedores</label>
-                                    <div class="input-group" style="display: flex;">
-                                        <select asp-for="Titulo" class="form-control">
-                                            @foreach (var pacote in ViewBag.PacotesPorCategoria)
+                                    <label asp-for="CategoriasDisponiveis" style="font-size:12px">Escolha seus Fornecedores</label>
+                                    <div class="row" style="max-height: 155px; overflow-y: auto;">
+                                        <div class="col">
+                                            @foreach (var categoria in ViewBag.Categorias)
                                             {
-                                                <option value="@pacote.Titulo">
-                                                    @pacote.Titulo
-                                                </option>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="categoria-@categoria.CategoriaID" name="CategoriasSelecionadas" value="@categoria.CategoriaID">
+                                                    <label class="form-check-label" for="categoria-@categoria.CategoriaID">
+                                                        @categoria.Descricao
+                                                    </label>
+                                                </div>
                                             }
-                                        </select>
+                                        </div>
                                     </div>
-                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                    <span asp-validation-for="CategoriasDisponiveis" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="CategoriasSelecionadas" name="CategoriasSelecionadas" />
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label style="font-size:12px" asp-for="OrcamentoTexto">Seu Orçamento</label>
+                                    <input type="text" asp-for="OrcamentoTexto" class="form-control" oninput="formatarMoeda(this)" />
+                                    <span asp-validation-for="OrcamentoTexto" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
 
                         <div style="margin-top:10px">
-                            <button class="btn btn-danger">Montar Casamento</button>
+                            <button type="submit" class="btn btn-danger">Montar Casamento</button>
                             <a asp-action="Index" class="btn btn-secondary">Voltar</a>
                         </div>
                     </form>
@@ -174,9 +228,6 @@
     </div>
 </div>
 <script>
-
-    
-
     $(document).ready(function () {
         // Verifica se há uma mensagem de sucesso
         var successMessage = $(".alert.alert-success");
@@ -201,5 +252,23 @@
         }
     });
 
-    
+    //Função pendente, ela deve definir
+    //os estados conforme o país e as cidades conforme o estado
+    function defineEstados() {
+
+        var paisSelecionado = document.getElementById("PaisID").value;
+
+        var dadosTeste = @Html.Raw(Json.Serialize(ViewBag.CatalogoGeografico));
+        console.log(dadosTeste);
+    }
+
+    function capturarCategoriasSelecionadas() {
+        var categoriasSelecionadas = [];
+        $("input[name='CategoriasSelecionadas']:checked").each(function () {
+            categoriasSelecionadas.push(parseInt($(this).val()));
+        });
+        $("#CategoriasSelecionadas").val(JSON.stringify(categoriasSelecionadas));
+    }
+
+
 </script>

@@ -62,7 +62,7 @@ namespace HojeEuCaso.Controllers
                     pacote.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacote.CategoriaID);
                     pacote.Ativo = true;
 
-                    var titulo = _pacoteService.GetPacoteByTitulo(pacote.Titulo).Titulo;
+                    var titulo = _pacoteService.GetPacoteByTitulo(pacote.Titulo)?.Titulo;
                     if (!string.IsNullOrEmpty(titulo))
                     {
                         TempData["ErrorMessage"] = "Título já existente para outro serviço!";

@@ -26,7 +26,6 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .AsNoTracking()
                 .Where(x => x.Ativo == true)
                 .ToList();
         }
@@ -39,7 +38,6 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Cidade)
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .AsNoTracking()
                 .Where(x => x.Categoria.CategoriaID == categoriaID
                 && x.Ativo == true)
                 .ToList();
@@ -51,9 +49,8 @@ namespace HojeEuCaso.Services
                 .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
                 .Include(x => x.Cidade)
-                .Include(x => x.Estado)
+                .Include(x => x.Estado)                
                 .Include(x => x.Pais)
-                .AsNoTracking()
                 .FirstOrDefault(x => x.PacoteID == ID
                 && x.Ativo == true);
         }
@@ -63,10 +60,9 @@ namespace HojeEuCaso.Services
             return _HojeEuCasoDbContext.Pacotes
                 .Include(x => x.Fornecedor)
                 .Include(x => x.Categoria)
-                .Include(x => x.Cidade)
+                .Include(x => x.Cidade)                
                 .Include(x => x.Estado)
                 .Include(x => x.Pais)
-                .AsNoTracking()
                 .FirstOrDefault(x => x.Titulo == titulo
                 && x.Ativo == true);
         }
@@ -119,11 +115,12 @@ namespace HojeEuCaso.Services
             try
             {
                 var pacote = GetPacoteById(ID);
+
                 if (pacote != null)
                 {
-                    _HojeEuCasoDbContext.Entry(pacote).State = EntityState.Detached;
-
+                    pacote.Categoria = null;
                     pacote.Ativo = false;
+
                     _HojeEuCasoDbContext.Pacotes.Update(pacote);
                     _HojeEuCasoDbContext.SaveChanges();
                 }

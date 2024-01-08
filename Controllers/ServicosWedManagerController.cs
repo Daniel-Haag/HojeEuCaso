@@ -1,10 +1,14 @@
-﻿using HojeEuCaso.Interfaces;
+﻿using HojeEuCaso.Dtos;
+using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
 using HojeEuCaso.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace HojeEuCaso.Controllers
 {
@@ -16,13 +20,15 @@ namespace HojeEuCaso.Controllers
         private readonly IPacoteService _pacoteService;
         private readonly IPaisService _paisService;
         private readonly IEstadoService _estadoService;
+        private readonly ICategoriaService _categoriaService;
 
         public ServicosWedManagerController(ILogger<ServicosWedManagerController> logger,
             ICidadeService cidadeService,
             IFornecedorService fornecedorService,
             IPacoteService pacoteService,
             IPaisService paisService,
-            IEstadoService estadoService)
+            IEstadoService estadoService,
+            ICategoriaService categoriaService)
         {
             _logger = logger;
             _cidadeService = cidadeService;
@@ -30,16 +36,140 @@ namespace HojeEuCaso.Controllers
             _pacoteService = pacoteService;
             _paisService = paisService;
             _estadoService = estadoService;
+            _categoriaService = categoriaService;
         }
 
         [HttpGet]
         public ActionResult FazerOrcamento()
         {
-            //var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
-            ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(5);
+            try
+            {
+                SetData();
 
-            SetData();
-            return View();
+                //var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+                ViewBag.Categorias = _categoriaService.GetAllCategorias();
+
+                //É possível obter os devidos registros dessa forma
+                //var teste2 = CatalogoGeografico.Where(x => x.Estado.Pais.PaisID == 1);
+                ViewBag.CatalogoGeografico = _cidadeService.GetAllCidades();
+
+
+
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult FazerOrcamentoFornecedores(OrcamentoDto orcamentoDto)
+        {
+            //VERIFICAR A AGENDA DO FORNECEDOR
+
+            try
+            {
+
+                SetData();
+
+                //Se o objeto não tiver o valor do orçamento, buscar todos os fornecedores
+                if (!string.IsNullOrEmpty(orcamentoDto.OrcamentoTexto))
+                {
+                    string valorNumerico = orcamentoDto.OrcamentoTexto.Replace("R$", "");
+                    decimal orcamentoDecimal;
+                    List<Categoria> categorias = new List<Categoria>();
+                    List<Fornecedor> fornecedores = new List<Fornecedor>();
+
+                    if (decimal.TryParse(valorNumerico, out orcamentoDecimal))
+                    {
+                        //var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+                        ViewBag.CatalogoGeografico = _cidadeService.GetAllCidades();
+
+                        var todasCategorias = _categoriaService.GetAllCategorias();
+                        var categoriaIDs = orcamentoDto.CategoriasSelecionadas.ToArray();
+                        var categoriasFiltradas = todasCategorias
+                            .Where(x => categoriaIDs.Contains(x.CategoriaID));
+                        var quantidadeDeCategorias = categoriasFiltradas.Count();
+                        var servicos = _pacoteService.GetAllPacotes()
+                            .Where(x => categoriaIDs.Contains(x.CategoriaID) && x.Fornecedor != null).ToList();
+
+                        foreach (var servico in servicos.ToList())
+                        {
+                            if (servico.Preco > orcamentoDecimal)
+                            {
+                                servicos.Remove(servico);
+                                continue;
+                            }
+
+                            if (orcamentoDto.QtdMaximaPessoas > servico.QtdMaximaPessoas)
+                            {
+                                servicos.Remove(servico);
+                                continue;
+                            }
+
+                            if (servico.Pais?.PaisID != orcamentoDto.PaisID)
+                            {
+                                servicos.Remove(servico);
+                                continue;
+                            }
+                            else if (servico.Estado?.EstadoID != orcamentoDto.EstadoID)
+                            {
+                                servicos.Remove(servico);
+                                continue;
+                            }
+                            else if (servico.Cidade?.CidadeID != orcamentoDto.CidadeID)
+                            {
+                                servicos.Remove(servico);
+                                continue;
+                            }
+
+                            if (servico.Categoria != null)
+                            {
+                                var categoriaJaIncluida = categorias
+                                    .FirstOrDefault(x => x.CategoriaID == servico.CategoriaID);
+
+                                if (categoriaJaIncluida == null)
+                                    categorias.Add(servico.Categoria);
+                            }
+
+                            if (servico.Fornecedor != null)
+                                fornecedores.Add(servico.Fornecedor);
+                        }
+
+                        foreach (var categoria in categorias)
+                        {
+                            //
+
+                            var fornecedoresCategoria = fornecedores.
+                                Where(x => x.CategoriaID == categoria.CategoriaID).ToList();
+                            //categoria.Fornecedores.AddRange(fornecedoresCategoria);
+
+                            categoria.Fornecedores = fornecedoresCategoria;
+                        }
+
+                        ViewBag.Categorias = categorias;
+
+                        return View();
+                    }
+                    else
+                    {
+                        return View();
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = "Ocorreu um erro!";
+                return View();
+            }
+
         }
 
         // GET: ServicosWedManagerController/Details/5

@@ -21,6 +21,7 @@ using HojeEuCaso.Services;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Net.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace HojeEuCaso.Controllers
 {
@@ -240,9 +241,10 @@ namespace HojeEuCaso.Controllers
                     CopyVideoStream(pacoteDto);
                 }
 
-                var pacotePiloto = _pacoteService.GetPacoteByTitulo(pacote.Titulo);
+                var pacotePiloto = _pacoteService
+                    .GetPacoteByTitulo(pacote.Titulo);
 
-                if (pacotePiloto != null)
+                if (pacotePiloto != null && pacotePiloto?.Fornecedor == null)
                 {
                     _pacoteService.DeletePacote(pacotePiloto.PacoteID);
                 }

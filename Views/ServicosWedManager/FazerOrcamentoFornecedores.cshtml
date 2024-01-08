@@ -1,0 +1,116 @@
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor;
+@using HojeEuCaso.Dtos;
+@model OrcamentoDto;
+
+@{
+    ViewData["Title"] = "Monte seu Casamento - Fornecedores";
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pt-BR");
+    System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+    System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+    <hr />
+
+    <style>
+        @@media (max-width: 767px) {
+            .center-image {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .center-image {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .card {
+            transition: transform 0.3s;
+        }
+
+            .card:hover {
+                transform: scale(1.05);
+            }
+
+            .card a {
+                text-decoration: none;
+                color: inherit;
+            }
+    </style>
+
+</head>
+<body>
+    <div style="display: flex; flex-wrap: wrap">
+        @{
+            foreach (var categoria in ViewBag.Categorias)
+            {
+                <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px;">
+                    <h2 style="font-weight: 600; font-size: 24px;">@categoria.Descricao</h2>
+
+                    @foreach (var fornecedor in categoria.Fornecedores)
+                    {
+                        <div onclick="teste()" class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px;width:90%;cursor: pointer">
+                            <h2 style="font-weight: 600; font-size: 24px;">@fornecedor.Nome</h2>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        <div class="text-right mt-3 ml-auto">
+        </div>
+    </div>
+
+
+    <!-- Modal Listagem Serviços -->
+    <div class="modal fade" id="listagemServicosModal" tabindex="-1" aria-labelledby="listagemServicosModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="listagemServicosModalLabel">Monte seu Casamento - Nome Fornecedor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px;width:90%">
+                        <h2 style="font-weight: 600; font-size: 24px;">Nome do serviço</h2>
+                        <p style="font-weight: 600; font-size: 24px;">Descrição do serviço</p>
+                        <span style="font-weight: 600; font-size: 24px;">Até 000 convidados</span>
+                    </div>
+                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px;width:90%">
+                        <h2 style="font-weight: 600; font-size: 24px;">Nome do serviço</h2>
+                        <p style="font-weight: 600; font-size: 24px;">Descrição do serviço</p>
+                        <span style="font-weight: 600; font-size: 24px;">Até 000 convidados</span>
+                    </div>
+                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px;width:90%">
+                        <h2 style="font-weight: 600; font-size: 24px;">Nome do serviço</h2>
+                        <p style="font-weight: 600; font-size: 24px;">Descrição do serviço</p>
+                        <span style="font-weight: 600; font-size: 24px;">Até 000 convidados</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger" id="saveAgendaBtn">Avançar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+<script>
+
+    function teste() {
+        $('#listagemServicosModal').modal('show');
+    }
+
+</script>

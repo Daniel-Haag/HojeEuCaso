@@ -22,6 +22,7 @@ namespace HojeEuCaso.Services
         {
             return _HojeEuCasoDbContext.Cidades
                 .Include(x => x.Estado)
+                    .ThenInclude(x => x.Pais)
                 .ToList();
         }
 
@@ -29,6 +30,7 @@ namespace HojeEuCaso.Services
         {
             return _HojeEuCasoDbContext.Cidades
                 .Include(x => x.Estado)
+                    .ThenInclude(x => x.Pais)
                 .Where(x => x.CidadeID == ID)
                 .FirstOrDefault();
         }
