@@ -136,16 +136,20 @@ namespace HojeEuCaso.Controllers
                             }
 
                             if (servico.Fornecedor != null)
-                                fornecedores.Add(servico.Fornecedor);
+                            {
+                                var fornecedorJaIncluido = fornecedores
+                                    .FirstOrDefault(x => x.FornecedorID == servico.FornecedorID);
+
+                                if (fornecedorJaIncluido == null)
+                                    fornecedores.Add(servico.Fornecedor);
+                            }
+
                         }
 
                         foreach (var categoria in categorias)
                         {
-                            //
-
                             var fornecedoresCategoria = fornecedores.
                                 Where(x => x.CategoriaID == categoria.CategoriaID).ToList();
-                            //categoria.Fornecedores.AddRange(fornecedoresCategoria);
 
                             categoria.Fornecedores = fornecedoresCategoria;
                         }
