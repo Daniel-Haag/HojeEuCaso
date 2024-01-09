@@ -80,12 +80,24 @@ namespace HojeEuCaso.Services
         {
             try
             {
-                _HojeEuCasoDbContext.Fornecedores.Update(Fornecedor);
-                _HojeEuCasoDbContext.SaveChanges();
+                //Verificando se a entidade já está rastreada 
+                var fornecedorContext = _HojeEuCasoDbContext.Fornecedores.Find(Fornecedor.FornecedorID);
+
+                if (fornecedorContext != null)
+                {
+                    _HojeEuCasoDbContext.Entry(fornecedorContext).CurrentValues.SetValues(Fornecedor);
+
+                    _HojeEuCasoDbContext.Fornecedores.Update(fornecedorContext);
+                    _HojeEuCasoDbContext.SaveChanges();
+                }
+                else
+                {
+                    _HojeEuCasoDbContext.Fornecedores.Update(Fornecedor);
+                    _HojeEuCasoDbContext.SaveChanges();
+                }
             }
             catch (Exception e)
             {
-
                 throw new Exception("Erro na atualização deste registro");
             }
         }

@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Net.Http;
 using Microsoft.EntityFrameworkCore;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace HojeEuCaso.Controllers
 {
@@ -472,8 +473,12 @@ namespace HojeEuCaso.Controllers
             var estados = _estadoService.GetAllEstados();
             ViewBag.Estados = estados;
 
+            var paises = _paisService.GetAllPaises();
+            ViewBag.Paises = paises;
+
             ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.Cidade.CidadeID);
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == fornecedor.Estado.EstadoID);
+            ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == fornecedor.Pais.PaisID);
 
             var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
@@ -503,18 +508,21 @@ namespace HojeEuCaso.Controllers
             {
                 SetData();
 
-                //if (fornecedorDto.Foto != null && fornecedorDto.Foto.Length > 0)
-                //{
-                //    long maxFileSize = 10 * 1024 * 1024; // 10MB
+                if (fornecedorDto.Foto != null && fornecedorDto.Foto.Length > 0)
+                {
+                    long maxFileSize = 10 * 1024 * 1024; // 10MB
 
-                //    if (fornecedorDto.Foto.Length > maxFileSize)
-                //    {
-                //        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
-                //        return View();
-                //    }
+                    if (fornecedorDto.Foto.Length > maxFileSize)
+                    {
+                        ModelState.AddModelError("Foto", "O tamanho da foto excede o limite de 10MB.");
+                        return View();
+                    }
 
-                //    CopyPhotoStream(fornecedorDto);
-                //}
+                    var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + fornecedorDto.Foto.FileName);
+                    fornecedorDto.CaminhoFoto = caminhoFoto;
+
+                    CopyPhotoStream(caminhoFoto, fornecedorDto.Foto);
+                }
 
                 Fornecedor fornecedor = _mapper.Map<Fornecedor>(fornecedorDto);
                 _fornecedorService.UpdateFornecedor(fornecedor);
