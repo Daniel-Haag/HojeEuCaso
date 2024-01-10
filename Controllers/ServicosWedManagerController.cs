@@ -9,6 +9,8 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace HojeEuCaso.Controllers
 {
@@ -21,6 +23,7 @@ namespace HojeEuCaso.Controllers
         private readonly IPaisService _paisService;
         private readonly IEstadoService _estadoService;
         private readonly ICategoriaService _categoriaService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ServicosWedManagerController(ILogger<ServicosWedManagerController> logger,
             ICidadeService cidadeService,
@@ -28,7 +31,8 @@ namespace HojeEuCaso.Controllers
             IPacoteService pacoteService,
             IPaisService paisService,
             IEstadoService estadoService,
-            ICategoriaService categoriaService)
+            ICategoriaService categoriaService,
+            IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _cidadeService = cidadeService;
@@ -37,6 +41,7 @@ namespace HojeEuCaso.Controllers
             _paisService = paisService;
             _estadoService = estadoService;
             _categoriaService = categoriaService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -82,6 +87,7 @@ namespace HojeEuCaso.Controllers
                     decimal orcamentoDecimal;
                     List<Categoria> categorias = new List<Categoria>();
                     List<Fornecedor> fornecedores = new List<Fornecedor>();
+                    var diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
 
                     if (decimal.TryParse(valorNumerico, out orcamentoDecimal))
                     {
@@ -139,6 +145,10 @@ namespace HojeEuCaso.Controllers
                             {
                                 var fornecedorJaIncluido = fornecedores
                                     .FirstOrDefault(x => x.FornecedorID == servico.FornecedorID);
+
+                                var caminhoImagem = servico.Fornecedor.CaminhoFoto?.Replace(diretorio, "~");
+                                caminhoImagem = caminhoImagem?.Replace("\\", "/");
+                                servico.Fornecedor.CaminhoFoto = caminhoImagem;
 
                                 if (fornecedorJaIncluido == null)
                                     fornecedores.Add(servico.Fornecedor);

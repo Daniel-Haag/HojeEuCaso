@@ -156,7 +156,7 @@ namespace HojeEuCaso.Controllers
         public ActionResult AdicionarServico()
         {
             var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
-            ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(fornecedor.CategoriaID);
+            ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(fornecedor.CategoriaID).Where(x => x.Fornecedor == null);
 
             SetData();
             return View();

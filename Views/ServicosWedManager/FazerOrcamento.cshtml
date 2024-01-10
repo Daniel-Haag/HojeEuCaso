@@ -55,19 +55,19 @@
         }
     }
 
-        .row::-webkit-scrollbar {
-            width: 12px;
-        }
+    .row::-webkit-scrollbar {
+        width: 12px;
+    }
 
-        .row::-webkit-scrollbar-thumb {
-            background-color: #ff9999; /* Cor da alça da barra de rolagem */
-            border-radius: 6px; /* Borda arredondada da alça */
-        }
+    .row::-webkit-scrollbar-thumb {
+        background-color: #ff9999; /* Cor da alça da barra de rolagem */
+        border-radius: 6px; /* Borda arredondada da alça */
+    }
 
-        .row::-webkit-scrollbar-track {
-            background-color: #f0f0f0; /* Cor da trilha da barra de rolagem */
-            border-radius: 6px; /* Borda arredondada da trilha */
-        }
+    .row::-webkit-scrollbar-track {
+        background-color: #f0f0f0; /* Cor da trilha da barra de rolagem */
+        border-radius: 6px; /* Borda arredondada da trilha */
+    }
 
     .form-control:focus {
         border-color: #FF5733;
@@ -188,7 +188,8 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label asp-for="CategoriasDisponiveis" style="font-size:12px">Escolha seus Fornecedores</label>
+                                    <label asp-for="CategoriasDisponiveis" style="font-size:12px;">Escolha seus Fornecedores</label>
+                                    <hr />
                                     <div class="row" style="max-height: 155px; overflow-y: auto;">
                                         <div class="col">
                                             @foreach (var categoria in ViewBag.Categorias)
