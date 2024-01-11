@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HojeEuCaso.Models
 {
@@ -54,5 +55,7 @@ namespace HojeEuCaso.Models
         public List<ClausulaContrato> ClausulasContrato { get; set; } 
         public Plano Plano { get; set; }
         public string AsaasCustomerID { get; set; }
+        [NotMapped]
+        public List<Pacote> ServicosFornecedor { get; set; }
     }
 }

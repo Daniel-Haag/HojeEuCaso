@@ -24,6 +24,7 @@ namespace HojeEuCaso.Controllers
         private readonly IEstadoService _estadoService;
         private readonly ICategoriaService _categoriaService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IFotoServicoService _fotoServicoService;
 
         public ServicosWedManagerController(ILogger<ServicosWedManagerController> logger,
             ICidadeService cidadeService,
@@ -32,7 +33,8 @@ namespace HojeEuCaso.Controllers
             IPaisService paisService,
             IEstadoService estadoService,
             ICategoriaService categoriaService,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IFotoServicoService fotoServicoService)
         {
             _logger = logger;
             _cidadeService = cidadeService;
@@ -42,6 +44,7 @@ namespace HojeEuCaso.Controllers
             _estadoService = estadoService;
             _categoriaService = categoriaService;
             _webHostEnvironment = webHostEnvironment;
+            _fotoServicoService = fotoServicoService;
         }
 
         [HttpGet]
@@ -58,9 +61,6 @@ namespace HojeEuCaso.Controllers
                 //var teste2 = CatalogoGeografico.Where(x => x.Estado.Pais.PaisID == 1);
                 ViewBag.CatalogoGeografico = _cidadeService.GetAllCidades();
 
-
-
-
                 return View();
             }
             catch (Exception e)
@@ -74,6 +74,7 @@ namespace HojeEuCaso.Controllers
         public ActionResult FazerOrcamentoFornecedores(OrcamentoDto orcamentoDto)
         {
             //VERIFICAR A AGENDA DO FORNECEDOR
+            //Se o objeto não tiver o valor do orçamento, buscar todos os fornecedores
 
             try
             {
@@ -101,6 +102,7 @@ namespace HojeEuCaso.Controllers
                         var quantidadeDeCategorias = categoriasFiltradas.Count();
                         var servicos = _pacoteService.GetAllPacotes()
                             .Where(x => categoriaIDs.Contains(x.CategoriaID) && x.Fornecedor != null).ToList();
+                        var fotosServicos = _fotoServicoService.GetAllFotoServicos();
 
                         foreach (var servico in servicos.ToList())
                         {
@@ -146,14 +148,19 @@ namespace HojeEuCaso.Controllers
                                 var fornecedorJaIncluido = fornecedores
                                     .FirstOrDefault(x => x.FornecedorID == servico.FornecedorID);
 
-                                var caminhoImagem = servico.Fornecedor.CaminhoFoto?.Replace(diretorio, "~");
-                                caminhoImagem = caminhoImagem?.Replace("\\", "/");
-                                servico.Fornecedor.CaminhoFoto = caminhoImagem;
+                                var caminhoImagemFornecedor = servico.Fornecedor.CaminhoFoto?.Replace(diretorio, "~");
+                                caminhoImagemFornecedor = caminhoImagemFornecedor?.Replace("\\", "/");
+                                servico.Fornecedor.CaminhoFoto = caminhoImagemFornecedor;
 
                                 if (fornecedorJaIncluido == null)
                                     fornecedores.Add(servico.Fornecedor);
                             }
 
+                            servico.CaminhoFoto = fotosServicos
+                                .FirstOrDefault(x => x.PacoteID == servico.PacoteID)?.CaminhoFoto?
+                                .Replace(diretorio, "~");
+
+                            servico.CaminhoFoto = servico.CaminhoFoto?.Replace("\\", "/");
                         }
 
                         foreach (var categoria in categorias)
@@ -162,6 +169,12 @@ namespace HojeEuCaso.Controllers
                                 Where(x => x.CategoriaID == categoria.CategoriaID).ToList();
 
                             categoria.Fornecedores = fornecedoresCategoria;
+
+                            foreach (var fornecedor in categoria.Fornecedores)
+                            {
+                                fornecedor.ServicosFornecedor = servicos
+                                    .Where(x => x.FornecedorID == fornecedor.FornecedorID).ToList();
+                            }
                         }
 
                         ViewBag.Categorias = categorias;
