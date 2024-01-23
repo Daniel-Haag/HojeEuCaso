@@ -37,7 +37,7 @@ namespace HojeEuCaso
             services.AddControllersWithViews();
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.IdleTimeout = TimeSpan.FromMinutes(40);
             });
 
             services.AddHttpClient();
@@ -111,7 +111,7 @@ namespace HojeEuCaso
             {
                 if (context.Session.Keys.Count() == 0)
                 {
-                    context.Response.Redirect("/Login/Logout");
+                    context.Response.Redirect("/Login/Login");
                     return;
                 }
 
