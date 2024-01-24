@@ -155,10 +155,10 @@
 
                             <label asp-for="CidadeID">Cidade</label>
                             <select asp-for="CidadeID" class="form-control">
-                                @foreach (var cidade in ViewBag.Cidades)
+                                @foreach (var Cidade in ViewBag.Cidades)
                                 {
-                                    <option value="@cidade.CidadeID">
-                                        @cidade.Nome
+                                    <option value="@Cidade.CidadeID">
+                                        @Cidade.Nome
                                     </option>
                                 }
                             </select>

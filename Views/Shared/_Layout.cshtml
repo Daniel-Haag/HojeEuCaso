@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
 <html lang="pt-br">
@@ -387,6 +387,10 @@
                                 {
                                     <li>
                                         <a asp-area="" asp-controller="ServicosWedManager" asp-action="FazerOrcamento"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span style="margin-left:10px;">Fazer Orçamento</span></a>
+                                        <hr />
+                                    </li>
+                                    <li>
+                                        <a asp-area="" asp-controller="ServicosWedManager" asp-action="FazerOrcamento"><i class="fa fa-id-card" aria-hidden="true"></i><span style="margin-left:10px;">Meus Orçamentos</span></a>
                                         <hr />
                                     </li>
                                 }

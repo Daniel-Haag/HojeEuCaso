@@ -1,0 +1,218 @@
+@using HojeEuCaso.Dtos;
+@model OrcamentoDto
+
+@{
+    ViewData["Title"] = "Orçamento";
+}
+<style>
+
+    input[type=checkbox] {
+        accent-color: red;
+    }
+
+    fade-in-out {
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes fadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .error-fade-in-out {
+        animation: errorFadeInOut 3s ease-in-out;
+    }
+
+    @@keyframes errorFadeInOut {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+<h5 style="margin-left: 11%">@ViewData["Title"]</h5>
+<hr />
+<div class="container" style="margin-left: 7%">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    else if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+                    <div id="formOrcamento">
+                        <form asp-action="GerarOrcamento" enctype="multipart/form-data">
+
+                            @if (ViewBag.WedManager != null)
+                            {
+                                <b>Orçamento @ViewBag.WedManager?.Nome</b>
+                                <br />
+                            }
+                            else
+                            {
+                                <b>Orçamento</b>
+                                <br />
+                            }
+
+                            Data do evento: @ViewBag.DataEvento<br />
+                            Nº Condidados: @ViewBag.QtdMaximaPessoas<br />
+
+                            <hr />
+
+                            @foreach (var servico in ViewBag.Servicos)
+                            {
+                                <b>@servico.Titulo</b>
+
+                                <br />
+                                <span class="greyFontStyle">@servico.SubTitulo</span>
+
+                                <br />
+
+                                if (servico.ItensDoPacote.Count > 0)
+                                {
+                                    <b>Itens Inclusos:</b>
+                                }
+
+                                @foreach (var item in servico.ItensDoPacote)
+                                {
+                                    <br />
+
+                                    <span>• @item.Quantidade - @item.Descricao</span>
+                                }
+                                <hr />
+                            }
+
+                            <b>Valor do pedido: </b><br />
+                            R$ @ViewBag.ValorTotalOrcamento
+
+                            <div style="margin-top:10px">
+                                @if (ViewBag.WedManager != null)
+                                {
+                                    <button type="button" onclick="imprimirOrcamento()" class="btn btn-warning">Imprimir</button>
+                                    <button type="button" onclick="compartilharOrcamento()" class="btn btn-success">Compartilhar link</button>
+                                }
+                                else
+                                {
+                                    <button type="button" onclick="" class="btn btn-success">Efetuar Pagamento</button>
+                                }
+                                
+                                <a asp-action="FazerOrcamento" class="btn btn-secondary">Voltar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+
+        // Verifica se há uma mensagem de sucesso
+        var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+
+    function imprimirOrcamento() {
+
+
+        exibirNotificacao("Imprimir", "Em manutenção.")
+
+        //var htmlOrcamento = document.getElementById("formOrcamento").innerHTML;
+
+        //console.log(htmlOrcamento);
+
+        //$.ajax({
+        //    type: "POST",
+        //    url: "/ServicosWedManager/ImprimirOrcamento",
+        //    contentType: "application/json",
+        //    data: JSON.stringify({ htmlOrcamento: htmlOrcamento }),
+        //    success: function () {
+
+        //    },
+        //    error: function () {
+        //        alert("Erro.");
+        //    }
+        //});
+    }
+
+
+    function compartilharOrcamento() {
+        var servicosSelecionados = encodeURIComponent(JSON.stringify(@Html.Raw(ViewBag.ServicosSelecionados)));
+        var dataEvento = encodeURIComponent("@Html.Raw(ViewBag.DataEvento)");
+        var qtdMaximaPessoas = encodeURIComponent("@Html.Raw(ViewBag.QtdMaximaPessoas)");
+
+        var url = window.location.origin + "/ServicosWedManager/GerarOrcamento" +
+            "?servicosSelecionados=" + servicosSelecionados +
+            "&dataEvento=" + dataEvento +
+            "&qtdMaximaPessoas=" + qtdMaximaPessoas;
+
+        var link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.download = 'orcamento.html';
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+
+        navigator.clipboard.writeText(url).then(function () {
+            exibirNotificacao("Compartilhamento de link", "Link copiado com sucesso!")
+        }).catch(function (err) {
+            exibirNotificacao("Erro", "Link não copiado!")
+        });
+    }
+</script>

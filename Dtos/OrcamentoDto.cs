@@ -38,5 +38,6 @@ namespace HojeEuCaso.Dtos
         [Column(TypeName = "decimal(10,2)")]
         public decimal Orcamento { get; set; }
         public string OrcamentoTexto { get; set; }
+        public List<Pacote> PacotesSelecionados { get; set; }
     }
 }

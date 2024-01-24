@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
+﻿using iTextSharp.text;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HojeEuCaso.Models
@@ -33,5 +34,7 @@ namespace HojeEuCaso.Models
         public Pais Pais { get; set; }
         public string CaminhoFoto { get; set; }
         public string CaminhoVideo { get; set; }
+        [NotMapped]
+        public List<ItensDePacotes> ItensDoPacote { get; set; }
     }
 }

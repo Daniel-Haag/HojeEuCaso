@@ -4,7 +4,7 @@
 @model OrcamentoDto;
 
 @{
-    ViewData["Title"] = "Monte seu Casamento - Fornecedores";
+    ViewData["Title"] = "Monte seu Casamento - Categorias";
     System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("pt-BR");
     System.Threading.Thread.CurrentThread.CurrentCulture = culture;
     System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
@@ -47,76 +47,228 @@
 
 </head>
 <body>
-    <div class="flex-box text-center " style="flex-wrap: wrap;">
 
-        @{
-            foreach (var categoria in ViewBag.Categorias)
+    @if (ViewBag.Categorias != null)
+    {
+        <div class="flex-box text-center " style="flex-wrap: wrap;">
+
+            @{
+                foreach (var categoria in ViewBag.Categorias)
+                {
+                    <div class="card p-4 shadow mobileCard desktopCard mx-auto" style="margin-top: 20px;">
+                        <h1 style="font-weight: 600; font-size: 24px; color: #FF5733;">@categoria.Descricao</h1>
+
+                        @foreach (var fornecedor in categoria.Fornecedores)
+                        {
+                            <div onclick="buscaServicos(@fornecedor.FornecedorID)" class="card p-4 shadow mobileCard desktopCard mx-auto" style="margin-top: 20px; width: 90%; cursor: pointer;">
+
+                                @if (!string.IsNullOrEmpty(fornecedor.CaminhoFoto))
+                                {
+                                    <img src="@Url.Content(fornecedor.CaminhoFoto)" alt="Foto Fornecedor" class="d-block mx-auto mb-3" style="max-width: 75%; height: auto;" />
+                                }
+                                <h2 style="font-weight: 600; font-size: 18px; color: #FF5733; text-align: center;">@fornecedor.Nome</h2>
+                                <p class="greyFontStyle text-center">@fornecedor.Estado.Nome - @fornecedor.Cidade.Nome</p>
+                            </div>
+                        }
+                    </div>
+
+                    <hr />
+                }
+            }
+
+            <div class="text-right mt-3 ml-auto">
+            </div>
+
+        </div>
+
+        @foreach (var categoria in ViewBag.Categorias)
+        {
+            @foreach (var fornecedor in categoria.Fornecedores)
             {
-                <div class="card p-4 shadow mobileCard desktopCard mx-auto" style="margin-top: 20px;">
-                    <h1 style="font-weight: 600; font-size: 24px; color: #FF5733;">@categoria.Descricao</h1>
+                <!-- Modal Listagem Serviços -->
+                <div class="modal fade" id="@fornecedor.FornecedorID" tabindex="-1" aria-labelledby="listagemServicosModalLabel_@fornecedor.FornecedorID" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="listagemServicosModalLabel_@fornecedor.FornecedorID">Serviços do Fornecedor - @fornecedor.Nome</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
 
-                    @foreach (var fornecedor in categoria.Fornecedores)
-                    {
-                        <div onclick="buscaServicos(@fornecedor.FornecedorID)" class="card p-4 shadow mobileCard desktopCard mx-auto" style="margin-top: 20px; width: 90%; cursor: pointer;">
-
-                            @if (!string.IsNullOrEmpty(fornecedor.CaminhoFoto))
-                            {
-                                <img src="@Url.Content(fornecedor.CaminhoFoto)" alt="Foto Fornecedor" class="d-block mx-auto mb-3" style="max-width: 75%; height: auto;" />
-                            }
-                            <h2 style="font-weight: 600; font-size: 18px; color: #FF5733; text-align: center;">@fornecedor.Nome</h2>
-                            <p class="greyFontStyle text-center">@fornecedor.Estado.Nome - @fornecedor.Cidade.Nome</p>
+                                @foreach (var servico in fornecedor.ServicosFornecedor)
+                                {
+                                    <div id="resumoservico_@servico.PacoteID" onclick="mostraServico('servico_@servico.PacoteID')" class="card p-4 shadow mobileCard desktopCard mx-auto" style="margin-top: 20px;width:90%;cursor: pointer;">
+                                        @if (!string.IsNullOrEmpty(servico.CaminhoFoto))
+                                        {
+                                            <img src="@Url.Content(servico.CaminhoFoto)" alt="Foto Serviço" class="d-block mx-auto mb-3" style="max-width: 75%; height: auto;" />
+                                        }
+                                        <h2 style="font-weight: 600; font-size: 18px; color: #FF5733; text-align: center;">@servico?.Titulo</h2>
+                                        <p class="greyFontStyle text-center">@servico?.SubTitulo</p>
+                                        <p class="greyFontStyle text-center">Até @servico?.QtdMaximaPessoas convidados</p>
+                                        <p class="greyFontStyle text-center">@string.Format("R$ {0:N2}", servico?.Preco)</p>
+                                    </div>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            </div>
                         </div>
-                    }
+                    </div>
                 </div>
             }
         }
 
-        <div class="text-right mt-3 ml-auto">
-        </div>
-
-    </div>
-
-    @foreach (var categoria in ViewBag.Categorias)
-    {
-        @foreach (var fornecedor in categoria.Fornecedores)
+        @foreach (var categoria in ViewBag.Categorias)
         {
-            <!-- Modal Listagem Serviços -->
-            <div class="modal fade" id="@fornecedor.FornecedorID" tabindex="-1" aria-labelledby="listagemServicosModalLabel_@fornecedor.FornecedorID" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="listagemServicosModalLabel_@fornecedor.FornecedorID">Monte seu Casamento - @fornecedor.Nome</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-
-                            @foreach (var servico in fornecedor.ServicosFornecedor)
-                            {
-                                <div class="card p-4 shadow mobileCard desktopCard mx-auto" style="margin-top: 20px;width:90%;cursor: pointer;">
-                                    @if (!string.IsNullOrEmpty(servico.CaminhoFoto))
-                                    {
-                                        <img src="@Url.Content(servico.CaminhoFoto)" alt="Foto Serviço" class="d-block mx-auto mb-3" style="max-width: 75%; height: auto;" />
-                                    }
-                                    <h2 style="font-weight: 600; font-size: 18px; color: #FF5733; text-align: center;">@servico?.Titulo</h2>
-                                    <p class="greyFontStyle text-center">@servico?.SubTitulo</p>
-                                    <p class="greyFontStyle text-center">Até @servico?.QtdMaximaPessoas convidados</p>
-                                    <p class="greyFontStyle text-center">@string.Format("R$ {0:N2}", servico?.Preco)</p>
+            @foreach (var fornecedor in categoria.Fornecedores)
+            {
+                @foreach (var servico in fornecedor.ServicosFornecedor)
+                {
+                    <div class="modal fade" id="servico_@servico.PacoteID" tabindex="-1" aria-labelledby="listagemServicosModalLabel_@servico.PacoteID" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" id="listagemServicosModalLabel_@servico.PacoteID">Detalhes do Serviço - @servico.Titulo</h6>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                            }
+                                <div class="modal-body">
+                                    @{
+                                        var caminhoVideo = servico.CaminhoVideo?.Replace(ViewBag.Diretorio, "~");
+                                        caminhoVideo = caminhoVideo?.Replace("\\", "/");
 
+                                        // Criando um ID de carrossel único com base no índice do pacote
+                                        var carouselId = "carousel_" + Guid.NewGuid().ToString();
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-danger" id="saveAgendaBtn_@fornecedor.FornecedorID">Avançar</button>
+                                        <div class="card shadow" style="margin-top: 20px; flex-grow:0;">
+
+                                            <div id="@carouselId" class="carousel slide" data-ride="carousel" style="background-color:white">
+
+                                                @{
+                                                    var pacoteID = servico.PacoteID;
+                                                    var fotosPacote = ViewBag.FotosServicos as List<FotosServicos>;
+
+                                                    if (fotosPacote != null)
+                                                    {
+                                                        fotosPacote = fotosPacote.Where(x => x.PacoteID == pacoteID).ToList();
+                                                    }
+                                                }
+
+                                                <div class="carousel-inner">
+
+                                                    @{
+                                                        var count = 0;
+
+                                                        @foreach (var fotoPacote in fotosPacote)
+                                                        {
+                                                            count++;
+
+                                                            var caminhoImagem = fotoPacote.CaminhoFoto?.Replace(ViewBag.Diretorio, "~");
+                                                            caminhoImagem = caminhoImagem?.Replace("\\", "/");
+
+                                                            if (count == 1 && !string.IsNullOrEmpty(caminhoImagem))
+                                                            {
+                                                                <div class="carousel-item active">
+                                                                    <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
+                                                                </div>
+                                                            }
+                                                            else if (!string.IsNullOrEmpty(caminhoImagem))
+                                                            {
+                                                                <div class="carousel-item">
+                                                                    <img src="@Url.Content(caminhoImagem)" alt="Imagens Serviço" class="d-block w-100" />
+                                                                </div>
+                                                            }
+                                                        }
+
+                                                        @if (!string.IsNullOrEmpty(caminhoVideo))
+                                                        {
+                                                            <div class="carousel-item">
+                                                                <video controls>
+                                                                    <source src="@Url.Content(caminhoVideo)" type="video/mp4" class="d-block w-100">
+                                                                    Seu navegador não suporta o elemento de vídeo.
+                                                                </video>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+
+                                                <a class="carousel-control-prev" href="#@carouselId" role="button" data-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#@carouselId" role="button" data-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
+
+                                            <div class="card-body">
+                                                <h3 class="card-title">@servico.Titulo</h3>
+                                                <h6 class="card-subtitle mb-2 text-muted">@servico.SubTitulo</h6>
+
+                                                <label style="font-size:12px">Número de convidados: @servico.QtdMaximaPessoas</label>
+
+                                                <hr />
+
+                                                <h3>Itens Inclusos</h3>
+                                                @foreach (var itenDoPacote in servico?.ItensDoPacote)
+                                                {
+                                                    <p>
+                                                        @itenDoPacote.Descricao
+                                                    </p>
+                                                    <span class="greyFontStyle">
+                                                        Quantidade: @itenDoPacote.Quantidade
+                                                    </span>
+                                                }
+
+                                                <hr />
+
+                                                <p>Itens do Contrato</p>
+
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <h5 class="card-title">Valor</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted">@string.Format("R$ {0:N2}", servico.Preco)</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                    <button type="button" onclick="selecionarServico('servico_@servico.PacoteID')"
+                            class="btn btn-danger"
+                            data-dismiss="modal"
+                            id="selectServiceBtn_@servico.PacoteID">
+                                        Selecionar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                }
+            }
         }
+
+        <div class="text-center">
+            <button type="button" id="" onclick="gerarOrcamento()" class="btn btn-danger">Gerar Orçamento</button>
+        </div>
     }
+    else
+    {
+        <div class="flex-box text-center " style="flex-wrap: wrap;">
+            <span style="margin-top:30px" class="greyFontStyle">Não foram encontrados registros com as informações solicitadas.</span>
+        </div>
+    }
+
+    <input type="datetime" id="dataEvento" style="display:none" value="@ViewBag.DataEvento" />
+    <input type="text" id="qtdMaximaPessoas" style="display:none" value="@ViewBag.QtdMaximaPessoas" />
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -124,9 +276,80 @@
 </html>
 
 <script>
+
+    $(document).ready(function () {
+        // Verifica se há uma mensagem de sucesso
+        var successMessage = $(".alert.alert-success");
+
+        // Se houver uma mensagem de sucesso, iniciar a animação de fade-in e depois fade-out
+        if (successMessage.length > 0) {
+            successMessage.addClass("fade-in-out");
+            setTimeout(function () {
+                successMessage.removeClass("fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+
+        // Verifica se há uma mensagem de erro
+        var errorMessage = $(".alert.alert-danger");
+
+        // Se houver uma mensagem de erro, iniciar a animação de fade-in e depois fade-out
+        if (errorMessage.length > 0) {
+            errorMessage.addClass("error-fade-in-out");
+            setTimeout(function () {
+                errorMessage.removeClass("error-fade-in-out").fadeOut(500);
+            }, 3000); // 3000 milissegundos (3 segundos)
+        }
+    });
+
+    var servicosSelecionados = [];
+
     function buscaServicos(id) {
-        console.log(id);
         $('#' + id).modal('show');
+    }
+
+    function mostraServico(id) {
+        $('#' + id).modal('show');
+    }
+
+    function selecionarServico(id) {
+
+        cardServico = document.getElementById('resumo' + id);
+
+        var numeroID = id.replace(/\D/g, '');
+
+        if (!servicosSelecionados.includes(numeroID)) {
+
+            var icon = document.createElement('i');
+            icon.className = 'fa fa-check-circle';
+            icon.style.color = 'red';
+            icon.style.position = 'absolute';
+            icon.style.top = '10px';
+            icon.style.right = '10px';
+
+            cardServico.appendChild(icon);
+
+            servicosSelecionados.push(numeroID);
+        }
+    }
+
+    function gerarOrcamento() {
+
+        console.log(servicosSelecionados);
+        console.log(dataEvento);
+        console.log(qtdMaximaPessoas);
+
+        var urlBase = "/ServicosWedManager/GerarOrcamento";
+        var parametros = "?servicosSelecionados=" + encodeURIComponent(JSON.stringify(servicosSelecionados));
+
+        var dataEvento = document.getElementById("dataEvento").value;
+        var qtdMaximaPessoas = document.getElementById("qtdMaximaPessoas").value;
+
+        parametros += "&dataEvento=" + encodeURIComponent(dataEvento);
+        parametros += "&qtdMaximaPessoas=" + encodeURIComponent(qtdMaximaPessoas);
+
+        var urlCompleta = urlBase + parametros;
+
+        window.location.href = urlCompleta;
     }
 </script>
 

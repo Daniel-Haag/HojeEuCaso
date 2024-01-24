@@ -28,5 +28,6 @@ namespace HojeEuCaso.Models
         public DbSet<ClausulaContrato> ClausulasContratos { get; set; }
         public DbSet<FotosServicos> FotosServicos { get; set; }
         public DbSet<PlanoFornecedor> PlanosFornecedores { get; set; }
+        public DbSet<Orcamento> Orcamentos { get; set; }
     }
 }

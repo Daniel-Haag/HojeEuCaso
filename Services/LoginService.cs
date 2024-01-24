@@ -19,8 +19,8 @@ namespace HojeEuCaso.Services
             httpContext.Session.Remove("Nome");
             httpContext.Session.Remove("Role");
             httpContext.Session.Remove("Email");
-            httpContext.Session.Remove("UsuarioID");
-            httpContext.Session.Remove("FornecedorID");
+            httpContext.Session.Remove("ID");
+            //httpContext.Session.Remove("FornecedorID");
         }
 
         public void AddSession(HttpContext httpContext, UsuarioSistema usuarioSistema)
@@ -28,7 +28,7 @@ namespace HojeEuCaso.Services
             //Implementar uma forma de adicionar noivo e wedManager
             httpContext.Session.SetString("Nome", usuarioSistema.Nome);
             httpContext.Session.SetString("Email", usuarioSistema.Email);
-            httpContext.Session.SetString("UsuarioID", usuarioSistema.UsuarioSistemaID.ToString());
+            httpContext.Session.SetString("ID", usuarioSistema.UsuarioSistemaID.ToString());
 
             var usuario = _usuarioSistemaService.GetUsuarioSistemaById(usuarioSistema.UsuarioSistemaID);
 
@@ -39,7 +39,7 @@ namespace HojeEuCaso.Services
         {
             httpContext.Session.SetString("Nome", fornecedor.Nome);
             httpContext.Session.SetString("Email", fornecedor.Email);
-            httpContext.Session.SetString("FornecedorID", fornecedor.FornecedorID.ToString());
+            httpContext.Session.SetString("ID", fornecedor.FornecedorID.ToString());
             httpContext.Session.SetString("Role", "Fornecedor");
         }
     }

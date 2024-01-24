@@ -27,9 +27,10 @@
                     // Criando um ID de carrossel único com base no índice do pacote
                     var carouselId = "carousel_" + Guid.NewGuid().ToString();
 
-                    <div class="card p-4 shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0;">
+                    //Alterado temporariamente só para testar como fica
+                    <div class="card shadow mobileCard desktopCard" style="margin-top: 20px; flex-grow:0;">
 
-                        <div id="@carouselId" class="carousel slide" data-ride="carousel" style="background-color:black">
+                        <div id="@carouselId" class="carousel slide" data-ride="carousel" style="background-color:white">
 
                             @{
                                 var pacoteID = pacote.PacoteID;

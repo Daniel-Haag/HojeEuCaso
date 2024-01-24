@@ -20,14 +20,14 @@ namespace HojeEuCaso.Controllers
         private readonly ILogger<UsuariosController> _logger;
         private readonly IFornecedorService _fornecedorService;
         private readonly IFornecedorIndicadoService _fornecedorIndicadoService;
-        private readonly ICidadeService _cidadeService;
+        private readonly ICidadeService _CidadeService;
         private readonly IEstadoService _estadoService;
         private readonly ICategoriaService _categoriaService;
         private readonly IPaisService _paisService;
 
         public FornecedoresController(ILogger<UsuariosController> logger,
                                     IFornecedorService FornecedorService,
-                                    ICidadeService cidadeService,
+                                    ICidadeService CidadeService,
                                     IEstadoService estadoService,
                                     ICategoriaService categoriaService,
                                     IPaisService paisService,
@@ -35,7 +35,7 @@ namespace HojeEuCaso.Controllers
         {
             _logger = logger;
             _fornecedorService = FornecedorService;
-            _cidadeService = cidadeService;
+            _CidadeService = CidadeService;
             _estadoService = estadoService;
             _categoriaService = categoriaService;
             _paisService = paisService;
@@ -59,7 +59,7 @@ namespace HojeEuCaso.Controllers
         // GET: UsuariosController/Create
         public ActionResult Create()
         {
-            ViewBag.Cidades = _cidadeService.GetAllCidades();
+            ViewBag.Cidades = _CidadeService.GetAllCidades();
             ViewBag.Estados = _estadoService.GetAllEstados();
             ViewBag.Paises = _paisService.GetAllPaises();
             ViewBag.Categorias = _categoriaService.GetAllCategorias();
@@ -82,9 +82,9 @@ namespace HojeEuCaso.Controllers
                     return RedirectToAction("Create");
                 }
 
-                var cidades = _cidadeService.GetAllCidades();
-                ViewBag.Cidades = cidades;
-                fornecedor.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.CidadeID);
+                var Cidades = _CidadeService.GetAllCidades();
+                ViewBag.Cidades = Cidades;
+                fornecedor.Cidade = Cidades.FirstOrDefault(x => x.CidadeID == fornecedor.CidadeID);
 
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
@@ -133,9 +133,9 @@ namespace HojeEuCaso.Controllers
             var fornecedor = _fornecedorService.GetFornecedorById(ID);
             ViewBag.Fornecedor = fornecedor;
 
-            var cidades = _cidadeService.GetAllCidades();
-            ViewBag.Cidades = cidades;
-            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.CidadeID);
+            var Cidades = _CidadeService.GetAllCidades();
+            ViewBag.Cidades = Cidades;
+            ViewBag.Cidade = Cidades.FirstOrDefault(x => x.CidadeID == fornecedor.CidadeID);
 
             var estados = _estadoService.GetAllEstados();
             ViewBag.Estados = estados;
@@ -160,12 +160,12 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                var cidades = _cidadeService.GetAllCidades();
-                ViewBag.Cidades = cidades;
-                var cidade = cidades.FirstOrDefault(x => x.CidadeID == Fornecedor.CidadeID);
+                var Cidades = _CidadeService.GetAllCidades();
+                ViewBag.Cidades = Cidades;
+                var Cidade = Cidades.FirstOrDefault(x => x.CidadeID == Fornecedor.CidadeID);
 
-                Fornecedor.Cidade = cidade;
-                ViewBag.Cidade = cidade;
+                Fornecedor.Cidade = Cidade;
+                ViewBag.Cidade = Cidade;
 
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;

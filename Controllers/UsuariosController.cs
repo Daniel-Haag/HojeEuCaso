@@ -13,19 +13,19 @@ namespace HojeEuCaso.Controllers
     {
         private readonly ILogger<UsuariosController> _logger;
         private readonly IUsuarioSistemaService _usuarioSistemaService;
-        private readonly ICidadeService _cidadeService;
+        private readonly ICidadeService _CidadeService;
         private readonly IEstadoService _estadoService;
         private readonly IPaisService _paisService;
 
         public UsuariosController(ILogger<UsuariosController> logger,
                                     IUsuarioSistemaService usuarioSistemaService,
-                                    ICidadeService cidadeService,
+                                    ICidadeService CidadeService,
                                     IEstadoService estadoService,
                                     IPaisService paisService)
         {
             _logger = logger;
             _usuarioSistemaService = usuarioSistemaService;
-            _cidadeService = cidadeService;
+            _CidadeService = CidadeService;
             _estadoService = estadoService;
             _paisService = paisService;
         }
@@ -44,7 +44,7 @@ namespace HojeEuCaso.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.Cidades = _cidadeService.GetAllCidades();
+            ViewBag.Cidades = _CidadeService.GetAllCidades();
             ViewBag.Estados = _estadoService.GetAllEstados();
             ViewBag.Paises = _paisService.GetAllPaises();
             TempData["SuccessMessage"] = null;
@@ -57,9 +57,9 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                var cidades = _cidadeService.GetAllCidades();
-                ViewBag.Cidades = cidades;
-                usuarioSistema.Cidade = cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
+                var Cidades = _CidadeService.GetAllCidades();
+                ViewBag.Cidades = Cidades;
+                usuarioSistema.Cidade = Cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
 
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
@@ -88,9 +88,9 @@ namespace HojeEuCaso.Controllers
             ViewBag.Usuario = usuarioSistema;
 
             //ViewBag.Usuario.DataNascimento = ((DateTime)usuarioSistema.DataNascimento).ToString("yyyy-MM-dd");
-            var cidades = _cidadeService.GetAllCidades();
-            ViewBag.Cidades = cidades;
-            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
+            var Cidades = _CidadeService.GetAllCidades();
+            ViewBag.Cidades = Cidades;
+            ViewBag.Cidade = Cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
 
             var estados = _estadoService.GetAllEstados();
             ViewBag.Estados = estados;
@@ -111,12 +111,12 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                var cidades = _cidadeService.GetAllCidades();
-                ViewBag.Cidades = cidades;
-                var cidade = cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
+                var Cidades = _CidadeService.GetAllCidades();
+                ViewBag.Cidades = Cidades;
+                var Cidade = Cidades.FirstOrDefault(x => x.CidadeID == usuarioSistema.CidadeID);
 
-                usuarioSistema.Cidade = cidade;
-                ViewBag.Cidade = cidade;
+                usuarioSistema.Cidade = Cidade;
+                ViewBag.Cidade = Cidade;
 
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;

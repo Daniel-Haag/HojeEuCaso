@@ -210,20 +210,20 @@
                         <div class="form-group">
                             <label asp-for="CidadeID">Cidade</label>
                             <select asp-for="CidadeID" class="form-control">
-                                @foreach (var cidade in ViewBag.Cidades)
+                                @foreach (var Cidade in ViewBag.Cidades)
                                 {
-                                    var isSelected = cidade.CidadeID == ViewBag.Cidade.CidadeID ? "selected" : "";
+                                    var isSelected = Cidade.CidadeID == ViewBag.Cidade.CidadeID ? "selected" : "";
 
                                     if (isSelected == "selected")
                                     {
-                                        <option value="@cidade.CidadeID" selected>
-                                            @cidade.Nome
+                                        <option value="@Cidade.CidadeID" selected>
+                                            @Cidade.Nome
                                         </option>
                                     }
                                     else
                                     {
-                                        <option value="@cidade.CidadeID">
-                                            @cidade.Nome
+                                        <option value="@Cidade.CidadeID">
+                                            @Cidade.Nome
                                         </option>
                                     }
                                 }

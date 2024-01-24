@@ -376,6 +376,34 @@ namespace HojeEuCaso.Migrations
                     b.ToTable("ItensDePacotesDeUsuarios");
                 });
 
+            modelBuilder.Entity("HojeEuCaso.Models.Cidade", b =>
+                {
+                    b.Property<int>("CidadeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataEvento")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("QtdConvidados")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsuarioSistemaID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ValorTotalCidade")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("servicosIDs")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("CidadeID");
+
+                    b.HasIndex("UsuarioSistemaID");
+
+                    b.ToTable("Cidades");
+                });
+
             modelBuilder.Entity("HojeEuCaso.Models.Pacote", b =>
                 {
                     b.Property<int>("PacoteID")
@@ -854,6 +882,17 @@ namespace HojeEuCaso.Migrations
                         .IsRequired();
 
                     b.Navigation("Pacote");
+                });
+
+            modelBuilder.Entity("HojeEuCaso.Models.Cidade", b =>
+                {
+                    b.HasOne("HojeEuCaso.Models.UsuarioSistema", "WedManager")
+                        .WithMany()
+                        .HasForeignKey("UsuarioSistemaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WedManager");
                 });
 
             modelBuilder.Entity("HojeEuCaso.Models.Pacote", b =>

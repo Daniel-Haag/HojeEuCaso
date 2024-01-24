@@ -32,7 +32,7 @@ namespace HojeEuCaso.Controllers
         private readonly IPacoteService _pacoteService;
         private readonly ICategoriaService _categoriaService;
         private readonly IMapper _mapper;
-        private readonly ICidadeService _cidadeService;
+        private readonly ICidadeService _CidadeService;
         private readonly IEstadoService _estadoService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IFornecedorService _fornecedorService;
@@ -48,7 +48,7 @@ namespace HojeEuCaso.Controllers
                                     IPacoteService pacoteService,
                                     ICategoriaService categoriaService,
                                     IMapper mapper,
-                                    ICidadeService cidadeService,
+                                    ICidadeService CidadeService,
                                     IEstadoService estadoService,
                                     IWebHostEnvironment webHostEnvironment,
                                     IFornecedorService fornecedorService,
@@ -64,7 +64,7 @@ namespace HojeEuCaso.Controllers
             _pacoteService = pacoteService;
             _categoriaService = categoriaService;
             _mapper = mapper;
-            _cidadeService = cidadeService;
+            _CidadeService = CidadeService;
             _estadoService = estadoService;
             _webHostEnvironment = webHostEnvironment;
             _fornecedorService = fornecedorService;
@@ -83,7 +83,7 @@ namespace HojeEuCaso.Controllers
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
             try
             {
-                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("ID"));
                 var pacotes = _pacoteService.GetPacoteByFornecedor(fornecedorID);
                 ViewBag.Pacotes = pacotes;
 
@@ -119,7 +119,7 @@ namespace HojeEuCaso.Controllers
         public ActionResult Profile()
         {
             //Buscando os Servicos/Pacotes do Fornecedor Logado!
-            int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+            int fornecedorID = int.Parse(HttpContext.Session.GetString("ID"));
 
             ViewBag.Pacotes = _pacoteService.GetPacoteByFornecedor((int)fornecedorID);
             ViewBag.Diretorio = Path.Combine(_webHostEnvironment.WebRootPath);
@@ -155,7 +155,7 @@ namespace HojeEuCaso.Controllers
         [HttpGet]
         public ActionResult AdicionarServico()
         {
-            var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+            var fornecedor = _fornecedorService.GetFornecedorById(int.Parse(HttpContext.Session.GetString("ID")));
             ViewBag.PacotesPorCategoria = _pacoteService.GetPacotesByCategoriaID(fornecedor.CategoriaID).Where(x => x.Fornecedor == null);
 
             SetData();
@@ -177,12 +177,12 @@ namespace HojeEuCaso.Controllers
                 List<ItensDePacotes> itensDePacotes;
                 MapPacoteDtoForPacoteObject(pacoteDto, out pacote, out itensDePacotes);
 
-                pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
+                pacote.Cidade = _CidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
                 pacote.Pais = _paisService.GetPaisById(pacoteDto.PaisID);
 
                 pacote.Fornecedor = _fornecedorService
-                    .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+                    .GetFornecedorById(int.Parse(HttpContext.Session.GetString("ID")));
 
                 //Definir o serviço pela categoria do fornecedor!
                 var categorias = _categoriaService.GetAllCategorias();
@@ -265,7 +265,7 @@ namespace HojeEuCaso.Controllers
                 {
                     foreach (var item in pacoteDto.Fotos)
                     {
-                        var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + item.FileName);
+                        var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("ID") + "_" + item.FileName);
 
                         FotosServicos fotoServico = new FotosServicos()
                         {
@@ -303,8 +303,8 @@ namespace HojeEuCaso.Controllers
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
 
-                var cidades = _cidadeService.GetAllCidades();
-                ViewBag.Cidades = cidades;
+                var Cidades = _CidadeService.GetAllCidades();
+                ViewBag.Cidades = Cidades;
 
                 var estados = _estadoService.GetAllEstados();
                 ViewBag.Estados = estados;
@@ -325,7 +325,7 @@ namespace HojeEuCaso.Controllers
 
                 ViewBag.PacoteAtual = pacoteAtual;
                 ViewBag.Categoria = categorias.FirstOrDefault(x => x.CategoriaID == pacoteAtual.CategoriaID);
-                ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade?.CidadeID);
+                ViewBag.Cidade = Cidades.FirstOrDefault(x => x.CidadeID == pacoteAtual.Cidade?.CidadeID);
                 ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == pacoteAtual.Estado?.EstadoID);
                 ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == pacoteAtual.Pais?.PaisID);
 
@@ -390,12 +390,12 @@ namespace HojeEuCaso.Controllers
                 List<ItensDePacotes> itensDePacotes;
                 MapPacoteDtoForPacoteObject(pacoteDto, out pacote, out itensDePacotes);
 
-                pacote.Cidade = _cidadeService.GetCidadeById(pacoteDto.CidadeID);
+                pacote.Cidade = _CidadeService.GetCidadeById(pacoteDto.CidadeID);
                 pacote.Estado = _estadoService.GetEstadoById(pacoteDto.EstadoID);
                 pacote.Pais = _paisService.GetPaisById(pacoteDto.PaisID);
 
                 pacote.Fornecedor = _fornecedorService
-                    .GetFornecedorById(int.Parse(HttpContext.Session.GetString("FornecedorID")));
+                    .GetFornecedorById(int.Parse(HttpContext.Session.GetString("ID")));
 
                 var categorias = _categoriaService.GetAllCategorias();
                 ViewBag.Categorias = categorias;
@@ -409,7 +409,7 @@ namespace HojeEuCaso.Controllers
                 {
                     foreach (var item in pacoteDto.Fotos)
                     {
-                        var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + DateTime.Now.ToString() + item.FileName);
+                        var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("ID") + "_" + DateTime.Now.ToString() + item.FileName);
 
                         long maxFileSize = 10 * 1024 * 1024; // 10MB
 
@@ -467,8 +467,8 @@ namespace HojeEuCaso.Controllers
             var fornecedor = _fornecedorService.GetFornecedorById(ID);
             ViewBag.Fornecedor = fornecedor;
 
-            var cidades = _cidadeService.GetAllCidades();
-            ViewBag.Cidades = cidades;
+            var Cidades = _CidadeService.GetAllCidades();
+            ViewBag.Cidades = Cidades;
 
             var estados = _estadoService.GetAllEstados();
             ViewBag.Estados = estados;
@@ -476,7 +476,7 @@ namespace HojeEuCaso.Controllers
             var paises = _paisService.GetAllPaises();
             ViewBag.Paises = paises;
 
-            ViewBag.Cidade = cidades.FirstOrDefault(x => x.CidadeID == fornecedor.Cidade.CidadeID);
+            ViewBag.Cidade = Cidades.FirstOrDefault(x => x.CidadeID == fornecedor.Cidade.CidadeID);
             ViewBag.Estado = estados.FirstOrDefault(x => x.EstadoID == fornecedor.Estado.EstadoID);
             ViewBag.Pais = paises.FirstOrDefault(x => x.PaisID == fornecedor.Pais.PaisID);
 
@@ -518,7 +518,7 @@ namespace HojeEuCaso.Controllers
                         return View();
                     }
 
-                    var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("FornecedorID") + "_" + fornecedorDto.Foto.FileName);
+                    var caminhoFoto = Path.Combine(_webHostEnvironment.WebRootPath, "images", HttpContext.Session.GetString("ID") + "_" + fornecedorDto.Foto.FileName);
                     fornecedorDto.CaminhoFoto = caminhoFoto;
 
                     CopyPhotoStream(caminhoFoto, fornecedorDto.Foto);
@@ -640,7 +640,7 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("ID"));
 
                 TempData["SuccessMessage"] = null;
 
@@ -664,7 +664,7 @@ namespace HojeEuCaso.Controllers
         {
             try
             {
-                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("ID"));
                 var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
 
                 UpdateOrDeleteClausulasDeContrato(fornecedor, clausulasDeContrato);
@@ -690,7 +690,7 @@ namespace HojeEuCaso.Controllers
             {
                 TempData["SuccessMessage"] = null;
 
-                int ID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                int ID = int.Parse(HttpContext.Session.GetString("ID"));
 
                 var fornecedor = _fornecedorService.GetFornecedorById(ID);
 
@@ -719,6 +719,8 @@ namespace HojeEuCaso.Controllers
         [HttpGet]
         public ActionResult DuplicarServico(int ID)
         {
+            //Falta replicar os itens do pacote
+            //Atenção às fotos e videos
             try
             {
                 var servicoExistente = _pacoteService.GetPacoteById(ID);
@@ -762,7 +764,7 @@ namespace HojeEuCaso.Controllers
             ViewBag.Pacotes = _pacoteService.GetAllPacotes();
             ViewBag.Paises = _paisService.GetAllPaises();
             ViewBag.Estados = _estadoService.GetAllEstados();
-            ViewBag.Cidades = _cidadeService.GetAllCidades();
+            ViewBag.Cidades = _CidadeService.GetAllCidades();
         }
 
         private decimal TransformToPercentDiscount(decimal number)
@@ -791,7 +793,7 @@ namespace HojeEuCaso.Controllers
 
         private void CopyVideoStream(PacoteComItensDoPacoteDto pacoteDto)
         {
-            pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", HttpContext.Session.GetString("FornecedorID") + "_" + pacoteDto.Video.FileName);
+            pacoteDto.CaminhoVideo = Path.Combine(_webHostEnvironment.WebRootPath, "videos", HttpContext.Session.GetString("ID") + "_" + pacoteDto.Video.FileName);
 
             if (!System.IO.File.Exists(pacoteDto.CaminhoVideo))
             {
@@ -934,7 +936,7 @@ namespace HojeEuCaso.Controllers
                 Plano plano = _planoService.GetPlanoById(planoID);
                 plano.Preco = Math.Round(plano.Preco, 2);
 
-                int fornecedorID = int.Parse(HttpContext.Session.GetString("FornecedorID"));
+                int fornecedorID = int.Parse(HttpContext.Session.GetString("ID"));
                 var fornecedor = _fornecedorService.GetFornecedorById(fornecedorID);
                 var dataVencimento = DateTime.Now.AddDays(1);
                 string dataFormatada = dataVencimento.ToString("yyyy-MM-dd");
