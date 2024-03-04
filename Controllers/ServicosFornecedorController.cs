@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using HojeEuCaso.Dtos;
 using HojeEuCaso.Interfaces;
 using HojeEuCaso.Models;
@@ -652,7 +652,7 @@ namespace HojeEuCaso.Controllers
             {
                 if (ex.Message == "Value cannot be null. (Parameter 's')")
                 {
-                    RedirectToAction("Logout", "Login");
+                    RedirectToAction("Login", "Login");
                 }
             }
 
@@ -676,7 +676,7 @@ namespace HojeEuCaso.Controllers
             {
                 if (ex.Message == "Value cannot be null. (Parameter 's')")
                 {
-                    RedirectToAction("Logout", "Login");
+                    RedirectToAction("Login", "Login");
                 }
             }
 
@@ -709,7 +709,7 @@ namespace HojeEuCaso.Controllers
             {
                 if (ex.Message == "Value cannot be null. (Parameter 's')" || ex.Message == "Value cannot be null. Arg_ParamName_Name")
                 {
-                    RedirectToAction("Logout", "Login");
+                    RedirectToAction("Login", "Login");
                 }
             }
 
